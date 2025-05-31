@@ -16,4 +16,8 @@ public class ProductDao {
 	public Product selectProduct(SqlSessionTemplate sqlSession, int userNo, int pdNum) {
 		return null;
 	}
+
+	public int tradeItem(SqlSessionTemplate sqlSession, int pdNum) {
+		return sqlSession.update("productMapper.upDateStatus",pdNum);
+	}
 }
