@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 비어있을 수 없음 필수입력 요소 (해당 mapper를 부르는 별칭) -->
+<mapper namespace="historyMapper">
+	<!-- 조회 결과를 VO에 매핑 시키는 도구 resultMap 작성해보기 -->
+	<resultMap type="TradeHistory" id="historyResultMap">
+		<result property="userNo" column="USER_NO" />
+		<result property="pdNum" column="PD_NUM" />
+		<result property="pdTitle" column="PD_TITLE" />
+		<result property="pdPrice" column="PD_PRICE" />
+		<result property="filed" column="FILED" />
+		<result property="pdImage" column="PD_IMAGE" />
+	</resultMap>
+	
+	<select id="myHistory" resultType="historyResultMap">
+		SELECT * FROM History
+		WHERE USER_ID = #{userNo}
+		ORDER BY PD_NUM
+	</select>
+	<select id="selectHistory" parameterType="_int" resultMap="historyResultMap">
+    	SELECT *
+    	FROM TRADE_HISTORY
+   		WHERE PD_NUM = #{pdNum}
+	</select>
+	<insert id="insertHistory" parameterType="TradeHistory">
+		INSERT INTO TRADE_HISTORY (USER_NO
+			   , PD_NUM
+			   , PD_TITLE
+			   , PD_PRICE
+			   , FILED
+			   , PD_IMAGE)
+			   VALUES (#{userNO}
+			   ,#{pdNum}
+			   ,#{pdTitle}
+			   ,#{pdPrice}
+			   ,#{filed}
+			   ,#{pdImage})
+	</insert>
+</mapper>
