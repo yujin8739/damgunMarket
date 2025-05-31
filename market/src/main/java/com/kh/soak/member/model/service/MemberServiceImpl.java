@@ -15,7 +15,7 @@ public class MemberServiceImpl implements MemberService{
 	private MemberDao dao;
 	
 	@Autowired
-	private SqlSessionTemplate sqlSession;  //추가 수정필요  
+	private SqlSessionTemplate sqlSession;  
 	
 	
 	//로그인기능
@@ -28,27 +28,27 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int insertMember(Member m) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.insertMember(sqlSession,m);
 	}
 
 	//회원정보수정 기능
 	@Override
 	public int updateMember(Member m) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.updateMember(sqlSession,m);
 	}
 	
 	//회원탈퇴 기능
 	@Override
 	public int deleteMember(Member m) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.deleteMember(sqlSession,m);
 	}
 	
 	//아이디 중복확인 기능
 	@Override
 	public int idCheck(String userId) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.idCheck(sqlSession,userId);
 	}
 }
