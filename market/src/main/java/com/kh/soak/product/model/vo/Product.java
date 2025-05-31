@@ -1,4 +1,4 @@
-package com.kh.soak.member.model.vo;
+package com.kh.soak.product.model.vo;
 
 import java.util.Date;
 import lombok.AllArgsConstructor;

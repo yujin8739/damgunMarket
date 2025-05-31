@@ -1,8 +1,7 @@
-package com.kh.soak.member.model.service;
+package com.kh.soak.history.model.service;
 
 import java.util.List;
-
-import com.kh.soak.member.model.vo.TradeHistory;
+import com.kh.soak.history.model.vo.TradeHistory;
 
 public interface HistroyService {
 

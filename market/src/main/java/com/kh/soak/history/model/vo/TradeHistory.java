@@ -1,4 +1,4 @@
-package com.kh.soak.member.model.vo;
+package com.kh.soak.history.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

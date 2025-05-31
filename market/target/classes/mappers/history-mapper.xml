@@ -7,17 +7,17 @@
 <mapper namespace="historyMapper">
 	<!-- 조회 결과를 VO에 매핑 시키는 도구 resultMap 작성해보기 -->
 	<resultMap type="TradeHistory" id="historyResultMap">
-		<result property="user_No" column="USER_NO" />
-		<result property="pd_Num" column="PD_NUM" />
-		<result property="pd_Title" column="PD_TITLE" />
-		<result property="pd_Price" column="PD_PRICE" />
+		<result property="userNo" column="USER_NO" />
+		<result property="pdNum" column="PD_NUM" />
+		<result property="pdTitle" column="PD_TITLE" />
+		<result property="pdPrice" column="PD_PRICE" />
 		<result property="filed" column="FILED" />
-		<result property="pd_image" column="PD_IMAGE" />
+		<result property="pdImage" column="PD_IMAGE" />
 	</resultMap>
 	
 	<select id="myHistory" resultType="historyResultMap">
 		SELECT * FROM History
-		WHERE USER_ID = #{user_No}
+		WHERE USER_ID = #{userNo}
 		ORDER BY PD_NUM
 	</select>
 	<select id="selectHistory" parameterType="int" resultMap="historyResultMap">

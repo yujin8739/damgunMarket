@@ -11,10 +11,6 @@ import lombok.ToString;
 //담굼마켓 멤버 DB사용시 사용할 객체
 @NoArgsConstructor //기본 생성자 
 @AllArgsConstructor//모든 필드를 갖는 매개변수 생성자
-@Setter//setter 메소드
-@Getter//getter 메소드
-@ToString//toString 메소드 
-@EqualsAndHashCode // equals와 hashcode 메소드
 @Data 
 public class Member {
 	private int userNo;		//	USERNO	NUMBER(11,0) 유저번호 (유저 이미지나 영상 판매물품 외례키)

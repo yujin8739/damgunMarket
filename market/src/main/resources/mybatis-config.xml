@@ -16,6 +16,8 @@
 	<typeAliases>
 	
 		<typeAlias type="com.kh.soak.member.model.vo.Member" alias="Member"/>
+		<typeAlias type="com.kh.sock.history.model.vo.TradeHistory" alias="TradeHistory"/>
+		<typeAlias type="com.kh.sock.product.model.vo.Product" alias="Product"/>
 		<!--  
 		<typeAlias type="com.kh.spring.board.model.vo.Board" alias="Board"/>
 		<typeAlias type="com.kh.spring.board.model.vo.Reply" alias="Reply"/>
