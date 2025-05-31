@@ -1,9 +1,6 @@
 package com.kh.soak.member.model.vo;
 
 import java.util.Date;
-
-import com.kh.soak.member.model.dao.ProductDao;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
