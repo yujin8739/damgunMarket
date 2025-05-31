@@ -19,12 +19,12 @@
 	<select id="loginMember" parameterType="Member"
 		resultMap="memberResultMap">
 		SELECT USERNO AS userNo
-		,USERID AS userId
-		,PASSWORD AS passWord
-		,USERNAME AS userName
-		,EMAIL AS email
-		,STATUS AS status
-		,USERRANK AS userRank
+			,USERID AS userId
+			,PASSWORD AS passWord
+			,USERNAME AS userName
+			,EMAIL AS email
+			,STATUS AS status
+			,USERRANK AS userRank
 		FROM MEMBER_TBL WHERE USERID
 		= #{userId} AND PASSWORD
 		= #{passWord}
