@@ -26,5 +26,10 @@ public class HistroyServiceImpl implements HistroyService {
 	public TradeHistory selectHistory(int pdNum) {
 		return dao.selectHistory(sqlSession, pdNum);
 	}
+	
+	@Override
+	public int insertMyHistory(TradeHistory t) {
+		return dao.insertHistory(sqlSession, t);
+	}
 
 }

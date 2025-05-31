@@ -9,4 +9,6 @@ public interface HistroyService {
 
 	TradeHistory selectHistory(int pd_Num);
 
+	int insertMyHistory(TradeHistory t);
+
 }

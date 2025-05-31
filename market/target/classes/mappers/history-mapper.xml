@@ -20,9 +20,23 @@
 		WHERE USER_ID = #{userNo}
 		ORDER BY PD_NUM
 	</select>
-	<select id="selectHistory" parameterType="int" resultMap="historyResultMap">
+	<select id="selectHistory" parameterType="_int" resultMap="historyResultMap">
     	SELECT *
     	FROM TRADE_HISTORY
    		WHERE PD_NUM = #{pdNum}
 	</select>
+	<insert id="insertHistory" parameterType="TradeHistory">
+		INSERT INTO TRADE_HISTORY (USER_NO
+			   , PD_NUM
+			   , PD_TITLE
+			   , PD_PRICE
+			   , FILED
+			   , PD_IMAGE)
+			   VALUES (#{userNO}
+			   ,#{pdNum}
+			   ,#{pdTitle}
+			   ,#{pdPrice}
+			   ,#{filed}
+			   ,#{pdImage})
+	</insert>
 </mapper>

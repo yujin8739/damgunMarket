@@ -4,12 +4,9 @@ import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
-
-import com.kh.soak.member.model.vo.Member;
 import com.kh.soak.history.model.vo.TradeHistory;
 
 @Repository
-
 public class TradeHistoryDao {
 	// 내 기록 찾기
 	public List<TradeHistory> myHistory(SqlSessionTemplate sqlSession, int userNo) {
