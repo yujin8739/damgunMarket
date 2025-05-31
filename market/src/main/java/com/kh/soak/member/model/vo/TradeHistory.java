@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class TradeHistory {
-	private int userNo; //	USER_NO 유저번호
-	private int pdNum; // PD_NUM  상품번호
-	private String pdTitle; //PD_TITLE 상품제목
+	private int user_No; //	USER_NO 유저번호
+	private int pd_Num; // PD_NUM  상품번호
+	private String pd_Title; //PD_TITLE 상품제목
 	private String file; //FILED 상품내용
-	private String pdImage; //PD_IMAGE 상품이미지 url
+	private String pd_Image; //PD_IMAGE 상품이미지 url
 }
