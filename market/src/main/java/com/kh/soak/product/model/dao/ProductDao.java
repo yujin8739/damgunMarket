@@ -1,5 +1,8 @@
 package com.kh.soak.product.model.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +22,14 @@ public class ProductDao {
 
 	public int tradeItem(SqlSessionTemplate sqlSession, int pdNum) {
 		return sqlSession.update("productMapper.upDateStatus",pdNum);
+	}
+
+	public List<Product> selectAllProdectList(SqlSessionTemplate sqlSession, RowBounds rowBounds) {
+		return sqlSession.selectList("productMapper.selectAllProducts", null, rowBounds);
+	}
+
+	public List<Product> selectProducts(SqlSessionTemplate sqlSession, RowBounds rowBounds, String keyword) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
