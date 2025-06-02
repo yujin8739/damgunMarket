@@ -11,6 +11,8 @@
 .mtj.tmp/
 
 # Package Files #
+pom.properties
+Manifest.Mf
 *.war
 *.nar
 *.ear
