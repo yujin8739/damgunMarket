@@ -1,17 +1,36 @@
 package com.kh.soak.chat.model.dao;
 
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.kh.soak.chat.model.vo.ChatRoomVO;
 import com.kh.soak.chat.model.vo.MessageVO;
 
-public interface ChatDAO {
+@Repository
+public class ChatDAO {
 
     // 채팅방
-    int insertChatRoom(ChatRoomVO room);
-    ChatRoomVO selectChatRoomById(int roomNo);
-    List<ChatRoomVO> selectChatRoomsByUserId(String userId);
+    public int insertChatRoom(ChatRoomVO room) {
+		return 0;
+    	
+    }
+    public ChatRoomVO selectChatRoomById(int roomNo) {
+		return null;
+    	
+    }
+    public List<ChatRoomVO> selectChatRoomsByUserId(String userId){
+		return null;
+    	
+    }
     
     // 메시지
-    int insertMessage(MessageVO message);
-    List<MessageVO> selectMessagesByRoomNo(int roomNo);
+    public int insertMessage(MessageVO message) {
+		return 0;
+    	
+    }
+    public List<MessageVO> selectMessagesByRoomNo(int roomNo) {
+		return null;
+    	
+    }
 }
