@@ -29,7 +29,6 @@ public class ProductDao {
 	}
 
 	public List<Product> selectProducts(SqlSessionTemplate sqlSession, RowBounds rowBounds, String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		return sqlSession.selectList("productMapper.selectProducts", keyword, rowBounds);
 	}
 }
