@@ -1,11 +1,15 @@
 package com.kh.soak.product.model.service;
 
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.soak.product.model.dao.ProductDao;
+import com.kh.soak.product.model.vo.Product;
 
 @Service
 @Transactional
@@ -19,6 +23,18 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int tradeItem(int pdNum) {
 		return dao.tradeItem(sqlSession, pdNum);
+	}
+
+	@Override
+	public List<Product> searchAllProduct(RowBounds rowBounds) {
+		// TODO Auto-generated method stub
+		return dao.selectAllProdectList(sqlSession,rowBounds);
+	}
+
+	@Override
+	public List<Product> searchProduct(RowBounds rowBounds, String keyword) {
+		// TODO Auto-generated method stub
+		return dao.selectProducts(sqlSession, rowBounds, keyword);
 	}
 	
 
