@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.kh.soak.history.model.service.HistroyServiceImpl;
 import com.kh.soak.history.model.vo.TradeHistory;
 
-@Controller
+@Controller 
 public class HistoryController {
 	
-	@Autowired 
+	@Autowired  
 	private HistroyServiceImpl service;
 //	USER_NO
 //	PD_NUM
