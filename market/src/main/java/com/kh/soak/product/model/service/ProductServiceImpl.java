@@ -19,7 +19,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-
+  
+	
+	
 	@Override
 	public int tradeItem(int pdNum) {
 		return dao.tradeItem(sqlSession, pdNum);
