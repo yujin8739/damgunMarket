@@ -1,5 +1,9 @@
 package com.kh.soak.member.model.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.soak.member.model.dao.MemberDao;
 import com.kh.soak.member.model.vo.Member;
+import com.kh.soak.product.model.vo.Product;
 
 @Service
 @Transactional 
@@ -50,5 +55,19 @@ public class MemberServiceImpl implements MemberService{
 	public int idCheck(String userId) {
 		// TODO Auto-generated method stub
 		return dao.idCheck(sqlSession,userId);
+	}
+	@Override
+	public int saveFavorite(int userNo, int pdNum) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return dao.saveFavorite(sqlSession, param);
+	}
+	@Override
+	public int deleteFavorite(int userNo, int pdNum) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return dao.deleteFavorite(sqlSession, param);
 	}
 }

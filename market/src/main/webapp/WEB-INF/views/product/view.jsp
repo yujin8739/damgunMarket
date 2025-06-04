@@ -62,7 +62,11 @@
 <p id="category"><strong>카테고리:</strong> ${product.bigCate} > ${product.midCate} > ${product.smallCate}</p>
 <div class="product-detail">
     <p>
-    <h1>${product.pdTitle}</h1>
+    <h1 style="display: flex; justify-content: space-between; align-items: center;">
+    	${product.pdTitle}
+    	<span id="favoriteStar" style="cursor: pointer; color: gold; font-size: 24px;">☆</span>
+	</h1>
+    
 	<p id="updateTime"><strong>업데이트:</strong> ${product.updateTime}</p>
 	<c:if test="${not empty fileListJson}">
 	    <div class="image-scroll-wrapper">
@@ -74,20 +78,59 @@
 	
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
-		    const imageContainer = document.getElementById("imageContainer");
-		    const jsonData = document.getElementById("json-data").dataset.json;
-		    const fileList = JSON.parse(jsonData);
-		    console.log("fileList:", fileList);
-	
-		    fileList.forEach(url => {
-		        const img = document.createElement("img");
-		        img.src = url;
-		        img.alt = "상품 이미지";
-		        img.style.margin = "5px";
-		        img.style.maxWidth = "700px";
-		        imageContainer.appendChild(img);
-		    });
-		});
+	        // 기존 이미지 로딩 스크립트
+	        const imageContainer = document.getElementById("imageContainer");
+	        const jsonData = document.getElementById("json-data").dataset.json;
+	        const fileList = JSON.parse(jsonData);
+	        console.log("fileList:", fileList);
+
+	        fileList.forEach(url => {
+	            const img = document.createElement("img");
+	            img.src = url;
+	            img.alt = "상품 이미지";
+	            img.style.margin = "5px";
+	            img.style.maxWidth = "700px";
+	            imageContainer.appendChild(img);
+	        });
+
+	        // 즐겨찾기 별 클릭 처리
+	        const star = document.getElementById("favoriteStar");
+	        let isFavorite = false;
+	        star.addEventListener("click", function () {
+	        	let userNo = 0;
+	        	let pdNum = product.pdNum;
+	        	isFavorite = !isFavorite;
+	        	if(favorite){
+		            $.ajax({
+		                url: "user/seveFavorite",
+		                data: {
+		                    userNo : userNo,
+		                    pdNum : pdNum
+		                },
+		                success: function (favorite) {
+		     	            star.textContent = isFavorite ? "★" : "☆";
+		                },
+		                error: function (){
+		                	 alert("저장 실패");
+		                }
+		        	});
+	        	} else {
+	        		 $.ajax({
+			                url: "user/Favorite",
+			                data: {
+			                    userNo : userNo,
+			                    pdNum : pdNum
+			                },
+			                success: function (favorite) {
+			     	            star.textContent = isFavorite ? "★" : "☆";
+			                },
+			                error: function (){
+			                	 alert("저장 실패");
+			                }
+			        	});
+	        	}
+	        });
+	    });
 
 	</script>
 	

@@ -1,6 +1,9 @@
 package com.kh.soak.member.model.service;
 
+import java.util.List;
+
 import com.kh.soak.member.model.vo.Member;
+import com.kh.soak.product.model.vo.Product;
 
 public interface MemberService {
 
@@ -18,4 +21,8 @@ public interface MemberService {
 
 	//아이디 중복확인 기능
 	int idCheck(String userId);
+
+	int saveFavorite(int userNo, int pdNum);
+
+	int deleteFavorite(int userNo, int pdNum);
 }

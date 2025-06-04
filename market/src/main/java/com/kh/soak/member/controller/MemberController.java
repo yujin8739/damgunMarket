@@ -1,7 +1,10 @@
 package com.kh.soak.member.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -9,10 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.soak.member.model.service.MemberService;
 import com.kh.soak.member.model.vo.Member;
+import com.kh.soak.product.model.vo.Product;
 
 @Controller //Controller 타입의 어노테이션을 부여하면 spring이 bean scan을 통해 Controller bean으로 등록해준다.
 public class MemberController {
@@ -238,6 +243,21 @@ public class MemberController {
 	}
 	
 	
+	 // AJAX로 상품 목록 가져오기 (무한 스크롤)
+	@RequestMapping(value = "user/saveFavorite",produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public int saveFavorite(@RequestParam(required = false) int userNo 
+			                        , @RequestParam(required = false) int pdNum) {
+	        return service.saveFavorite(userNo,pdNum);        
+	}
+	
+	// AJAX로 상품 목록 가져오기 (무한 스크롤)
+	@RequestMapping(value = "user/deleteFavorite",produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public int deleteFavorite(@RequestParam(required = false) int userNo 
+			                        , @RequestParam(required = false) int pdNum) {
+	        return service.deleteFavorite(userNo,pdNum);        
+	}
 	
 	
 	
