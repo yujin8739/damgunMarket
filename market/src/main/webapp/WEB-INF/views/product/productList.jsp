@@ -45,32 +45,41 @@
                 }
 
                 products.forEach(function (product) {
-                    const $productDiv = $('<div>').addClass('product');
+                    const $productDiv = $('<div>')
+                        .addClass('product')
+                        .attr('data-pdnum', product.pdNum)
+                        .attr('data-userno', product.userNo);
+
+                    $productDiv.on('click', function () {
+                        const pdNum = $(this).data('pdnum');
+                        const userNo = $(this).data('userno');
+                        console.log("clicked pdNum:", pdNum, "userNo:", userNo);
+                        window.location.href = `/product/view?pdNum=\${pdNum}&userNo=\${userNo}`;
+                    });
 
                     $('<h4>').text(product.pdTitle).appendTo($productDiv);
+                    
+                    if (product.pd_url != null) {
+                        const $imgWrapper = $('<div>').css({
+                            width: '300px',
+                            height: '300px',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: '0 auto'
+                        });
 
-                    if(product.pd_url!=null) {
-	                    // 이미지 wrapper에 스타일 적용
-	                    const $imgWrapper = $('<div>').css({
-	                        width: '300px',
-	                        height: '300px',
-	                        overflow: 'hidden',
-	                        display: 'flex',
-	                        justifyContent: 'center',
-	                        alignItems: 'center',
-	                        margin: '0 auto'
-	                    });
-	
-	                    const $img = $('<img>').attr('src', product.pd_url)
-	                        .attr('alt', product.pdTitle + ' 이미지')
-	                        .css({});
-	                    $imgWrapper.append($img);
-	                    $productDiv.append($imgWrapper);
-	                    
+                        const $img = $('<img>').attr('src', product.pd_url)
+                            .attr('alt', product.pdTitle + ' 이미지')
+                            .css({ maxHeight: '100%', maxWidth: '100%' });
+                        $imgWrapper.append($img);
+                        $productDiv.append($imgWrapper);
                     }
 
+                    
                     $('<p>').text(product.pdBoard).appendTo($productDiv);
-                    $('<p>').text(`가격: ${product.pdPrice}원`).appendTo($productDiv);
+                    $('<p>').text(`가격: \${product.pdPrice}원`).appendTo($productDiv);
 
                     $('#product-container').append($productDiv);
                 });

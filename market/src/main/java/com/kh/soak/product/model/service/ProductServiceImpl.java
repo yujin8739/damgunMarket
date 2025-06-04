@@ -19,7 +19,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-
+  
+	
+	
 	@Override
 	public int tradeItem(int pdNum) {
 		return dao.tradeItem(sqlSession, pdNum);
@@ -27,14 +29,22 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> searchAllProduct(RowBounds rowBounds) {
-		// TODO Auto-generated method stub
 		return dao.selectAllProdectList(sqlSession,rowBounds);
 	}
 
 	@Override
 	public List<Product> searchProduct(RowBounds rowBounds, String keyword) {
-		// TODO Auto-generated method stub
 		return dao.selectProducts(sqlSession, rowBounds, keyword);
+	}
+
+	@Override
+	public Product selectOneProduct(int pdNum, int userNo) {
+		return dao.selectOneProduct(sqlSession, pdNum,userNo);
+	}
+
+	@Override
+	public List<String> selectFiles(int pdNum, int userNo) {
+		return dao.selectFiles(sqlSession, pdNum, userNo);
 	}
 	
 
