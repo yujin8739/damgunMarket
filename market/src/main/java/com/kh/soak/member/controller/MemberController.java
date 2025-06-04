@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.soak.member.model.service.MemberService;
@@ -142,5 +143,21 @@ public class MemberController {
 		} else {
 			return "NNNNY"; //사용가능
 		}
+	}
+	
+	 // AJAX로 상품 목록 가져오기 (무한 스크롤)
+	@RequestMapping(value = "user/saveFavorite",produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public int saveFavorite(@RequestParam(required = false) int userNo 
+			              , @RequestParam(required = false) int pdNum) {
+	        return service.saveFavorite(userNo,pdNum);        
+	}
+	
+	// AJAX로 상품 목록 가져오기 (무한 스크롤)
+	@RequestMapping(value = "user/deleteFavorite",produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public int deleteFavorite(@RequestParam(required = false) int userNo 
+			                , @RequestParam(required = false) int pdNum) {
+	        return service.deleteFavorite(userNo,pdNum);        
 	}
 }

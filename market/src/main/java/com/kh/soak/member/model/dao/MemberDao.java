@@ -1,5 +1,7 @@
 package com.kh.soak.member.model.dao;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -47,10 +49,14 @@ public class MemberDao {
 		return sqlSession.selectOne("memberMapper.idCheck",userId);
 	}
 
+	public int saveFavorite(SqlSessionTemplate sqlSession, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("memberMapper.saveFavorite",param);
+	}
 	
-	
-	
-	
-	
+	public int deleteFavorite(SqlSessionTemplate sqlSession, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete("memberMapper.delete Favorite",param);
+	}
 	
 }

@@ -1,5 +1,8 @@
 package com.kh.soak.member.model.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,8 +69,22 @@ public class MemberServiceImpl implements MemberService{
 		return dao.idCheck(sqlSession,userId);
 	}
 	
-
+	@Override
+	public int saveFavorite(int userNo, int pdNum) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return dao.saveFavorite(sqlSession, param);
+	}
+	@Override
+	public int deleteFavorite(int userNo, int pdNum) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return dao.deleteFavorite(sqlSession, param);
+	}
 	
 	
 	
 }
+

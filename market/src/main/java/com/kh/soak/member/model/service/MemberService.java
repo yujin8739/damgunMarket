@@ -19,5 +19,8 @@ public interface MemberService {
 	//아이디 중복확인 기능
 	int idCheck(String userId);
 	
+	int saveFavorite(int userNo, int pdNum);
+
+	int deleteFavorite(int userNo, int pdNum);
 	
 }
