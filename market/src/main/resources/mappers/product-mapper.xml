@@ -78,5 +78,34 @@
 		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%')
 		ORDER BY p.update_time DESC
 	</select>
+	<select id="selectOneProduct" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+	        p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        pd.pd_url
+	    FROM Product p
+			LEFT JOIN pd_file pd 
+				ON p.user_no = pd.userno 
+				AND p.pd_num = pd.pd_num
+		WHERE p.PD_NUM = #{pdNum} AND p.USER_NO = #{userNo} AND pd.filetype = 'thum'
+	</select>
+	
+	<select id="selectFileList" resultType="string">
+	    SELECT PD_URL
+	    FROM PD_FILE
+		WHERE PD_NUM = #{pdNum} AND USERNO = #{userNo}
+	</select>
 </mapper>
 	
