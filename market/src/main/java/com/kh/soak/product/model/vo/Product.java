@@ -24,4 +24,6 @@ public class Product {
 	private int pdStatus; //	PD_STATUS
 	private String isSub; //	IS_SUB
 	private String pd_url;
+	
+	
 }
