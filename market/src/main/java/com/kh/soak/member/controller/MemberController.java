@@ -14,26 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kh.soak.member.model.service.MemberService;
 import com.kh.soak.member.model.vo.Member;
 
-@Controller //Controller 타입의 어노테이션을 부여하면 spring이 bean scan을 통해 Controller bean으로 등록해준다.
+@Controller 
 public class MemberController {
 	
-	//사용할 Service객체를 선언해놓고 스프링이 관리할 수 있도록 처리하기
-	//기존 방식
-	//private MemberService service = new MemberService();
-	/*
-	 * 기존 객체 생성 방식
-	 * 객체간의 결합도가 높다.(소스코드의 수정이 일어날 경우 직접 찾아서 변경해야함)
-	 * 서비스가 동시에 많은 횟수가 요청될 경우 그만큼 객체 생성이 발생됨 
-	 * 
-	 * Spring에선 DI(Dependency Injection)을 이용한 방식으로 
-	 * 객체를 생성시켜 주입한다. (객체간의 결합도를 낮춰준다)
-	 * new 라는 키워드없이 선언문만 사용하고 @Autowired라는 어노테이션을 부여해서 
-	 * 스프링이 직접 bean을 관리 할 수 있도록 등록한다.
-	 * 
-	 * @Autowired : 스프링이 bean을 자동 주입할 수 있도록 하는 어노테이션
-	 * 
-	 * */
 	
+	
+
 	@Autowired
 	private MemberService service;
 	
@@ -41,8 +27,7 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcrypt;
 	
-	
-	
+
 	@RequestMapping("login.me")
 	public String loginMember(Member m
 							 ,HttpSession session
@@ -125,7 +110,7 @@ public class MemberController {
 		//비밀번호는 암호문으로 변경하여 m 에 담고 데이터베이스에 등록작업하기 
 		
 		String encPwd = bcrypt.encode(m.getPassWord());//평문 암호문으로 변경 
-
+		
 		m.setPassWord(encPwd);//객체에 암호문 비밀번호 넣기
 		
 		//서비스에 회원가입 메소드 호출 및 전달
@@ -158,6 +143,9 @@ public class MemberController {
 	public String updateMember(Member m
 							  ,HttpSession session
 							  ,Model model) {
+//		updateMember() 메소드를 작성하여 정보수정 처리해보기 
+//    	성공시 : 정보수정 성공! 메시지와 함께 마이페이지로 되돌아오기 (변경된 정보 갱신)
+//    	실패시 : 에러페이지로 정보수정 실패! 메시지와 함께 위임시키기(model 이용)
 		
 		int result = service.updateMember(m);
 		
@@ -186,6 +174,16 @@ public class MemberController {
 	@RequestMapping("delete.me")
 	public String deleteMember(Member m 
 							  ,HttpSession session) {
+//		메소드명 : deleteMember()
+//    	매핑주소 : delete.me
+//    	성공시 회원 탈퇴 성공 메시지와 함께 메인페이지로 이동(재요청) - 세션에 담긴 로그인정보 삭제하기 
+//    	실패시 회원 탈퇴 실패 메시지와 함께 마이페이지로 이동(재요청)
+		
+		//사용자 아이디가 있어야 해당 회원정보의 비밀번호를 확인할 수 있으니 
+		//아이디 추출하기
+		//전달받은 아이디를 이용하여 데이터베이스에서 회원정보 조회 후 
+		//조회된 비밀번호(암호문) 와 전달받은 비밀번호(평문) 판별 후 
+		//통과하면 성공 아니면 실패 처리하기 
 		
 		Member loginUser = service.loginMember(m);
 		

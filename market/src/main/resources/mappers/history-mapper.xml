@@ -15,7 +15,7 @@
 		<result property="pdImage" column="PD_IMAGE" />
 	</resultMap>
 	
-	<select id="myHistory" resultType="historyResultMap">
+	<select id="myHistory" resultMap="historyResultMap">
 		SELECT * FROM History
 		WHERE USER_ID = #{userNo}
 		ORDER BY PD_NUM

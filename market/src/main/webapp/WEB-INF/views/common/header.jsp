@@ -23,22 +23,25 @@
         }
         #header>div {width:100%; margin-bottom:10px;}
         #header_1 {height:40%;}
-    
+        #header_2 {height:60%;}
 
         #header_1>div{
             height:100%;
             float:left;
         }
-        #header_1_left {width:30%; position:relative;}
+
         #header_1_center {width:40%;}
         #header_1_right {width:30%;}
 
-        #header_1_left>img {height:80%; position:absolute; margin:auto; top:0px; bottom:0px; right:0px; left:0px;}
         #header_1_right {text-align:center; line-height:35px; font-size:12px; text-indent:35px;}
         #header_1_right>a {margin:5px;}
         #header_1_right>a:hover {cursor:pointer;}
 
-       
+        #header_2>ul {width:100%; height:100%; list-style-type:none; margin:auto; padding:0;}
+        #header_2>ul>li {float:left; width:25%; height:100%; line-height:55px; text-align:center;}
+        #header_2>ul>li a {text-decoration:none; color:black; font-size:18px; font-weight:900;}
+
+        #header_2 {border-top:1px solid lightgray;}
 
         #header a {text-decoration:none; color:black;}
 
@@ -75,9 +78,6 @@
 	
     <div id="header">
         <div id="header_1">
-            <div id="header_1_left">
-                <img src="https://www.iei.or.kr/resources/images/common/top_logo_s.jpg" alt="">
-            </div>
             <div id="header_1_center"></div>
             <div id="header_1_right">
             
@@ -96,7 +96,15 @@
                 </c:choose>
             </div>
         </div>
-        
+        <div id="header_2">
+            <ul>
+                <li><a href="${contextRoot}">HOME</a></li>
+                <li><a href="">공지사항</a></li>
+                <li><a href="${contextRoot}/list.bo">자유게시판</a></li>
+                <li><a href="${contextRoot}/list.ph">사진게시판</a></li>
+            </ul>
+        </div>
+    </div>
 
     <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
     <div class="modal fade" id="loginModal">
@@ -116,8 +124,8 @@
                     <div class="modal-body">
                         <label for="userId" class="mr-sm-2">ID : </label>
                         <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId"> <br>
-                        <label for="password" class="mr-sm-2">Password : </label>
-                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="password" name="password">
+                        <label for="passWord" class="mr-sm-2">Password : </label>
+                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="passWord" name="passWord">
                     </div>
                            
                     <!-- Modal footer -->
@@ -130,6 +138,8 @@
         </div>
 
     </div>
+    
+   
     
     <br clear="both">
 </body>

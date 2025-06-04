@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chatMapper">
+
+    <!-- 채팅방 생성 -->
+    <insert id="insertChatRoom" >
+        INSERT INTO CHAT_ROOM (ROOM_NO, USER_ID, LASTVISIT, CHAT_TYPE)
+        VALUES (#{roomNo}, #{userId}, #{lastVisit}, #{chatType})
+    </insert>
+
+    <!-- 채팅방 번호로 단일 조회 -->
+    <select id="selectChatRoomById" parameterType="int" >
+        SELECT *
+        FROM CHAT_ROOM
+        WHERE ROOM_NO = #{roomNo}
+    </select>
+
+    <!-- 특정 유저의 채팅방 목록 조회 -->
+    <select id="selectChatRoomsByUserId" parameterType="string" >
+        SELECT *
+        FROM CHAT_ROOM
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <!-- 메시지 저장 -->
+    <insert id="insertMessage" >
+        INSERT INTO MESSAGE (NO, ROOM_NO, MESSAGE, IMAGEURL, USER_ID, SENDTIME)
+        VALUES (#{no}, #{roomNo}, #{message}, #{imageUrl}, #{userId}, #{sendTime})
+    </insert>
+
+    <!-- 특정 채팅방 메시지 목록 조회 -->
+    <select id="selectMessagesByRoomNo" parameterType="int" >
+        SELECT *
+        FROM MESSAGE
+        WHERE ROOM_NO = #{roomNo}
+        ORDER BY SENDTIME ASC
+    </select>
+
+</mapper>

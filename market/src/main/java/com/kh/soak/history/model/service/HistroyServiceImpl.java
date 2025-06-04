@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.soak.history.model.dao.TradeHistoryDao;
 import com.kh.soak.history.model.vo.TradeHistory;
 
-
+@Service
+@Transactional
 public class HistroyServiceImpl implements HistroyService {
 	
 	@Autowired

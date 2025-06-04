@@ -9,18 +9,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Product {
-	private int user_No; //	USER_NO
-	private int pd_Num; //	PD_NUM
-	private String pd_Title; //	PD_TITLE
-	private String pd_Board; //	PD_BOARD
-	private String pd_Price; //	PD_PRICE
+	private int userNo; //	USER_NO
+	private int pdNum; //	PD_NUM
+	private String pdTitle; //	PD_TITLE
+	private String pdBoard; //	PD_BOARD
+	private String pdPrice; //	PD_PRICE
 	private String latitude; //	LATITUDE
 	private String longitude; //	LONGITUDE
-	private String big_cate; //	BIG_CATE
-	private String mid_cate; //	MID_CATE
-	private String small_cate; //	SMALL_CATE
-	private Date update_Time; //	UPDATE_TIME
-	private int pd_Rank; //	PD_RANK
-	private int pd_status; //	PD_STATUS
-	private String is_Sub; //	IS_SUB
+	private String bigCate; //	BIG_CATE
+	private String midCate; //	MID_CATE
+	private String smallCate; //	SMALL_CATE
+	private Date updateTime; //	UPDATE_TIME
+	private int pdRank; //	PD_RANK
+	private int pdStatus; //	PD_STATUS
+	private String isSub; //	IS_SUB
+	private String pd_url;
 }

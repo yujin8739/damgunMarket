@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 비어있을 수 없음 필수입력 요소 (해당 mapper를 부르는 별칭) -->
+<mapper namespace="productMapper">
+	<!-- 조회 결과를 VO에 매핑 시키는 도구 resultMap 작성해보기 -->
+	<resultMap type="Product" id="productResultMap">
+		<result property="userNo" column="USER_NO" />
+		<result property="pdNum" column="PD_NUM" />
+		<result property="pdTitle" column="PD_TITLE" />
+		<result property="pdBoard" column="PD_BOARD" />
+		<result property="pdPrice" column="PD_PRICE" />
+		<result property="latitude" column="LATITUDE" />
+		<result property="longitude" column="LONGITUDE" />
+		<result property="bigCate" column="BIG_CATE" />
+		<result property="midCate" column="MID_CATE" />
+		<result property="smallCate" column="SMALL_CATE" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="pdRank" column="PD_RANK" />
+		<result property="pdStatus" column="PD_STATUS" />
+		<result property="isSub" column="IS_SUB" />
+	</resultMap>
+	
+	<update id="upDateStatus">
+		UPDATE PRODUCT
+		SET PD_STATUS = 'DONE'
+		WHERE USER_NO = #{userNo}
+	</update>
+	
+	<select id="selectAllProducts" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+	        p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        pd.pd_url
+	    FROM Product p
+			LEFT JOIN pd_file pd 
+				ON p.user_no = pd.userno 
+				AND p.pd_num = pd.pd_num
+		WHERE pd.filetype = 'thum' OR pd.filetype IS NULL
+		ORDER BY p.update_time DESC
+	</select>
+	<select id="selectProducts" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+	        p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        pd.pd_url
+	    FROM Product p
+			LEFT JOIN pd_file pd 
+				ON p.user_no = pd.userno 
+				AND p.pd_num = pd.pd_num
+		WHERE (pd.filetype = 'thum' OR pd.filetype IS NULL) 
+		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%')
+		ORDER BY p.update_time DESC
+	</select>
+</mapper>
+	

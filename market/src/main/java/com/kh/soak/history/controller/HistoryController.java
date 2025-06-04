@@ -4,24 +4,23 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.kh.soak.history.model.service.HistroyServiceImpl;
+import com.kh.soak.history.model.service.HistroyService;
 import com.kh.soak.history.model.vo.TradeHistory;
 
-@Controller
+@Controller 
 public class HistoryController {
 	
-	@Autowired 
-	private HistroyServiceImpl service;
+	@Autowired  
+	private HistroyService service;
 //	USER_NO
 //	PD_NUM
 //	PD_TITLE
 //	PD_PRICE
 //	FILED
 //	PD_IMAGE
-	@PostMapping("/trade-end")
+	@PostMapping("trade-end")
 	public String tradeEnd(int userNo
 						 , int pdNum
 						 , String pdTitle

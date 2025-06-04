@@ -39,8 +39,8 @@
                     <input type="text" class="form-control" id="insertUserId" placeholder="Please Enter ID" name="userId" required> <br>
 					<div id="resultDiv" style="font-size:0.8em; display:none"></div> 
 					
-                    <label for="password">* Password : </label>
-                    <input type="password" class="form-control" id="insertUserPwd" placeholder="Please Enter Password" name="password" required> <br>
+                    <label for="passWord">* Password : </label>
+                    <input type="password" class="form-control" id="insertPassWord" placeholder="Please Enter Password" name="passWord" required> <br>
 
                     <label for="checkPwd">* Password Check : </label>
                     <input type="password" class="form-control" id="checkPwd" placeholder="Please Enter Password" required> <br>
@@ -48,6 +48,10 @@
                     <label for="userName">* Name : </label>
                     <input type="text" class="form-control" id="userName" placeholder="Please Enter Name" name="userName" required> <br>
 
+                    <label for="email"> &nbsp; Email : </label>
+                    <input type="text" class="form-control" id="email" placeholder="Please Enter Email" name="email"> <br>
+
+                   
                 </div> 
                 <br>
                 <div class="btns" align="center">
