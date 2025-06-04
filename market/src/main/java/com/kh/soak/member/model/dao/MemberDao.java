@@ -4,7 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.soak.member.model.vo.Member;
-
+//Repository : 저장소, 주로 DB(저장소)와 관련된 작업을 처리하는 영역이기때문에 dao에는 Repository 어노테이션을 부여한다.
 @Repository
 public class MemberDao {
 
@@ -18,7 +18,7 @@ public class MemberDao {
 		
 		return loginUser;
 	}
-	//전체기능 수정 필ㅇ 
+	
 	//회원가입 기능
 	public int insertMember(SqlSessionTemplate sqlSession, Member m) {
 		
@@ -46,4 +46,11 @@ public class MemberDao {
 		
 		return sqlSession.selectOne("memberMapper.idCheck",userId);
 	}
+
+	
+	
+	
+	
+	
+	
 }
