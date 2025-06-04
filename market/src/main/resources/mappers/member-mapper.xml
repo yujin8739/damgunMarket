@@ -34,26 +34,17 @@
 	<!-- DML구문은 항상 처리된 행 수 가 반환되기 때문에 결과타입을 작성할 필요가 없다. 작성하지 않음 -->
 	<!-- parameterType은 마이바티스가 자동추론하기 때문에 생략해도 무방하다. -->
 	<insert id="insertMember" parameterType="Member">
-		INSERT INTO MEMBER(USER_ID ,USER_PWD ,USER_NAME ,EMAIL ,GENDER ,AGE
-		,PHONE,ADDRESS)
+		INSERT INTO MEMBER(USER_ID ,PASSWORD ,USER_NAME ,EMAIL)
 		VALUES(#{userId}
-		,#{userPwd}
+		,#{passWord}
 		,#{userName}
 		,#{email}
-		,#{gender}
-		,#{age}
-		,#{phone}
 		,#{address})
 	</insert>
 	<update id="updateMember" parameterType="Member">
 		UPDATE MEMBER
 		SET USER_NAME = #{userName}
-		,EMAIL = #{email}
-		,AGE =#{age}
-		,PHONE = #{phone}
-		,ADDRESS = #{address}
-		,GENDER = #{gender}
-		,MODIFY_DATE =SYSDATE
+		,EMAIL = #{email}		
 		WHERE USER_ID = #{userId}
 		AND STATUS = 'Y'
 	</update>

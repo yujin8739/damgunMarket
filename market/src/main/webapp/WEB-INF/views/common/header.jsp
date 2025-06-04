@@ -23,7 +23,7 @@
         }
         #header>div {width:100%; margin-bottom:10px;}
         #header_1 {height:40%;}
-        #header_2 {height:60%;}
+    
 
         #header_1>div{
             height:100%;
@@ -38,11 +38,7 @@
         #header_1_right>a {margin:5px;}
         #header_1_right>a:hover {cursor:pointer;}
 
-        #header_2>ul {width:100%; height:100%; list-style-type:none; margin:auto; padding:0;}
-        #header_2>ul>li {float:left; width:25%; height:100%; line-height:55px; text-align:center;}
-        #header_2>ul>li a {text-decoration:none; color:black; font-size:18px; font-weight:900;}
-
-        #header_2 {border-top:1px solid lightgray;}
+       
 
         #header a {text-decoration:none; color:black;}
 
@@ -100,15 +96,7 @@
                 </c:choose>
             </div>
         </div>
-        <div id="header_2">
-            <ul>
-                <li><a href="${contextRoot}">HOME</a></li>
-                <li><a href="">공지사항</a></li>
-                <li><a href="${contextRoot}/list.bo">자유게시판</a></li>
-                <li><a href="${contextRoot}/list.ph">사진게시판</a></li>
-            </ul>
-        </div>
-    </div>
+        
 
     <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
     <div class="modal fade" id="loginModal">

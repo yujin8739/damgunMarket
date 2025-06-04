@@ -48,11 +48,10 @@
                     <label for="userId">* ID : </label>
                     <input type="text" class="form-control" id="mypageId" value="${loginUser.userId }" name="userId" readonly> <br>
 
-                    <label for="passWord">* Name : </label>
+                    <label for="userName">* Name : </label>
                     <input type="text" class="form-control" id="userName" value="${loginUser.userName }" name="userName" required> <br>
 
-                    <label for="email"> &nbsp; Email : </label>
-                    <input type="text" class="form-control" id="email" value="${loginUser.email }" name="email"> <br>
+            
 
                    
                 </div> 
@@ -67,15 +66,6 @@
         
     </div>
     
-    <script>
-    	//남여 체크박스 체크시키기 
-    	$(function(){
-    		//var gender = "${loginUser.gender}";
-    		//console.log(gender);
-    		$("input[value=${loginUser.gender}]").attr("checked",true);
-    	});
-    
-    </script>
     
     
     <!-- 
@@ -111,8 +101,8 @@
                             정말로 탈퇴 하시겠습니까? <br>
                         </div>
                         <br>
-                            <label for="userPwd" class="mr-sm-2">Password : </label>
-                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deleteUserPwd" name="userPwd"> <br>
+                            <label for="password" class="mr-sm-2">Password : </label>
+                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deleteUserPwd" name="password"> <br>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" align="center">
