@@ -1,8 +1,11 @@
 package com.kh.soak.product.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -30,5 +33,20 @@ public class ProductDao {
 
 	public List<Product> selectProducts(SqlSessionTemplate sqlSession, RowBounds rowBounds, String keyword) {
 		return sqlSession.selectList("productMapper.selectProducts", keyword, rowBounds);
+	}
+
+	public Product selectOneProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		//selectOne은 하나의 파라미터만 전달 가능하기 때문에 HashMap으로 묶어서 전달
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return sqlSession.selectOne("productMapper.selectOneProduct",param);
+	}
+	
+	public List<String> selectFiles(SqlSession sqlSession, int pdNum, int userNo) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return sqlSession.selectList("productMapper.selectFileList", param);
 	}
 }
