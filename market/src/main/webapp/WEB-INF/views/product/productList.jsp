@@ -54,7 +54,7 @@
                         const pdNum = $(this).data('pdnum');
                         const userNo = $(this).data('userno');
                         console.log("clicked pdNum:", pdNum, "userNo:", userNo);
-                        window.location.href = `/product/view?pdNum=\${pdNum}&userNo=\${userNo}`;
+                        window.location.href = `/soak/product/view?pdNum=\${pdNum}&userNo=\${userNo}`;
                     });
 
                     $('<h4>').text(product.pdTitle).appendTo($productDiv);
