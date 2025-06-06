@@ -48,7 +48,7 @@
                     <label for="userId">* ID : </label>
                     <input type="text" class="form-control" id="mypageId" value="${loginUser.userId }" name="userId" readonly> <br>
 
-                    <label for="passWord">* Name : </label>
+                    <label for="userName">* Name : </label>
                     <input type="text" class="form-control" id="userName" value="${loginUser.userName }" name="userName" required> <br>
 
                     <label for="email"> &nbsp; Email : </label>
@@ -67,29 +67,6 @@
         
     </div>
     
-    <script>
-    	//남여 체크박스 체크시키기 
-    	$(function(){
-    		//var gender = "${loginUser.gender}";
-    		//console.log(gender);
-    		$("input[value=${loginUser.gender}]").attr("checked",true);
-    	});
-    
-    </script>
-    
-    
-    <!-- 
-    	메소드명 : deleteMember()
-    	매핑주소 : delete.me
-    	성공시 회원 탈퇴 성공 메시지와 함께 메인페이지로 이동(재요청) - 세션에 담긴 로그인정보 삭제하기 
-    	실패시 회원 탈퇴 실패 메시지와 함께 마이페이지로 이동(재요청)
-    	
-    	회원탈퇴 처리도 update로 작성하기 (STATUS 에 Y를 N으로 변경하는 처리)
-    
-     -->
-    
-    
-
     <!-- 회원탈퇴 버튼 클릭 시 보여질 Modal -->
     <div class="modal fade" id="deleteForm">
         <div class="modal-dialog modal-sm">
@@ -111,8 +88,8 @@
                             정말로 탈퇴 하시겠습니까? <br>
                         </div>
                         <br>
-                            <label for="userPwd" class="mr-sm-2">Password : </label>
-                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deleteUserPwd" name="userPwd"> <br>
+                            <label for="passWord" class="mr-sm-2">Password : </label>
+                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deletePassword" name="passWord"> <br>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" align="center">

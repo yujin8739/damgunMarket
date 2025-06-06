@@ -1,6 +1,6 @@
 package com.kh.soak.chat.model.vo;
 
-import java.util.Date;
+import java.util.Date; // java.sql.Timestamp 대신 java.util.Date 사용 (JSON 직렬화/역직렬화에 더 용이)
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,18 +14,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MessageVO {
-    private int no;               // 메시지 번호
-    private int roomNo;           // 채팅방 번호 (FK)
-    private String message;       // 메시지 내용
-    private String imageUrl;      // 이미지 URL
-    private String userId;        // 보낸 유저 아이디
-    private Date sendTime;        // 보낸 시간
-//    컬럼타입      		   널에이블   컬럼아이디  	코멘트
-    
-//    NUMBER(11,0)			No		1			채팅방번호
-//    NUMBER(11,0)			No		2			메시지번호
-//    CLOB					No		3			메시지내용
-//    VARCHAR2(255 BYTE)	No		4			이미지URL
-//    VARCHAR2(255 BYTE)	No		5			보낸사람아이디
-//    DATE					No		6			보낸 시간
+    private int no;            // 메시지 번호 (CHAT_MESSAGE_SEQ)
+    private int roomNo;        // 채팅방 번호 (FK)
+    private String message;    // 메시지 내용
+    private String imageUrl;   // 이미지 URL (이미지 메시지일 경우)
+    private String userId;     // 보낸 유저 아이디
+    private Date sendTime;     // 보낸 시간 (DB는 SYSDATE, Java는 Date 객체)
+    private String type;       // 메시지 타입 (예: "enter", "chat", "image")
 }

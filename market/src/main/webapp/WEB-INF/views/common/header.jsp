@@ -29,11 +29,10 @@
             height:100%;
             float:left;
         }
-        #header_1_left {width:30%; position:relative;}
+
         #header_1_center {width:40%;}
         #header_1_right {width:30%;}
 
-        #header_1_left>img {height:80%; position:absolute; margin:auto; top:0px; bottom:0px; right:0px; left:0px;}
         #header_1_right {text-align:center; line-height:35px; font-size:12px; text-indent:35px;}
         #header_1_right>a {margin:5px;}
         #header_1_right>a:hover {cursor:pointer;}
@@ -79,9 +78,6 @@
 	
     <div id="header">
         <div id="header_1">
-            <div id="header_1_left">
-                <img src="https://www.iei.or.kr/resources/images/common/top_logo_s.jpg" alt="">
-            </div>
             <div id="header_1_center"></div>
             <div id="header_1_right">
             
@@ -128,8 +124,8 @@
                     <div class="modal-body">
                         <label for="userId" class="mr-sm-2">ID : </label>
                         <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId"> <br>
-                        <label for="password" class="mr-sm-2">Password : </label>
-                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="password" name="password">
+                        <label for="passWord" class="mr-sm-2">Password : </label>
+                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="passWord" name="passWord">
                     </div>
                            
                     <!-- Modal footer -->
@@ -142,6 +138,8 @@
         </div>
 
     </div>
+    
+   
     
     <br clear="both">
 </body>
