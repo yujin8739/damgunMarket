@@ -29,7 +29,7 @@ public class ChatController {
         Member loginUser = (Member) session.getAttribute("loginUser");
 
         if (loginUser == null) {
-            return "redirect:/member/login";
+            return "redirect:/";
         }
 
         String userId = loginUser.getUserId();

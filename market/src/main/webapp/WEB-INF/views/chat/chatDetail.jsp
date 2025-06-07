@@ -37,34 +37,28 @@
 
     <script>
         var websocket;
-        var roomNo = ${chatRoom.roomNo}; // JSP에서 서버로부터 받은 roomNo
-        var currentUserId = '${currentUserId}'; // JSP에서 서버로부터 받은 현재 로그인된 유저 ID
+        var roomNo = ${chatRoom.roomNo};
+        var currentUserId = '${currentUserId}';
 
         const chatContainer = document.getElementById('chatContainer');
         // 초기 스크롤 하단으로 이동
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
-        // WebSocket 연결 함수
         function connectWebSocket() {
-            // location.host는 "localhost:8080"과 같이 호스트와 포트를 포함합니다.
-            // ${pageContext.request.contextPath}는 "/soak"와 같이 웹 애플리케이션의 컨텍스트 경로입니다.
-            // 최종적으로 "ws://localhost:8080/soak/chatting" 형태의 URL이 됩니다.
             websocket = new WebSocket("ws://" + location.host + "${pageContext.request.contextPath}/chatting");
 
             websocket.onopen = function(event) {
                 console.log("WebSocket 연결 성공!");
-                // 방 입장 시 서버에 "enter" 타입의 메시지를 보냅니다.
                 var enterMessage = {
                     roomNo: roomNo,
                     userId: currentUserId,
-                    message: "", // 입장 메시지는 내용이 없을 수 있습니다.
-                    type: "enter" // 메시지 타입: 'enter'
+                    message: "",
+                    type: "enter"
                 };
                 websocket.send(JSON.stringify(enterMessage));
             };
 
             websocket.onmessage = function(event) {
-                // 서버로부터 메시지 수신 시
                 var receivedMessage = JSON.parse(event.data);
                 console.log("메시지 수신: ", receivedMessage);
                 displayMessage(receivedMessage); // 수신된 메시지를 화면에 표시
@@ -73,6 +67,8 @@
             websocket.onclose = function(event) {
                 console.log("WebSocket 연결 종료: ", event.code, event.reason);
                 // 연결이 끊겼을 때 재연결을 시도하거나 사용자에게 알림을 줄 수 있습니다.
+                // 5초 후에 재연결 시도 (옵션)
+                // setTimeout(connectWebSocket, 5000);
             };
 
             websocket.onerror = function(event) {
@@ -81,7 +77,6 @@
             };
         }
 
-        // 메시지 전송 함수
         function sendMessage() {
             const messageInput = document.getElementById('messageInput');
             const messageText = messageInput.value.trim();
@@ -92,49 +87,62 @@
             }
 
             if (websocket.readyState === WebSocket.OPEN) {
-                // 서버로 보낼 메시지 데이터 객체
                 const messageData = {
                     roomNo: roomNo,
                     userId: currentUserId,
                     message: messageText,
-                    imageUrl: null, // 이미지 메시지가 아니므로 null
-                    type: "chat" // 메시지 타입: 'chat'
+                    imageUrl: null,
+                    type: "chat",
+                    // sendTime을 클라이언트에서 현재 시간으로 설정하여 바로 표시
+                    // 서버로 보내면 서버에서 다시 설정하겠지만, 화면에 즉시 보이게 하기 위함.
+                    sendTime: new Date().toISOString()
                 };
-                websocket.send(JSON.stringify(messageData)); // JSON 문자열로 변환하여 전송
-                messageInput.value = ""; // 입력창 비우기
+                websocket.send(JSON.stringify(messageData));
+                messageInput.value = "";
+
+                // **자신이 보낸 메시지도 즉시 화면에 추가**
+                displayMessage(messageData);
+
             } else {
                 console.error("WebSocket 연결이 닫혀있습니다.");
                 alert("채팅 서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
-                // 연결이 끊겼을 경우 재연결 로직을 호출할 수도 있습니다.
-                // connectWebSocket();
             }
         }
 
-        // 메시지를 화면에 표시하는 함수
         function displayMessage(msg) {
             const chatContainer = document.getElementById('chatContainer');
             const newMessageDiv = document.createElement('div');
-            // 자신의 메시지는 my-message, 다른 사람 메시지는 other-message 클래스 적용
             newMessageDiv.className = 'message ' + (msg.userId === currentUserId ? 'my-message' : 'other-message');
 
             let messageHtml = `<span class="sender">${msg.userId}</span>: ${msg.message}`;
             if (msg.imageUrl) {
-                // 이미지 URL이 있을 경우 이미지 태그 추가
                 messageHtml += `<br><img src="${msg.imageUrl}" width="100px">`;
             }
-            // 수신 시간 포맷 (서버에서 받은 sendTime은 ISO 8601 문자열 또는 숫자 타임스탬프일 수 있음)
-            // `new Date(msg.sendTime).toLocaleTimeString()`을 사용하여 현재 로케일에 맞는 시간 포맷으로 표시
-            messageHtml += `<span class="time">(${new Date(msg.sendTime).toLocaleTimeString()})</span>`;
+            
+            // `sendTime`이 유효한지 확인하고 포맷팅
+            let messageTimeStr = '';
+            try {
+                // msg.sendTime이 없거나 유효하지 않은 경우 대비
+                const messageDate = new Date(msg.sendTime);
+                if (!isNaN(messageDate.getTime())) { // 유효한 Date 객체인지 확인
+                    messageTimeStr = messageDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                } else {
+                    console.warn("Invalid sendTime received:", msg.sendTime);
+                    messageTimeStr = "시간정보없음"; // 또는 다른 기본값
+                }
+            } catch (e) {
+                console.error("Error parsing sendTime:", msg.sendTime, e);
+                messageTimeStr = "시간정보없음";
+            }
+            messageHtml += `<span class="time">(${messageTimeStr})</span>`;
 
             newMessageDiv.innerHTML = messageHtml;
             chatContainer.appendChild(newMessageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight; // 스크롤 하단으로 이동
         }
 
-        // 페이지 로드 시 웹소켓 연결 시작
         window.onload = function() {
             connectWebSocket();
-            // 엔터 키로 메시지 전송 이벤트 리스너
             document.getElementById('messageInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     sendMessage();
