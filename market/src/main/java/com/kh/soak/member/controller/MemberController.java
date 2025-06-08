@@ -34,7 +34,9 @@ public class MemberController {
 		Member loginUser = service.loginMember(m);
 		
 		System.out.println("DB에서 조회된 사용자: " + loginUser);
-		
+//		bcrypt.matches(평문,암호문) : 평문과 암호문을 비교해주는 메소드 : true / false 반환
+		System.out.println("사용자가 입력한 비밀번호 : "+m.getPassWord());
+		System.out.println("평문에 대한 암호문 : "+bcrypt.encode(m.getPassWord()));
 		//성공 실패 처리 
 		if(loginUser != null && bcrypt.matches(m.getPassWord(), loginUser.getPassWord())) { 
 	
