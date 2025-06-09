@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="chatMapper">
-
-    <resultMap id="chatRoomResultMap" type="com.kh.soak.chat.model.vo.ChatRoomVO">
+<mapper namespace="chatMapper"> <resultMap id="chatRoomResultMap" type="com.kh.soak.chat.model.vo.ChatRoomVO">
         <id property="roomNo" column="ROOMNO"/>
         <result property="chatType" column="CHATTYPE"/>
         <result property="createdDate" column="CREATED_DATE"/>
-        <result property="lastVisit" column="LAST_VISIT_TIME" javaType="java.util.Date"/>
-        <result property="otherUserId" column="OTHER_USER_ID"/>
+        <result property="lastVisit" column="LAST_VISIT_TIME" javaType="java.util.Date"/> <result property="otherUserId" column="OTHER_USER_ID"/>
         <result property="otherUserName" column="OTHER_USER_NAME"/>
     </resultMap>
 
     <resultMap id="messageResultMap" type="com.kh.soak.chat.model.vo.MessageVO">
-        <id property="no" column="NO"/>
+        <id property="msgNo" column="NO"/>
+        
         <result property="roomNo" column="ROOMNO"/>
         <result property="message" column="MESSAGE"/>
         <result property="imageUrl" column="IMAGEURL"/>
         <result property="userId" column="USERID"/>
         <result property="sendTime" column="SENDTIME"/>
-        <result property="type" column="TYPE"/> </resultMap>
+        <result property="type" column="TYPE"/> 
+    </resultMap>
 
     <resultMap id="chatParticipantResultMap" type="com.kh.soak.chat.model.vo.ChatParticipantVO">
         <id property="roomNo" column="ROOMNO"/>
@@ -26,8 +25,7 @@
         <result property="lastVisitTime" column="LAST_VISIT_TIME"/>
     </resultMap>
 
-
-    <insert id="insertChatRoom" parameterType="com.kh.soak.chat.model.vo.ChatRoomVO" useGeneratedKeys="true" keyProperty="roomNo" keyColumn="ROOMNO">
+    <insert id="insertChatRoom" parameterType="com.kh.soak.chat.model.vo.ChatRoomVO">
         <selectKey keyProperty="roomNo" resultType="int" order="BEFORE">
             SELECT DAMGEUN.CHAT_ROOM_SEQ.NEXTVAL FROM DUAL
         </selectKey>
@@ -38,8 +36,7 @@
         ) VALUES (
             #{roomNo},
             #{chatType},
-            #{createdDate}
-        )
+            SYSDATE  )
     </insert>
 
     <insert id="insertChatParticipant" parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
@@ -50,7 +47,25 @@
         ) VALUES (
             #{roomNo},
             #{userId},
-            #{lastVisitTime}
+            SYSDATE  )
+    </insert>
+
+    <insert id="insertMessage" parameterType="com.kh.soak.chat.model.vo.MessageVO">
+        <selectKey keyProperty="msgNo" resultType="int" order="BEFORE"> SELECT DAMGEUN.MESSAGE_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO DAMGEUN.MESSAGE (
+            NO,
+            ROOMNO,
+            MESSAGE,
+            IMAGEURL,
+            USERID,
+            SENDTIME
+        ) VALUES (
+            #{msgNo}, #{roomNo},
+            #{message},
+            #{imageUrl},
+            #{userId},
+            #{sendTime}
         )
     </insert>
 
@@ -81,46 +96,18 @@
         WHERE cp.USERID = #{userId}
         ORDER BY cp.LAST_VISIT_TIME DESC NULLS LAST
     </select>
-
-    <update id="updateLastVisit" parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
-        UPDATE DAMGEUN.CHAT_PARTICIPANT
-        SET LAST_VISIT_TIME = #{lastVisitTime}
-        WHERE ROOMNO = #{roomNo} AND USERID = #{userId}
-    </update>
-
+    
     <select id="selectMessagesByRoomNo" parameterType="int" resultMap="messageResultMap">
         SELECT
-            NO,
-            ROOMNO,
+            NO,       ROOMNO,
             MESSAGE,
             IMAGEURL,
             USERID,
             SENDTIME
-            FROM DAMGEUN.MESSAGE
+        FROM DAMGEUN.MESSAGE
         WHERE ROOMNO = #{roomNo}
         ORDER BY SENDTIME ASC, NO ASC
     </select>
-
-    <insert id="insertMessage" parameterType="com.kh.soak.chat.model.vo.MessageVO">
-        <selectKey keyProperty="no" resultType="int" order="BEFORE">
-            SELECT DAMGEUN.MESSAGE_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO DAMGEUN.MESSAGE (
-            NO,
-            ROOMNO,
-            MESSAGE,
-            IMAGEURL,
-            USERID,
-            SENDTIME
-            ) VALUES (
-            #{no},
-            #{roomNo},
-            #{message},
-            #{imageUrl},
-            #{userId},
-            #{sendTime}
-            )
-    </insert>
 
     <select id="selectChatRoomByRoomNo" parameterType="int" resultMap="chatRoomResultMap">
         SELECT
@@ -157,5 +144,11 @@
         FROM DAMGEUN.USER_INFO
         WHERE USERID = #{userId}
     </select>
+
+    <update id="updateLastVisit" parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
+        UPDATE DAMGEUN.CHAT_PARTICIPANT
+        SET LAST_VISIT_TIME = #{lastVisitTime}
+        WHERE ROOMNO = #{roomNo} AND USERID = #{userId}
+    </update>
 
 </mapper>
