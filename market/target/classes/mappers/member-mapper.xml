@@ -38,7 +38,7 @@
 						  ,EMAIL
 						  ,STATUS
 						  ,USERRANK)
-           		    VALUES(SEQ_UNO.NEXTVAL
+           		    VALUES(USER_INFO_SEQ.NEXTVAL
            		    	  ,#{userId}
            		    	  ,#{passWord}
            		    	  ,#{userName}

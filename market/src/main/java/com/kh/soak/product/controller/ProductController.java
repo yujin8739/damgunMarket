@@ -51,6 +51,7 @@ public class ProductController {
         } 
         return service.searchProduct(rowBounds,keyword);
     }
+
     
 	@RequestMapping(value = "product/view", produces = "text/html;charset=UTF-8")
 	public String viewProduct(@RequestParam("pdNum") int pdNum,

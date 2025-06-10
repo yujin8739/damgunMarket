@@ -44,10 +44,12 @@
 
                     <label for="checkPwd">* Password Check : </label>
                     <input type="password" class="form-control" id="checkPwd" placeholder="Please Enter Password" required> <br>
-
+					<div id="pwdCheckMsg" style="font-size: 0.8em; display: none;"></div>
+					
                     <label for="userName">* Name : </label>
                     <input type="text" class="form-control" id="userName" placeholder="Please Enter Name" name="userName" required> <br>
-
+					<div id="nameMsg" style="font-size: 0.8em; display: none;"></div>
+					
                     <label for="email"> &nbsp; Email : </label>
                     <input type="text" class="form-control" id="email" placeholder="Please Enter Email" name="email"> <br>
 
@@ -64,67 +66,100 @@
 
     </div>
     
-    
-    <script>
-    	$(function(){
-    		/*
-    			사용자가 입력한 아이디가 중복인지 확인하는 작업 비동기식으로 처리하기
-    			아이디입력값이 5글자 이상 부터 사용자가 키를 입력후 떼어질때 이벤트 발생(또는 버튼을 만들어서 해도 됨)
-    			중복인지 아닌지 확인하여 네이버에서 봤던 응답데이터 처럼 NNNNN(사용불가) 또는 NNNNY(사용가능)
-    			으로 응답 데이터를 받아 응답데이터에 따라 result div에 사용가능한 아이디 입니다. 또는 
-    			사용 불가능한 아이디입니다 라는 텍스트를 출력하기.
-    			이때 사용 가능한 아이디라면 회원가입 버튼이 활성화 되도록 처리
-    			메소드명 : idCheck() 
-    			요청 매핑주소 : idCheck.me
-    		*/
-			
-    		//입력 요소 추출
-    		var inputId = $("#insertUserId");
-    		
-    		inputId.keyup(function(){
-    			
-				//값이 5글자 이상인지 체크 
-				
-				if(inputId.val().length > 4){
-					$.ajax({
-						url : "idCheck.me",
-						data : {
-							userId : inputId.val()
-						},
-						success : function(result){
-							
-							if(result=="NNNNN"){ //중복
-								$("#resultDiv").show();
-								$("#resultDiv").css("color","red").text("사용 불가능한 아이디 입니다.");
-								//사용불가능이면 버튼 비활성화
-								$(".btns>button[type=submit]").attr("disabled",true);
-							}else{//사용가능 
-								$("#resultDiv").show();
-								$("#resultDiv").css("color","green").text("사용 가능한 아이디 입니다.");
-								//사용불가능이면 버튼 비활성화
-								$(".btns>button[type=submit]").attr("disabled",false);
-							}
-						}, 
-						error : function(){
-							console.log("통신 실패");
-						}
-					});
-				}else{
-					//길이 제한 미달이면 안보이게 숨기기
-					$("#resultDiv").hide();
-					$(".btns>button[type=submit]").attr("disabled",true);
-				}
-				
-				
-    		
-    		});
-    		
-    		
-    		
-    	});
-    
-    
-    </script>
+ 
+  	<script>
+$(function(){
+    var inputId = $("#insertUserId");
+    var inputPwd = $("#insertPassWord");
+    var inputPwdCheck = $("#checkPwd");
+    var inputName = $("#userName");
+
+    var resultDiv = $("#resultDiv");
+    var pwdCheckMsg = $("#pwdCheckMsg");
+    var nameMsg = $("#nameMsg");
+    var submitBtn = $(".btns>button[type=submit]");
+
+    let idUsable = false;
+
+    // 이름 확인
+    function checkNameValid() {
+        const name = inputName.val().trim();
+        if (name.length === 0) {
+            nameMsg.css({ display: "block", color: "red" }).text("이름을 입력해 주세요.");
+            return false;
+        } else {
+            nameMsg.css({ display: "block", color: "green" }).text("이름이 입력되었습니다.");
+            return true;
+        }
+    }
+
+    // 비밀번호 일치 확인
+    function checkPasswordMatch() {
+        const pwd = inputPwd.val();
+        const confirmPwd = inputPwdCheck.val();
+
+        if (pwd.length === 0 && confirmPwd.length === 0) {
+            pwdCheckMsg.hide();
+            return false;
+        }
+
+        if (pwd !== confirmPwd) {
+            pwdCheckMsg.css({ display: "block", color: "red" }).text("비밀번호가 일치하지 않습니다.");
+            return false;
+        } else {
+            pwdCheckMsg.css({ display: "block", color: "green" }).text("비밀번호가 일치합니다.");
+            return true;
+        }
+    }
+
+    // 최종 검사해서 버튼 활성화
+    function validateAll() {
+        const pwdOk = checkPasswordMatch();
+        const nameOk = checkNameValid();
+
+        if (idUsable && pwdOk && nameOk) {
+            submitBtn.attr("disabled", false);
+        } else {
+            submitBtn.attr("disabled", true);
+        }
+    }
+
+    // 아이디 입력 검사 + AJAX 중복 확인
+    inputId.keyup(function(){
+        const val = inputId.val();
+        if(val.length > 4){
+            $.ajax({
+                url : "idCheck.me",
+                data : { userId : val },
+                success : function(result){
+                    if(result === "NNNNN"){
+                        resultDiv.css({ display: "block", color: "red" }).text("사용 불가능한 아이디 입니다.");
+                        idUsable = false;
+                    } else {
+                        resultDiv.css({ display: "block", color: "green" }).text("사용 가능한 아이디 입니다.");
+                        idUsable = true;
+                    }
+                    validateAll();
+                },
+                error : function(){
+                    resultDiv.css({ display: "block", color: "red" }).text("서버 오류");
+                    idUsable = false;
+                    validateAll();
+                }
+            });
+        } else {
+            resultDiv.css({ display: "block", color: "orange" }).text("아이디는 최소 5글자 이상이어야 합니다.");
+            idUsable = false;
+            validateAll();
+        }
+    });
+
+    inputPwd.keyup(validateAll);
+    inputPwdCheck.keyup(validateAll);
+    inputName.keyup(validateAll);
+});
+</script>
+  	
     
     
     
