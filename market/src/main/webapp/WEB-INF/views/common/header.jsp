@@ -16,19 +16,16 @@
          box-sizing: border-box;
       }
 
-      body {
-         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-         line-height: 1.6;
-         color: #333;
-         background: linear-gradient(135deg, #f8f6ff 0%, #ede7ff 100%);
-         padding-top: 80px;
-      }
+        #header_1>div{
+            height:100%;
+            float:left;
+        }
 
-      .container {
-         max-width: 1200px;
-         margin: 0 auto;
-         padding: 0 20px;
-      }
+        #header_1_center {width:40%;}
+        #header_1_right {width:30%;}
+        #header_1_right {text-align:center; line-height:35px; font-size:12px; text-indent:35px;}
+        #header_1_right>a {margin:5px;}
+        #header_1_right>a:hover {cursor:pointer;}
 
       header {
          background: rgba(255, 255, 255, 0.9);
@@ -239,68 +236,76 @@
 </head>
 
 <body>
-
-   <!-- 사이드바 -->
-   <div class="sidebar" id="sidebar">
-      <h3>카테고리</h3>
-      <ul>
-         <li>전자기기</li>
-         <li>의류</li>
-         <li>가구</li>
-         <li>도서</li>
-         <li>운동용품</li>
-         <li>기타</li>
-      </ul>
-   </div>
-
-   <!-- header -->
-   <header>
-      <div class="container">
-         <nav>
-            <button class="hamburger" onclick="toggleSidebar()">
-               <img src="images/hamburger-icon.png" alt="메뉴" />
-            </button>
-            <div class="logo">담금마켓</div>
-            <ul class="nav-links">
-               <li><a href="#home">홈</a></li>
-               <li><a href="#category">카테고리</a></li>
-               <li><a href="#">해야됨</a></li>
-               <li><a href="#">하하..</a></li>
-            </ul>
-            <div class="nav-buttons">
-               <a href="#" class="btn btn-login">로그인</a>
-               <a href="#" class="btn btn-join">회원가입</a>
-               <a href="#" class="btn btn-chat">담금톡</a>
+	<c:set var="contextRoot" value="${pageContext.request.contextPath}"/>	
+	
+	<script>
+	
+		var msg="${alertMsg}";
+		
+		if(msg!=""){
+			alert(msg);
+		}
+	</script>
+	<c:remove var="alertMsg"/>
+	
+	
+    <div id="header">
+        <div id="header_1">
+            <div id="header_1_center"></div>
+            <div id="header_1_right">
+            
+            	<c:choose>
+            		<c:when test="${empty loginUser}">
+		                <!-- 로그인 전 -->
+		                <a href="${contextRoot}/insert.me">회원가입</a>
+		                <a data-toggle="modal" data-target="#loginModal">로그인</a> <!-- 모달의 원리 : 이 버튼 클릭시 data-targer에 제시되어있는 해당 아이디의 div요소를 띄워줌 -->
+            		</c:when>
+					<c:otherwise>
+	                <!-- 로그인 후 -->
+	                    <label>${loginUser.userName}님 환영합니다</label> &nbsp;&nbsp;
+	                    <a href="${contextRoot }/mypage.me">마이페이지</a>
+	                    <a href="${contextRoot}/logout.me">로그아웃</a>
+					</c:otherwise>                
+                </c:choose>
             </div>
+        </div>
+        <div id="header_2">
+            <ul>
+                <li><a href="${contextRoot}">HOME</a></li>
+                <li><a href="">공지사항</a></li>
+                <li><a href="${contextRoot}/list.bo">자유게시판</a></li>
+                <li><a href="${contextRoot}/list.ph">사진게시판</a></li>
+            </ul>
+        </div>
+    </div>
 
-         </nav>
-      </div>
-   </header>
+    <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
+    <div class="modal fade" id="loginModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Login</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
 
-   <!-- Hero Section -->
-   <section class="hero" id="home">
-      <div class="container">
-         <h1 class="floating">담금마켓</h1>
-         <p>묻고 따지지 말고 그냥 담금마켓 하세요. 후회하지 않습니다.</p>
-      </div>
-   </section>
-
-   <!-- 사이드바 토글 스크립트 --> 
-   <script>
-      let sidebarTimer;
-
-      function toggleSidebar() {
-         const sidebar = document.getElementById('sidebar');
-         sidebar.classList.toggle('open');
-
-         if (sidebar.classList.contains('open')) {
-            clearTimeout(sidebarTimer);
-            sidebarTimer = setTimeout(() => {
-               sidebar.classList.remove('open');
-            }, 5000);
-         }
-      }
-   </script>   
+                <form action="${contextRoot}/login.me" method="post">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <label for="userId" class="mr-sm-2">ID : </label>
+                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId"> <br>
+                        <label for="passWord" class="mr-sm-2">Password : </label>
+                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="passWord" name="passWord">
+                    </div>
+                           
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                    </div>
+                </form>
+            </div>
+    </div>
+    <br clear="both">
 </body>
-
 </html>

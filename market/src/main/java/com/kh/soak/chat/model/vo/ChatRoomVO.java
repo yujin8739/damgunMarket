@@ -6,22 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 public class ChatRoomVO {
-    private int roomNo;           // 채팅방번호
-    private String userId;        // 유저아이디
-    private String lastVisit;     // 마지막 방문 (형식: ABC123(날짜)@TEST123(날짜))
-    private String chatType;      // 채팅타입 (예: TEXT, IMAGE 등)
-    
-//    컬럼타입      		   널에이블   컬럼아이디  	코멘트
-    
-//    NUMBER(11,0)			No		1			채팅방번호
-//    VARCHAR2(255 BYTE)	No		2			유저 ID(ABC123@TEST123)
-//    VARCHAR2(255 BYTE)	No		3			마지막방문 EX)ABC123(날짜시간)@TEST123(날짜시간)
-//    VARCHAR2(20 BYTE)		No		4			채팅타입(이미지 채팅인지 일반 채팅인지)
-//    
+    private int roomNo;        // 채팅방번호 (PK)
+    private String chatType;    // 채팅타입 (TEXT, IMAGE 등)
+    private Date createdDate;   // 방 생성일시 (DB: DATE 타입)
+    private Date lastVisit;     // 현재 로그인한 유저의 이 방 마지막 방문 시간 (채팅방 목록 조회 시 사용)
+    private String otherUserId; // 1:1 채팅 시 상대방 ID (편의상 추가, DB 컬럼 아님)
+    private String otherUserName; // 1:1 채팅 시 상대방 이름 (편의상 추가, DB 컬럼 아님)
+    // private int unreadMessageCount; // 필요하다면 추가 (JSP에서 사용)
 }

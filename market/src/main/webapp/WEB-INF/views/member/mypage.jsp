@@ -107,7 +107,7 @@
                             정말로 탈퇴 하시겠습니까? <br>
                         </div>
                         <br>
-                            <label for="userPwd" class="mr-sm-2">Password : </label>
+                            <label for="passWord" class="mr-sm-2">Password : </label>
                             <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deleteUserPwd" name="userPwd"> <br>
                     </div>
                     <!-- Modal footer -->

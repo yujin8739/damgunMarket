@@ -68,6 +68,11 @@ public class ProductController {
 	    model.addAttribute("fileListJson", fileListJson); // 문자열 그대로 전달
 	    return "product/view";
 	}
+	
+	@GetMapping
+	public String showRegist() {
+		return "product/pd-regist";
+	}
    
 
 }
