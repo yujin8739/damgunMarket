@@ -48,7 +48,7 @@
 	        pd.pd_url
 	    FROM Product p
 			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.userno 
+				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
 		WHERE pd.filetype = 'thum' OR pd.filetype IS NULL
 		ORDER BY p.update_time DESC
@@ -72,7 +72,7 @@
 	        pd.pd_url
 	    FROM Product p
 			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.userno 
+				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
 		WHERE (pd.filetype = 'thum' OR pd.filetype IS NULL) 
 		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%')
@@ -97,7 +97,7 @@
 	        pd.pd_url
 	    FROM Product p
 			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.userno 
+				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
 		WHERE p.PD_NUM = #{pdNum} AND p.USER_NO = #{userNo} AND pd.filetype = 'thum'
 	</select>
@@ -105,7 +105,7 @@
 	<select id="selectFileList" resultType="string">
 	    SELECT PD_URL
 	    FROM PD_FILE
-		WHERE PD_NUM = #{pdNum} AND USERNO = #{userNo}
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</select>
 </mapper>
 	

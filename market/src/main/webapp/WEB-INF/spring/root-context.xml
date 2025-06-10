@@ -20,9 +20,7 @@
 	 	
 	 	SqlSessionFactoryBean sfb = new SqlSessionFactoryBean();
 	 	SqlSessionTemplate st = new SqlSessionTemplate(sfb);
-	 	sfb.setDataSource(bds) 
-	 	
-	 	
+	 	sfb.setDataSource(bds) 	 		 	
 	  -->
 	 
 	 <!-- DB 등록작업 3단계-->
@@ -30,7 +28,7 @@
 	 <!-- 1단계 DB접속 정보 등록 -->
 	 <bean class="org.apache.commons.dbcp2.BasicDataSource" id="dataSource">
 	 	<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-	 	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+	 	<property name="url" value="jdbc:oracle:thin:@175.123.112.82:1521:xe"/>
 	 	<property name="username" value="DAMGEUN"/>
 	 	<property name="password" value="DAMGEUN"/>
 	 </bean>

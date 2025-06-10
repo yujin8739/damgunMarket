@@ -1,29 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <!-- jQuery 라이브러리 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- 부트스트랩에서 제공하고 있는 스타일 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- 부트스트랩에서 제공하고 있는 스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <style>
-        div {box-sizing:border-box;}
-        #header {
-            width:80%;
-            height:100px;
-            padding-top:20px;
-            margin:auto;
-        }
-        #header>div {width:100%; margin-bottom:10px;}
-        #header_1 {height:40%;}
-        #header_2 {height:60%;}
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>담금마켓header</title>
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
 
         #header_1>div{
             height:100%;
@@ -32,38 +23,220 @@
 
         #header_1_center {width:40%;}
         #header_1_right {width:30%;}
-
         #header_1_right {text-align:center; line-height:35px; font-size:12px; text-indent:35px;}
         #header_1_right>a {margin:5px;}
         #header_1_right>a:hover {cursor:pointer;}
 
-        #header_2>ul {width:100%; height:100%; list-style-type:none; margin:auto; padding:0;}
-        #header_2>ul>li {float:left; width:25%; height:100%; line-height:55px; text-align:center;}
-        #header_2>ul>li a {text-decoration:none; color:black; font-size:18px; font-weight:900;}
+      header {
+         background: rgba(255, 255, 255, 0.9);
+         backdrop-filter: blur(10px);
+         box-shadow: 0 2px 20px rgba(139, 69, 255, 0.1);
+         position: fixed;
+         width: 100%;
+         top: 0;
+         z-index: 1000;
+         transition: all 0.3s ease;
+      }
 
-        #header_2 {border-top:1px solid lightgray;}
+      nav {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 1rem 0;
+      }
 
-        #header a {text-decoration:none; color:black;}
+      .logo {
+         font-size: 1.8rem;
+         font-weight: bold;
+         background: linear-gradient(45deg, #8b45ff, #b45aff);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+      }
 
-        /* 세부페이지마다 공통적으로 유지할 style */
-        .content {
-            background-color:rgb(247, 245, 245);
-            width:80%;
-            margin:auto;
-        }
-        .innerOuter {
-            border:1px solid lightgray;
-            width:80%;
-            margin:auto;
-            padding:5% 10%;
-            background-color:white;
-        }
+      .nav-links {
+         display: flex;
+         list-style: none;
+         gap: 2rem;
+      }
 
-    </style>
+      .nav-links a {
+         text-decoration: none;
+         color: #666;
+         font-weight: 500;
+         transition: color 0.3s ease;
+      }
+
+      .nav-links a:hover {
+         color: #8b45ff;
+      }
+
+      .nav-buttons {
+         display: flex;
+         gap: 1rem;
+      }
+
+      .btn {
+         padding: 0.7rem 1.5rem;
+         border: none;
+         border-radius: 25px;
+         font-weight: 500;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         text-decoration: none;
+         display: inline-block;
+      }
+
+      .btn-login {
+         background: transparent;
+         color: #8b45ff;
+         border: 2px solid #8b45ff;
+      }
+
+      .btn-login:hover {
+         background: #8b45ff;
+         color: white;
+         transform: translateY(-2px);
+         box-shadow: 0 5px 15px rgba(139, 69, 255, 0.3);
+      }
+
+      .btn-join {
+         background: linear-gradient(45deg, #8b45ff, #b45aff);
+         color: white;
+      }
+
+      .btn-join:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 5px 15px rgba(139, 69, 255, 0.4);
+      }
+
+      .btn-chat {
+         background: linear-gradient(45deg, #b45aff, #8b45ff);
+         color: white;
+         border: 2px solid #b45aff;
+         padding: 0.7rem 1.5rem;
+         border-radius: 25px;
+         font-weight: 500;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         text-decoration: none;
+         display: inline-block;
+      }
+
+      .btn-chat:hover {
+         background: linear-gradient(45deg, #8b45ff, #b45aff);
+         border-color: #8b45ff;
+         box-shadow: 0 5px 15px rgba(180, 90, 255, 0.4);
+         transform: translateY(-2px);
+      }
+
+
+      .hamburger {
+         font-size: 2rem;
+         background: none;
+         border: none;
+         color: #8b45ff;
+         cursor: pointer;
+         display: none;
+      }
+
+      @media (max-width: 768px) {
+
+         .nav-links,
+         .nav-buttons {
+            display: none;
+         }
+
+         .hamburger {
+            display: block;
+         }
+      }
+
+      .sidebar {
+         position: fixed;
+         top: 0;
+         left: -260px;
+         width: 240px;
+         height: 100%;
+         background-color: #f5efff;
+         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+         padding: 2rem 1.2rem;
+         transition: left 0.3s ease;
+         z-index: 2000;
+      }
+
+      .sidebar.open {
+         left: 0;
+      }
+
+      .sidebar h3 {
+         color: #8b45ff;
+         margin-bottom: 1rem;
+      }
+
+      .sidebar ul {
+         list-style: none;
+         padding: 0;
+      }
+
+      .sidebar li {
+         margin: 1rem 0;
+         font-weight: 500;
+         cursor: pointer;
+         color: #5c3d99;
+      }
+
+      .sidebar li:hover {
+         color: #8b45ff;
+      }
+
+      .hero {
+         margin-top: 80px;
+         padding: 4rem 0;
+         text-align: center;
+      }
+
+      .hero h1 {
+         font-size: 3rem;
+         margin-bottom: 1rem;
+         background: linear-gradient(45deg, #8b45ff, #b45aff);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+         background-clip: text;
+      }
+
+      .hero p {
+         font-size: 1.2rem;
+         color: #666;
+         margin-bottom: 2rem;
+         max-width: 600px;
+         margin-left: auto;
+         margin-right: auto;
+      }
+
+      .search-input {
+         width: 100%;
+         padding: 1rem 1.5rem;
+         border: 2px solid #e0d9ff;
+         border-radius: 50px;
+         font-size: 1rem;
+         outline: none;
+         transition: all 0.3s ease;
+      }
+
+      .search-input:focus {
+         border-color: #8b45ff;
+         box-shadow: 0 0 20px rgba(139, 69, 255, 0.2);
+      }
+
+      .search-btn:hover {
+         transform: translateY(-50%) scale(1.05);
+      }
+   </style>
 </head>
+
 <body>
-	<c:set var="contextRoot" value="${pageContext.request.contextPath}"/>
-	
+	<c:set var="contextRoot" value="${pageContext.request.contextPath}"/>	
 	
 	<script>
 	
@@ -115,10 +288,7 @@
                     <h4 class="modal-title">Login</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-        
-        		
-        
-        
+
                 <form action="${contextRoot}/login.me" method="post">
                     <!-- Modal body -->
                     <div class="modal-body">
@@ -135,12 +305,7 @@
                     </div>
                 </form>
             </div>
-        </div>
-
     </div>
-    
-   
-    
     <br clear="both">
 </body>
 </html>
