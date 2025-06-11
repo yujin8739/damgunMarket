@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.soak.etc.model.service.EtcService;
+import com.kh.soak.etc.model.vo.Station;
 import com.kh.soak.product.model.vo.Product;
 
 @Controller
@@ -75,6 +76,12 @@ public class EtcController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+    
+    @RequestMapping(value = "Station/pd-regit",produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public List<Station> getNearbyStations(@RequestParam double lat, @RequestParam double lng) {
+        return service.selectNearStations(lat,lng);
     }
 
 }
