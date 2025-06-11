@@ -96,6 +96,7 @@ public class ProductController {
 	public String insertProduct(
 	        @ModelAttribute Product product,
 	        @RequestParam("uploadFile") MultipartFile[] uploadFiles,
+	        @RequestParam(value = "station", required = false) List<String> stations,
 	        HttpSession session,
 	        HttpServletRequest request) throws Exception {
 
