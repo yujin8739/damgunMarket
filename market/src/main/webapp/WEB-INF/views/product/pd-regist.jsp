@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -70,14 +71,60 @@
             border-radius: 5px;
             margin-top: 10px;
         }
+        .station-selection-container {
+		    margin: 20px 0;
+		    text-align: center;
+		}
+		.station-label {
+		    display: block;
+		    margin-bottom: 10px;
+		    font-size: 1.2rem;
+		    color: #6a0dad;
+		    font-weight: bold;
+		}
+		.station-list {
+		    display: flex;
+		    flex-wrap: wrap;
+		    justify-content: center;
+		    gap: 10px;
+		}
+		.station-list input[type="radio"] {
+		    display: none;
+		}
+		.station-item {
+		    display: block;
+  			margin-bottom: 8px;
+		    padding: 10px 20px;
+		    background-color: #eee;
+		    border-radius: 30px;
+		    border: 2px solid transparent;
+		    cursor: pointer;
+		    font-size: 1rem;
+		    color: #333;
+		    transition: all 0.3s ease;
+		    min-width: 120px;
+		    text-align: center;
+		}
+		.station-list input[type="radio"]:checked + .station-item {
+		    background-color: #c084fc;
+		    border-color: #9333ea;
+		    color: white;
+		    font-weight: bold;
+		    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+		}
+		.station-item:hover {
+		    background-color: #e0d4f7;
+		}
+        
     </style>
 </head>
 <body>
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
     <div class="container">
         <div class="form-container">
             <h2 class="form-title">상품 등록</h2>
             
-            <form action="${contextPath}/product/insert" method="post" enctype="multipart/form-data" id="productForm">
+            <form action="${pageContext.request.contextPath}/product/insert" method="post" enctype="multipart/form-data" id="Product">
                 
                 <!-- 상품명 -->
                 <div class="form-group">
@@ -146,18 +193,12 @@
                 </div>
                 
                 <!-- 위치 정보 -->
-                <div class="form-group">
-                    <label class="form-label">거래 위치</label>
-                    <button type="button" class="btn btn-outline-primary" id="getLocationBtn">
-                        현재 위치 가져오기
-                    </button>
-                    <div class="location-info" id="locationInfo" style="display: none;">
-                        <p class="mb-1"><strong>설정된 위치:</strong></p>
-                        <p class="mb-0" id="locationText">위치를 설정해주세요</p>
-                    </div>
-                    <input type="hidden" id="latitude" name="latitude">
-                    <input type="hidden" id="longitude" name="longitude">
-                </div>
+				<div id="stationSelectionWrapper" style="display: none; margin-top: 20px;">
+				  <label class="station-label">📍 가까운 정거장을 선택하세요</label>
+				  <div id="stationList" class="station-list"></div>
+				  <input type="hidden" id="latitude" name="latitude">
+                  <input type="hidden" id="longitude" name="longitude">
+				</div>
                 
                 <!-- 버튼 영역 -->
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
@@ -168,13 +209,74 @@
             </form>
         </div>
     </div>
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 최신 안정 버전 jQuery (CDN) -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+	    const serverPath = '${pageContext.request.contextPath}';
+	</script>
     
     <script>
+    	//시작시 동작하는 함수 거래 가능 역 찾기
+	    function checkStation() {
+	        if (navigator.geolocation) {
+	            navigator.geolocation.getCurrentPosition(function(position) {
+	                const lat = position.coords.latitude;
+	                const lng = position.coords.longitude;
+	                
+	                $('#latitude').val(lat);
+	                $('#longitude').val(lng);
+	                //$('#locationText').text('위도: ' + lat.toFixed(6) + ', 경도: ' + lng.toFixed(6));
+	                $.ajax({
+		                url: serverPath+'/Station/pd-regit',
+		                type: 'GET',
+		                data: { 
+		                	lat: lat,
+		                	lng: lng 
+	                },
+	                success: function(data) {
+	                    //console.log('데이터:', data);
+
+	                    $('#stationList').empty();
+
+	                    if (!Array.isArray(data) || data.length === 0) {
+	                        $('#stationList').append('<p>조회된 역이 없습니다.</p>');
+	                        return;
+	                    }
+
+	                    $.each(data, function(index, station) {
+	                        $('#stationList').append(
+	                            '<label class="station-item">' +
+	                            '<input type="checkbox" name="station" value="' + station.stationNum + '" min="1"> ' +
+	                            station.stationName + ' (' + station.lineName + ')' +
+	                            '</label>'
+	                        );
+	                    });
+
+	                    $('#stationList').prop('disabled', false);
+	                    $('#stationSelectionWrapper').show();  // 또는
+	                },
+	                error: function() {
+	                    alert('소분류 카테고리를 불러오는데 실패했습니다.');
+	                }
+	            });
+	                $('#locationInfo').show();
+	                
+	                alert('현재 위치가 설정되었습니다.');
+	            }, function(error) {
+	                alert('위치 정보를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.');
+	            });
+	        } else {
+	            alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+	        }
+	    }
+	    
+	    
         $(document).ready(function() {
-            
+        	checkStation();
             // 대분류 선택 시 중분류 로드
             $('#bigCate').change(function() {
                 const bigCate = $(this).val();
@@ -188,7 +290,7 @@
                 
                 if (bigCate) {
                     $.ajax({
-                        url: '${contextPath}/product/midCategory',
+                        url: serverPath+'/category/mid',
                         type: 'GET',
                         data: { bigCate: bigCate },
                         success: function(data) {
@@ -216,7 +318,7 @@
                 
                 if (bigCate && midCate) {
                     $.ajax({
-                        url: '${contextPath}/product/smallCategory',
+                        url: serverPath+'/category/small',
                         type: 'GET',
                         data: { 
                             bigCate: bigCate,
@@ -267,25 +369,7 @@
             });
             
             // 현재 위치 가져오기
-            $('#getLocationBtn').click(function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        
-                        $('#latitude').val(lat);
-                        $('#longitude').val(lng);
-                        $('#locationText').text('위도: ' + lat.toFixed(6) + ', 경도: ' + lng.toFixed(6));
-                        $('#locationInfo').show();
-                        
-                        alert('현재 위치가 설정되었습니다.');
-                    }, function(error) {
-                        alert('위치 정보를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.');
-                    });
-                } else {
-                    alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
-                }
-            });
+            $('#getLocationBtn').click();
             
             // 가격 입력 시 숫자만 입력되도록 포맷팅
             $('#pdPrice').on('input', function() {
@@ -294,7 +378,16 @@
             });
             
             // 폼 제출 전 유효성 검사
-            $('#productForm').submit(function(e) {
+            $('#Product').submit(function(e) {
+            	
+            	const checkedStations = $('input[name="station"]:checked');
+            	
+                if (checkedStations.length === 0) {
+                    alert('정거장을 1개 이상 선택해주세요.');
+                    e.preventDefault(); // 폼 제출 막기
+                    return false;
+                }
+                
                 // 필수 필드 검사
                 if (!$('#pdTitle').val().trim()) {
                     alert('상품명을 입력해주세요.');
@@ -327,7 +420,7 @@
                     alert('상품 이미지를 선택해주세요.');
                     e.preventDefault();
                     return false;
-                }
+                }   
                 
                 // 제출 확인
                 if (confirm('상품을 등록하시겠습니까?')) {

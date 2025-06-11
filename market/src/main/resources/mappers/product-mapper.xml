@@ -50,7 +50,7 @@
 			LEFT JOIN pd_file pd 
 				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
-		WHERE pd.filetype = 'thum' OR pd.filetype IS NULL
+		WHERE pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL
 		ORDER BY p.update_time DESC
 	</select>
 	<select id="selectProducts" resultMap="productResultMap" resultType="Product">
@@ -74,7 +74,7 @@
 			LEFT JOIN pd_file pd 
 				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
-		WHERE (pd.filetype = 'thum' OR pd.filetype IS NULL) 
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) 
 		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%')
 		ORDER BY p.update_time DESC
 	</select>
@@ -99,7 +99,7 @@
 			LEFT JOIN pd_file pd 
 				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
-		WHERE p.PD_NUM = #{pdNum} AND p.USER_NO = #{userNo} AND pd.filetype = 'thum'
+		WHERE p.PD_NUM = #{pdNum} AND p.USER_NO = #{userNo} AND (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) 
 	</select>
 	
 	<select id="selectFileList" resultType="string">
@@ -107,5 +107,62 @@
 	    FROM PD_FILE
 		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</select>
+	
+	<insert id="insertProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="pdNum">
+	    <!-- 먼저 시퀀스로 pdNum 값을 설정 -->
+	    <selectKey keyProperty="pdNum" resultType="int" order="BEFORE">
+	        SELECT PRODUCT_SEQ.NEXTVAL FROM DUAL
+	    </selectKey>
+	    INSERT INTO PRODUCT (
+	        USER_NO,
+	        PD_NUM,
+	        PD_TITLE,
+	        PD_BOARD,
+	        PD_PRICE,
+	        LATITUDE,
+	        LONGITUDE,
+	        BIG_CATE,
+	        MID_CATE,
+	        SMALL_CATE,
+	        UPDATE_TIME,
+	        PD_RANK,
+	        IS_SUB
+	    ) VALUES (
+	        #{userNo},
+	        #{pdNum},
+	        #{pdTitle},
+	        #{pdBoard},
+	        #{pdPrice},
+	        #{latitude},
+	        #{longitude},
+	        #{bigCate},
+	        #{midCate},
+	        #{smallCate},
+	        SYSDATE,
+	        #{pdRank},
+	        'Y'
+	    )
+	</insert>
+	<insert id="insertProductFile" parameterType="PdFile" useGeneratedKeys="true">
+	    INSERT INTO PD_FILE (
+	        USER_NO,
+	        PD_NUM,
+	        PD_URL,
+	        FILETYPE,
+	        ISTHUMBNAIL,
+	        IS_SUB,
+	        FILE_NO
+	    ) VALUES (
+	        #{userNo},
+	        #{pdNum},
+	        #{pdUrl},
+	        #{fileType},
+	        #{isThumbnail},
+	        #{isSub},
+	        #{fileNo}
+	    )
+	</insert>
+
+
 </mapper>
 	

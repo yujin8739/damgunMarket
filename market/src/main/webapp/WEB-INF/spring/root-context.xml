@@ -20,7 +20,9 @@
 	 	
 	 	SqlSessionFactoryBean sfb = new SqlSessionFactoryBean();
 	 	SqlSessionTemplate st = new SqlSessionTemplate(sfb);
-	 	sfb.setDataSource(bds) 	 		 	
+	 	sfb.setDataSource(bds) 
+	 	
+	 	
 	  -->
 	 
 	 <!-- DB 등록작업 3단계-->
