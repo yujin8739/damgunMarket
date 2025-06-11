@@ -1,0 +1,30 @@
+package com.kh.soak.etc.model.dao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.kh.soak.product.model.vo.Product;
+
+@Repository
+public class EtcDao {
+
+	public List<String> selectBigCateList(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("etcMapper.bigCateList");
+	}
+
+	public List<Product> selectMidCateList(SqlSessionTemplate sqlSession, String bigCate) {
+		return sqlSession.selectList("etcMapper.midCateList",bigCate);
+	}
+
+	public List<Product> selectSmallCateList(SqlSessionTemplate sqlSession, String bigCate, String midCate) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("midCate", midCate);
+		param.put("bigCate", bigCate);
+		return sqlSession.selectList("etcMapper.smallCateList",param);
+	}
+
+}

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -73,11 +74,12 @@
     </style>
 </head>
 <body>
+	<%@ include file="/WEB-INF/views/common/header.jsp" %>
     <div class="container">
         <div class="form-container">
             <h2 class="form-title">상품 등록</h2>
             
-            <form action="${contextPath}/product/insert" method="post" enctype="multipart/form-data" id="productForm">
+            <form action="${pageContext.request.contextPath}/product/insert" method="post" enctype="multipart/form-data" id="Product">
                 
                 <!-- 상품명 -->
                 <div class="form-group">
@@ -168,9 +170,15 @@
             </form>
         </div>
     </div>
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 최신 안정 버전 jQuery (CDN) -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+	    const serverPath = '${pageContext.request.contextPath}';
+	</script>
     
     <script>
         $(document).ready(function() {
@@ -188,7 +196,7 @@
                 
                 if (bigCate) {
                     $.ajax({
-                        url: '${contextPath}/product/midCategory',
+                        url: serverPath+'/category/mid',
                         type: 'GET',
                         data: { bigCate: bigCate },
                         success: function(data) {
@@ -216,7 +224,7 @@
                 
                 if (bigCate && midCate) {
                     $.ajax({
-                        url: '${contextPath}/product/smallCategory',
+                        url: serverPath+'/category/small',
                         type: 'GET',
                         data: { 
                             bigCate: bigCate,
@@ -325,6 +333,18 @@
                 
                 if (!$('#uploadFile')[0].files.length) {
                     alert('상품 이미지를 선택해주세요.');
+                    e.preventDefault();
+                    return false;
+                }
+                
+                if (!$('#latitude').val().trim()) {
+                    alert('거래를 위한 현재 위치조회를 해주세요.');
+                    e.preventDefault();
+                    return false;
+                }
+                
+                if (!$('#longitude').val().trim()) {
+                    alert('거래를 위한 현재 위치조회를 해주세요.');
                     e.preventDefault();
                     return false;
                 }

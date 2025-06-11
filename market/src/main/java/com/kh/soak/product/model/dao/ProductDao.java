@@ -9,10 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.soak.product.model.vo.PdFile;
 import com.kh.soak.product.model.vo.Product;
-
-
-
 
 
 @Repository
@@ -48,5 +46,13 @@ public class ProductDao {
 	    param.put("pdNum", pdNum);
 	    param.put("userNo", userNo);
 		return sqlSession.selectList("productMapper.selectFileList", param);
+	}
+
+	public int insertProduct(SqlSessionTemplate sqlSession, Product product) {
+		return sqlSession.insert("productMapper.insertProduct", product);
+	}
+	
+	public int insertPdFiles(SqlSessionTemplate sqlSession, PdFile pdFile) {
+		return sqlSession.insert("productMapper.insertProductFile", pdFile);
 	}
 }
