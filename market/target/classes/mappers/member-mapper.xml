@@ -6,7 +6,7 @@
 <mapper namespace="memberMapper">
 	
 	<resultMap type="Member" id="memberResultMap">
-		<result property="userNo" column="USERNO" />
+		<result property="userNo" column="USER_NO" />
 		<result property="userId" column="USERID" />
 		<result property="passWord" column="PASSWORD" />
 		<result property="userName" column="USERNAME" />
@@ -17,7 +17,7 @@
 	
 	<!-- 로그인 시 아이디로만 조회 (비밀번호는 컨트롤러에서 bcrypt로 비교) -->
 	<select id="loginMember" parameterType="Member" resultType="Member">
-		SELECT USERNO
+		SELECT USER_NO
 			  ,USERID 
 			  ,PASSWORD
 			  ,USERNAME
@@ -31,7 +31,7 @@
 	
 	<!-- 회원가입 시 USERNO를 자동증가로 설정 -->
 	<insert id="insertMember" parameterType="Member"> 
-		INSERT INTO USER_INFO(USERNO
+		INSERT INTO USER_INFO(USER_NO
 						  ,USERID 
 						  ,PASSWORD
 						  ,USERNAME

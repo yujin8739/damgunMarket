@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.soak.product.model.dao.ProductDao;
+import com.kh.soak.product.model.vo.PdFile;
 import com.kh.soak.product.model.vo.Product;
 
 @Service
@@ -46,6 +47,15 @@ public class ProductServiceImpl implements ProductService {
 	public List<String> selectFiles(int pdNum, int userNo) {
 		return dao.selectFiles(sqlSession, pdNum, userNo);
 	}
-	
+
+	@Override
+	public int insertProduct(Product product) {
+		return dao.insertProduct(sqlSession, product);
+	}
+
+	@Override
+	public int insertPdFiles(PdFile pdFiles) {
+		return dao.insertPdFiles(sqlSession,pdFiles);
+	}
 
 }

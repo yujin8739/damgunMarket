@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 비어있을 수 없음 필수입력 요소 (해당 mapper를 부르는 별칭) -->
+<mapper namespace="etcMapper">
+	<select id="bigCateList" resultType="string">
+		SELECT BIG_CATE FROM CATEGORY GROUP BY BIG_CATE
+	</select>
+	
+	<select id="midCateList" resultType="string">
+		SELECT MID_CATE FROM CATEGORY WHERE BIG_CATE='${bigCate}' GROUP BY MID_CATE
+	</select>
+	
+	<select id="smallCateList" resultType="string">
+		SELECT SMALL_CATE FROM CATEGORY WHERE BIG_CATE = #{bigCate} AND MID_CATE = #{midCate} GROUP BY SMALL_CATE
+	</select>
+
+</mapper> 
