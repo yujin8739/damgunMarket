@@ -44,18 +44,16 @@
 		}
 		#category {
 		}
-	.image-scroll-wrapper {
-		overflow-x: auto;
-		white-space: nowrap;
-		padding: 10px 0;
-	}
-	.image-scroll-wrapper img {
-		display: inline-block;
-		margin-right: 10px;
-		max-height: 700px;
-	}
-		
-
+		.image-scroll-wrapper {
+			overflow-x: auto;
+			white-space: nowrap;
+			padding: 10px 0;
+		}
+		.image-scroll-wrapper img {
+			display: inline-block;
+			margin-right: 10px;
+			max-height: 700px;
+		}
 	</style>
 </head>
 <body>
