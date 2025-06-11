@@ -23,13 +23,14 @@ public interface ChatService {
     List<MessageVO> getMessagesByRoomNo(int roomNo);
 
     // 5. 메시지 전송
-    int insertMessage(MessageVO message);
+    int insertMessage(MessageVO message); // MessageVO 객체 안에 fileType 필드가 포함되어 넘어옴
 
     // 6. 특정 채팅방 정보 조회
     ChatRoomVO getChatRoomByRoomNo(int roomNo);
 
     // 7. 특정 채팅방에서 특정 유저가 읽지 않은 메시지 수 조회
     int getUnreadMessageCount(int roomNo, String userId);
+    
     // 새롭게 추가된 메서드들: Controller에서 직접 DAO를 호출하는 대신 Service를 통해 호출
     String selectOtherParticipantId(Map<String, Object> params);
     String selectUserNameByUserId(String userId);
