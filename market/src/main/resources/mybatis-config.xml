@@ -18,6 +18,8 @@
 		<typeAlias type="com.kh.soak.history.model.vo.TradeHistory" alias="TradeHistory"/>
 		<typeAlias type="com.kh.soak.product.model.vo.Product" alias="Product"/>
 		<typeAlias type="com.kh.soak.product.model.vo.PdFile" alias="PdFile"/>
+		<typeAlias type="com.kh.soak.etc.model.vo.Station" alias="Station"/>
+		<typeAlias type="com.kh.soak.etc.model.vo.TradeStation" alias="TradeStation"/>
 		<!--  
 		<typeAlias type="com.kh.spring.board.model.vo.Board" alias="Board"/>
 		<typeAlias type="com.kh.spring.board.model.vo.Reply" alias="Reply"/>

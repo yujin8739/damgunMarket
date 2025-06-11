@@ -8,161 +8,44 @@
 <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>담금마켓header</title>
+   <title>담금마켓</title>
+
    <style>
-      * {
+      /* 기본 리셋 및 폰트 */
+      body {
+         font-family: 'Noto Sans KR', sans-serif;
          margin: 0;
          padding: 0;
-         box-sizing: border-box;
+         background: #fafafa;
       }
 
-        #header_1>div{
-            height:100%;
-            float:left;
-        }
-
-        #header_1_center {width:40%;}
-        #header_1_right {width:30%;}
-        #header_1_right {text-align:center; line-height:35px; font-size:12px; text-indent:35px;}
-        #header_1_right>a {margin:5px;}
-        #header_1_right>a:hover {cursor:pointer;}
-
-      header {
-         background: rgba(255, 255, 255, 0.9);
-         backdrop-filter: blur(10px);
-         box-shadow: 0 2px 20px rgba(139, 69, 255, 0.1);
+      /* 햄버거 버튼 */
+      #hamburger {
          position: fixed;
-         width: 100%;
-         top: 0;
-         z-index: 1000;
-         transition: all 0.3s ease;
-      }
-
-      nav {
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         padding: 1rem 0;
-      }
-
-      .logo {
-         font-size: 1.8rem;
-         font-weight: bold;
-         background: linear-gradient(45deg, #8b45ff, #b45aff);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-      }
-
-      .nav-links {
-         display: flex;
-         list-style: none;
-         gap: 2rem;
-      }
-
-      .nav-links a {
-         text-decoration: none;
-         color: #666;
-         font-weight: 500;
-         transition: color 0.3s ease;
-      }
-
-      .nav-links a:hover {
-         color: #8b45ff;
-      }
-
-      .nav-buttons {
-         display: flex;
-         gap: 1rem;
-      }
-
-      .btn {
-         padding: 0.7rem 1.5rem;
-         border: none;
-         border-radius: 25px;
-         font-weight: 500;
-         cursor: pointer;
-         transition: all 0.3s ease;
-         text-decoration: none;
-         display: inline-block;
-      }
-
-      .btn-login {
+         top: 15px;
+         left: 15px;
+         font-size: 28px;
          background: transparent;
-         color: #8b45ff;
-         border: 2px solid #8b45ff;
-      }
-
-      .btn-login:hover {
-         background: #8b45ff;
-         color: white;
-         transform: translateY(-2px);
-         box-shadow: 0 5px 15px rgba(139, 69, 255, 0.3);
-      }
-
-      .btn-join {
-         background: linear-gradient(45deg, #8b45ff, #b45aff);
-         color: white;
-      }
-
-      .btn-join:hover {
-         transform: translateY(-2px);
-         box-shadow: 0 5px 15px rgba(139, 69, 255, 0.4);
-      }
-
-      .btn-chat {
-         background: linear-gradient(45deg, #b45aff, #8b45ff);
-         color: white;
-         border: 2px solid #b45aff;
-         padding: 0.7rem 1.5rem;
-         border-radius: 25px;
-         font-weight: 500;
-         cursor: pointer;
-         transition: all 0.3s ease;
-         text-decoration: none;
-         display: inline-block;
-      }
-
-      .btn-chat:hover {
-         background: linear-gradient(45deg, #8b45ff, #b45aff);
-         border-color: #8b45ff;
-         box-shadow: 0 5px 15px rgba(180, 90, 255, 0.4);
-         transform: translateY(-2px);
-      }
-
-
-      .hamburger {
-         font-size: 2rem;
-         background: none;
          border: none;
-         color: #8b45ff;
          cursor: pointer;
-         display: none;
+         color: #7b68ee;
+         z-index: 1100;
+         outline: none;
       }
 
-      @media (max-width: 768px) {
-
-         .nav-links,
-         .nav-buttons {
-            display: none;
-         }
-
-         .hamburger {
-            display: block;
-         }
-      }
-
+      /* 사이드바 */
       .sidebar {
          position: fixed;
          top: 0;
          left: -260px;
-         width: 240px;
-         height: 100%;
-         background-color: #f5efff;
-         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-         padding: 2rem 1.2rem;
+         width: 260px;
+         height: 100vh;
+         background-color: #e6e6fa;
+         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+         padding: 20px;
+         box-sizing: border-box;
          transition: left 0.3s ease;
-         z-index: 2000;
+         z-index: 1050;
       }
 
       .sidebar.open {
@@ -170,142 +53,328 @@
       }
 
       .sidebar h3 {
-         color: #8b45ff;
-         margin-bottom: 1rem;
+         margin-top: 0;
+         color: #5a4fcf;
+         margin-bottom: 20px;
       }
 
       .sidebar ul {
          list-style: none;
          padding: 0;
+         margin: 0;
       }
 
-      .sidebar li {
-         margin: 1rem 0;
+      .sidebar ul li {
+         padding: 12px 0;
+         border-bottom: 1px solid #cfcfff;
+         cursor: pointer;
+         color: #4b3bdb;
+         font-weight: 600;
+      }
+
+      /* header */
+      #header {
+         width: 100%;
+         background-color: #a798f7;
+         padding-top: 60px;
+         box-sizing: border-box;
+         color: white;
+      }
+
+      #header_1 {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 0 20px;
+         height: 50px;
+      }
+
+      #header_1_right a {
+         color: white;
+         margin-left: 15px;
+         text-decoration: none;
          font-weight: 500;
          cursor: pointer;
-         color: #5c3d99;
       }
 
-      .sidebar li:hover {
-         color: #8b45ff;
+      #header_1_right label {
+         font-weight: 600;
       }
 
+      #header_2 {
+         background-color: #8c7ae6;
+      }
+
+      #header_2 ul {
+         display: flex;
+         list-style: none;
+         padding: 0 20px;
+         margin: 0;
+      }
+
+      #header_2 ul li {
+         margin-right: 25px;
+      }
+
+      #header_2 ul li a {
+         color: white;
+         text-decoration: none;
+         font-weight: 600;
+      }
+
+      #header_2 ul li a:hover {
+         text-decoration: underline;
+      }
+
+      /* Hero Section */
       .hero {
-         margin-top: 80px;
-         padding: 4rem 0;
+         padding: 10px 20px;
+         min-height: 200px;
+         background: linear-gradient(135deg, #d3cce3 0%, #e9e4f0 100%);
          text-align: center;
+         color: #5a4fcf;
+         position: relative;
+         z-index: 1;
       }
 
       .hero h1 {
-         font-size: 3rem;
-         margin-bottom: 1rem;
-         background: linear-gradient(45deg, #8b45ff, #b45aff);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
+         font-size: 45px;
+         margin-bottom: 15px;
+         font-weight: 700;
+         color: #5a4fcf;
       }
 
       .hero p {
-         font-size: 1.2rem;
-         color: #666;
-         margin-bottom: 2rem;
-         max-width: 600px;
-         margin-left: auto;
-         margin-right: auto;
+         font-size: 20px;
+         font-weight: 500;
+         color: #7b68ee;
       }
 
-      .search-input {
+      /* 로그인 모달 스타일 */
+      .modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100vw;
+         height: 100vh;
+         background: rgba(0, 0, 0, 0.5);
+         justify-content: center;
+         align-items: center;
+         z-index: 1200;
+      }
+
+      .modal.show {
+         display: flex;
+      }
+
+      .modal-content {
+         background: white;
+         padding: 20px 30px;
+         border-radius: 8px;
+         width: 320px;
+         box-sizing: border-box;
+         position: relative;
+         box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-content h4 {
+         margin-top: 0;
+         margin-bottom: 20px;
+         color: #5a4fcf;
+         font-weight: 700;
+         text-align: center;
+      }
+
+      .modal-content label {
+         display: block;
+         margin-bottom: 5px;
+         font-weight: 600;
+         color: #4b3bdb;
+      }
+
+      .modal-content input[type="text"],
+      .modal-content input[type="password"] {
          width: 100%;
-         padding: 1rem 1.5rem;
-         border: 2px solid #e0d9ff;
-         border-radius: 50px;
-         font-size: 1rem;
-         outline: none;
-         transition: all 0.3s ease;
+         padding: 8px 10px;
+         margin-bottom: 15px;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+         box-sizing: border-box;
+         font-size: 14px;
       }
 
-      .search-input:focus {
-         border-color: #8b45ff;
-         box-shadow: 0 0 20px rgba(139, 69, 255, 0.2);
+      .modal-content button {
+         padding: 10px 18px;
+         border: none;
+         border-radius: 4px;
+         font-weight: 600;
+         cursor: pointer;
+         font-size: 14px;
       }
 
-      .search-btn:hover {
-         transform: translateY(-50%) scale(1.05);
+      .btn-primary {
+         background-color: #7b68ee;
+         color: white;
+         margin-right: 10px;
+      }
+
+      .btn-primary:hover {
+         background-color: #5a4fcf;
+      }
+
+      .btn-danger {
+         background-color: #e57373;
+         color: white;
+      }
+
+      .btn-danger:hover {
+         background-color: #d32f2f;
+      }
+
+      .close-btn {
+         position: absolute;
+         top: 10px;
+         right: 15px;
+         font-size: 24px;
+         font-weight: bold;
+         color: #7b68ee;
+         cursor: pointer;
       }
    </style>
 </head>
 
 <body>
-	<c:set var="contextRoot" value="${pageContext.request.contextPath}"/>	
-	
-	<script>
-	
-		var msg="${alertMsg}";
-		
-		if(msg!=""){
-			alert(msg);
-		}
-	</script>
-	<c:remove var="alertMsg"/>
-	
-	
-    <div id="header">
-        <div id="header_1">
-            <div id="header_1_center"></div>
-            <div id="header_1_right">
-            
-            	<c:choose>
-            		<c:when test="${empty loginUser}">
-		                <!-- 로그인 전 -->
-		                <a href="${contextRoot}/insert.me">회원가입</a>
-		                <a data-toggle="modal" data-target="#loginModal">로그인</a> <!-- 모달의 원리 : 이 버튼 클릭시 data-targer에 제시되어있는 해당 아이디의 div요소를 띄워줌 -->
-            		</c:when>
-					<c:otherwise>
-	                <!-- 로그인 후 -->
-	                    <label>${loginUser.userName}님 환영합니다</label> &nbsp;&nbsp;
-	                    <a href="${contextRoot }/mypage.me">마이페이지</a>
-	                    <a href="${contextRoot}/logout.me">로그아웃</a>
-					</c:otherwise>                
-                </c:choose>
-            </div>
-        </div>
-        <div id="header_2">
-            <ul>
-                <li><a href="${contextRoot}">HOME</a></li>
-                <li><a href="">공지사항</a></li>
-                <li><a href="${contextRoot}/list.bo">자유게시판</a></li>
-                <li><a href="${contextRoot}/list.ph">사진게시판</a></li>
-            </ul>
-        </div>
-    </div>
+   <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
 
-    <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
-    <div class="modal fade" id="loginModal">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Login</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+   <script>
+      var msg = "${alertMsg}";
+      if (msg != "") {
+         alert(msg);
+      }
+   </script>
+   <c:remove var="alertMsg" />
 
-                <form action="${contextRoot}/login.me" method="post">
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <label for="userId" class="mr-sm-2">ID : </label>
-                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId"> <br>
-                        <label for="passWord" class="mr-sm-2">Password : </label>
-                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="passWord" name="passWord">
-                    </div>
-                           
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">로그인</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-                    </div>
-                </form>
+   <!-- 햄버거 버튼 -->
+   <button id="hamburger" onclick="toggleSidebar()">☰</button>
+
+   <!-- 사이드바 -->
+   <div class="sidebar" id="sidebar">
+      <h3>카테고리</h3>
+      <ul>
+         <li>전자기기</li>
+         <li>의류</li>
+         <li>가구</li>
+         <li>도서</li>
+         <li>운동용품</li>
+         <li>기타</li>
+      </ul>
+   </div>
+
+   <!-- header -->
+   <div id="header">
+      <div id="header_1">
+         <div id="header_1_center"></div>
+         <div id="header_1_right">
+            <c:choose>
+               <c:when test="${empty loginUser}">
+                  <!-- 로그인 전 -->
+                  <a href="${contextRoot}/insert.me">회원가입</a>
+                  <a href="#" id="loginLink">로그인</a>
+               </c:when>
+               <c:otherwise>
+                  <!-- 로그인 후 -->
+                  <label>${loginUser.userName}님 환영합니다</label> &nbsp;&nbsp;
+                  <a href="${contextRoot}/mypage.me">마이페이지</a>
+                  <a href="${contextRoot}/logout.me">로그아웃</a>
+               </c:otherwise>
+            </c:choose>
+         </div>
+      </div>
+
+      <div id="header_2">
+         <ul>
+            <li><a href="${contextRoot}">HOME</a></li>
+            <li><a href="">공지사항</a></li>
+            <li><a href="${contextRoot}/list.bo">자유게시판</a></li>
+            <li><a href="${contextRoot}/list.ph">사진게시판</a></li>
+         </ul>
+      </div>
+   </div>
+
+   <!-- Hero -->
+   <section class="hero" id="home">
+      <div class="container">
+         <h1 class="floating">담금마켓</h1>
+         <p>묻고 따지지 말고 그냥 담금마켓 하세요. 후회하지 않습니다.</p>
+      </div>
+   </section>
+
+   <!-- 로그인 모달 -->
+   <div class="modal" id="loginModal">
+      <div class="modal-content">
+         <span class="close-btn" id="closeModal">&times;</span>
+         <h4>Login</h4>
+         <form action="${contextRoot}/login.me" method="post">
+            <label for="userId">ID:</label>
+            <input type="text" id="userId" name="userId" required />
+
+            <label for="passWord">Password:</label>
+            <input type="password" id="passWord" name="passWord" required />
+
+            <div style="text-align: center;">
+               <button type="submit" class="btn-primary">로그인</button>
+               <button type="button" class="btn-danger" id="cancelBtn">취소</button>
             </div>
-    </div>
-    <br clear="both">
+         </form>
+      </div>
+   </div>
+
+   <br clear="both" />
+
+   <!-- 사이드바 자동 닫힘 스크립트 -->
+   <script>
+      let sidebarTimer;
+
+      function toggleSidebar() {
+         const sidebar = document.getElementById('sidebar');
+         sidebar.classList.toggle('open');
+
+         if (sidebar.classList.contains('open')) {
+            clearTimeout(sidebarTimer);
+            sidebarTimer = setTimeout(() => {
+               sidebar.classList.remove('open');
+            }, 5000);
+         }
+      }
+   </script>
+
+   <!-- 로그인 모달 제어 스크립트 -->
+   <script>
+      const loginLink = document.getElementById('loginLink');
+      const modal = document.getElementById('loginModal');
+      const closeBtn = document.getElementById('closeModal');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      // 로그인 링크 클릭 시 모달 열기
+      loginLink.addEventListener('click', (e) => {
+         e.preventDefault();
+         modal.classList.add('show');
+      });
+
+      // 닫기 버튼 클릭 시 모달 닫기
+      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+
+      // 취소 버튼 클릭 시 모달 닫기
+      cancelBtn.addEventListener('click', () => modal.classList.remove('show'));
+
+      // 모달 바깥 클릭 시 모달 닫기
+      modal.addEventListener('click', (e) => {
+         if (e.target === modal) {
+            modal.classList.remove('show');
+         }
+      });
+   </script>
 </body>
+
 </html>

@@ -3,24 +3,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-   
-    
-    <style>
-        .content {
-            background-color:rgb(247, 245, 245);
-            width:80%;
-            margin:auto;
-        }
-        .innerOuter {
-            border:1px solid lightgray;
-            width:80%;
-            margin:auto;
-            padding:5% 10%;
-            background-color:white;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+	.content {
+		display: flex;
+		justify-content: center;
+		padding: 50px 20px;
+		background-color: #f4efff; /* 전체 배경: 연보라 */
+	}
+	
+	.innerOuter {
+		width: 100%;
+		max-width: 500px;
+		background-color: #ffffff;
+		border-radius: 16px;
+		padding: 30px 40px;
+		box-shadow: 0 4px 12px rgba(168, 139, 255, 0.2); /* 연보라 그림자 */
+	}
+	
+	.form-title {
+		text-align: center;
+		color: #7c5cc4;
+		margin-bottom: 30px;
+	}
+	
+	.form-group {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.form-group label {
+		margin-top: 12px;
+		font-weight: bold;
+		color: #7c5cc4;
+	}
+	
+	.form-group input {
+		padding: 10px;
+		margin-top: 4px;
+		border: 1px solid #ccc;
+		border-radius: 6px;
+		font-size: 14px;
+		transition: border-color 0.3s ease;
+	}
+	
+	.form-group input:focus {
+		border-color: #a88bff;
+		outline: none;
+		background-color: #f4f0ff;
+	}
+	
+	.msg-div {
+		font-size: 0.8em;
+		margin-top: 5px;
+		display: none;
+	}
+	
+	.btns {
+		margin-top: 30px;
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	.btns .btn {
+		width: 48%;
+		padding: 12px 0;
+		font-size: 16px;
+		border: none;
+		border-radius: 8px;
+		cursor: pointer;
+	}
+	
+	.btns .btn-primary {
+		background-color: #a88bff;
+		color: #fff;
+	}
+	
+	.btns .btn-primary:disabled {
+		background-color: #d6cfff;
+		color: #eee;
+		cursor: not-allowed;
+	}
+	
+	.btns .btn-danger {
+		background-color: #d32f2f;
+		color: #fff;
+	}
+	
+	@media ( max-width : 600px) {
+		.innerOuter {
+			padding: 20px;
+		}
+		.btns {
+			flex-direction: column;
+			gap: 10px;
+		}
+		.btns .btn {
+			width: 100%;
+		}
+	}
+</style>
 </head>
 <body>
     
@@ -159,13 +242,7 @@ $(function(){
     inputName.keyup(validateAll);
 });
 </script>
-  	
-    
-    
-    
-    
 
-    <!-- 푸터바 -->
     <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 </body>

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.soak.etc.model.vo.Station;
 import com.kh.soak.product.model.vo.Product;
 
 @Repository
@@ -17,14 +18,21 @@ public class EtcDao {
 	}
 
 	public List<Product> selectMidCateList(SqlSessionTemplate sqlSession, String bigCate) {
-		return sqlSession.selectList("etcMapper.midCateList",bigCate);
+		return sqlSession.selectList("etcMapper.midCateList", bigCate);
 	}
 
 	public List<Product> selectSmallCateList(SqlSessionTemplate sqlSession, String bigCate, String midCate) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("midCate", midCate);
 		param.put("bigCate", bigCate);
-		return sqlSession.selectList("etcMapper.smallCateList",param);
+		return sqlSession.selectList("etcMapper.smallCateList", param);
+	}
+
+	public List<Station> selectNearStations(SqlSessionTemplate sqlSession, double lat, double lng) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("lat", lat);
+		param.put("lng", lng);
+		return sqlSession.selectList("etcMapper.selectNearStations", param);
 	}
 
 }

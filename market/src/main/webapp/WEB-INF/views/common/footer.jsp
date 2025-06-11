@@ -98,7 +98,7 @@
                <h3>서비스</h3>
                <ul>
                   <li><a href="#">중고거래</a></li>
-                  <li><a href="#">배송서비스</a></li>
+                  <li><a href="#">넣고싶은거 넣지</a></li>
                   <li><a href="#">판매자인증</a></li>
                    <li><a href="#">광고문의</a></li>
                </ul>
