@@ -103,9 +103,50 @@
             </div>
             <div class="footer-section">
                <h3>고객지원</h3>
-               <ul>                 
-                  <li><a href="#">공지사항</a></li>
-
+               <ul>
+                  <li><a href="#">FAQ</a></li>
+                  
+                  <!-- 공지사항 링크 -->
+                  <c:choose>
+                     <c:when test="${not empty loginAdmin}">
+                        <!-- 관리자 로그인시 - 관리 기능 포함 -->
+                        <li>
+                           <a href="${contextRoot}/board/list.bo">공지사항 조회</a>
+                           <span class="divider">|</span>
+                           <a href="${contextRoot}/board/enrollForm.bo" class="admin-menu">작성</a>
+                        </li>
+                     </c:when>
+                     <c:otherwise>
+                        <!-- 일반 유저 또는 비로그인시 - 조회만 -->
+                        <li><a href="${contextRoot}/board/list.bo">공지사항</a></li>
+                     </c:otherwise>
+                  </c:choose>
+                  
+                  <!-- 문의사항 링크 -->
+                  <c:choose>
+                     <c:when test="${not empty loginAdmin}">
+                        <!-- 관리자 로그인시 - 관리 기능 포함 -->
+                        <li>
+                           <a href="${contextRoot}/userqna/list.uq">문의사항 관리</a>
+                           <span class="divider">|</span>
+                           <a href="${contextRoot}/answer/list.an" class="admin-menu">답변 관리</a>
+                        </li>
+                     </c:when>
+                     <c:when test="${not empty loginUser}">
+                        <!-- 일반 유저 로그인시 -->
+                        <li>
+                           <a href="${contextRoot}/userqna/list.uq">문의사항</a>
+                           <span class="divider">|</span>
+                           <a href="${contextRoot}/userqna/enrollForm.uq">문의하기</a>
+                        </li>
+                     </c:when>
+                     <c:otherwise>
+                        <!-- 비로그인시 -->
+                        <li><a href="${contextRoot}/userqna/list.uq">문의사항</a></li>
+                     </c:otherwise>
+                  </c:choose>
+                  
+                  <li><a href="#">신고하기</a></li>
                </ul>
             </div>
             <div class="footer-section">
@@ -114,11 +155,22 @@
                   <li><a href="">팀소개</a></li>
                   <li><a href="">이용약관</a></li>
                   <li><a href="">개인정보처리방침</a></li>
+                  
+                  <!-- 관리자 전용 메뉴 -->
+                  <c:if test="${not empty loginAdmin}">
+                     <li><a href="${contextRoot}/admin/main.ad" class="admin-menu">관리자 메인</a></li>
+                     <li><a href="${contextRoot}/admin/insert.ad" class="admin-menu">관리자 등록</a></li>
+                  </c:if>
                </ul>
             </div>
          </div>
          <div class="footer-bottom">
             <p>&copy; 2025 DamgeumMarket. All rights reserved.</p>
+            <c:if test="${not empty loginAdmin}">
+               <p style="color: #ff6b35; font-size: 12px; margin-top: 5px;">
+                  <i class="fas fa-user-shield"></i> 관리자 모드로 접속중
+               </p>
+            </c:if>
          </div>
       </div>
    </footer>
