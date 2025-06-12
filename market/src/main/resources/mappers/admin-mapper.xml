@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminMapper">
+    
+    <resultMap id="adminResultSet" type="Admin">
+        <result column="ADMIN_NUM" property="adminNum"/>
+        <result column="ADMIN_ID" property="adminId"/>
+        <result column="ADMIN_PW" property="adminPw"/>
+        <result column="ADMIN_NAME" property="adminName"/>
+    </resultMap>
+    
+    <!-- resultMap 사용 -->
+    <select id="loginAdmin" parameterType="Admin" resultMap="adminResultSet">
+        SELECT ADMIN_NUM
+              ,ADMIN_ID
+              ,ADMIN_PW
+              ,ADMIN_NAME
+        FROM ADMIN 
+        WHERE ADMIN_ID = #{adminId}
+    </select>
+
+
+    
+    
+    
+    <insert id="insertAdmin" parameterType="Admin">
+        INSERT INTO ADMIN (ADMIN_NUM, ADMIN_ID, ADMIN_PW, ADMIN_NAME)
+        VALUES (SEQ_ADMIN.NEXTVAL, #{adminId}, #{adminPw}, #{adminName})
+    </insert>
+    
+    <update id="updateAdmin" parameterType="Admin">
+        UPDATE ADMIN SET ADMIN_NAME = #{adminName} WHERE ADMIN_ID = #{adminId}
+    </update>
+    
+    <delete id="deleteAdmin" parameterType="Admin">
+        DELETE FROM ADMIN WHERE ADMIN_ID = #{adminId}
+    </delete>
+    
+    <select id="idCheck" parameterType="string" resultType="_int">
+        SELECT COUNT(*) FROM ADMIN WHERE ADMIN_ID = #{adminId}
+    </select>
+    
+    <select id="selectAdminByNum" parameterType="_int" resultMap="adminResultSet">
+        SELECT * FROM ADMIN WHERE ADMIN_NUM = #{adminNum}
+    </select>
+    
+</mapper>
