@@ -22,6 +22,14 @@
             padding:5% 10%;
             background-color:white;
         }
+        .addressOuter {
+			width: 100%;
+			max-width: 90%;
+			background-color: #ffffff;
+			border-radius: 16px;
+			padding: 30px 40px;
+			box-shadow: 0 4px 12px rgba(168, 139, 255, 0.2); /* 연보라 그림자 */
+		}
     </style>
 </head>
 <body>
@@ -53,7 +61,27 @@
 
                     <label for="email"> &nbsp; Email : </label>
                     <input type="text" class="form-control" id="email" value="${loginUser.email }" name="email"> <br>
-
+					<input type="hidden" class="form-control" id="latitude" name="latitude"  value="${loginUser.latitude}">
+					<input type="hidden" class="form-control" id="longitude" name="longitude"  value="${loginUser.longitude}">
+					
+					<div class="btns" align="center">
+						<div id="confirmBox" class="addressOuter">
+							<h1 style="color: #7c5cc4;">해당 위치가 맞습니까?<br><br> </h1>
+						    <p style="font-size: 14px;color: #7c5cc4;">
+						    위치는 오차가 있을 수 있으며,</p>
+						    <h3 style="color: green;"> 현재 위치의 근처로 설정하셔도 무관합니다.</h3>
+						    <p style="font-size: 14px;color: #7c5cc4;">
+						    네트워크 이용환경에 따라 위치가 다르게 조회될 수 있습니다.<br>
+						    <br>
+						    <!-- 주소 표시 영역 -->
+							<div id="addressBox">
+							    <h2 id="parcel" style="color: green;"></h2>
+							</div><br><br>
+						    <button  type="button" class="btn btn-primary" onclick="checkStation(true)">내 위치 다시 확인</button>
+						</div>
+					<br>
+			
+					</div>
                    
                 </div> 
                 <br>
@@ -68,12 +96,45 @@
     </div>
     
     <script>
-    	//남여 체크박스 체크시키기 
-    	$(function(){
-    		//var gender = "${loginUser.gender}";
-    		//console.log(gender);
-    		$("input[value=${loginUser.gender}]").attr("checked",true);
-    	});
+    	function geoCodingRun(lat,lng,answer){
+	         $('#latitude').val(lat);
+  	         $('#longitude').val(lng);
+    		 $.ajax({
+	                url: "Gecoding",
+	                data: {
+	                    longitude: lng,
+	                    latitude: lat
+	                },
+	                success: function(result) {
+	                	if(answer){
+	                		alert("주소 정보를 다시 가져왔습니다.");
+	                	}
+	                    $('#parcel').text("주소: " + result.parcel);
+	                },
+	                error: function() {
+	                	$('#parcel').text("주소를 가져오지 못했습니다. 가입을 위해 다시 시도해주세요");
+	                    alert("주소 정보를 가져오지 못했습니다.");
+	                }
+	            });
+    	}
+    
+	  	function checkStation(answer) {
+	  	    if (navigator.geolocation) {
+	  	        navigator.geolocation.getCurrentPosition(function(position) {
+	  	            const lat = position.coords.latitude;
+	  	            const lng = position.coords.longitude;
+	  	          	geoCodingRun(lat,lng,answer);
+	  	        }, function(error) {
+	  	            alert('위치 정보를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.');
+	  	        });
+	  	    } else {
+	  	        alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+	  	    }
+	  	}
+	  	
+	  	$(document).ready(function() {
+	  		geoCodingRun($('#latitude').val(),$('#longitude').val(),false);
+	  	});
     
     </script>
     
