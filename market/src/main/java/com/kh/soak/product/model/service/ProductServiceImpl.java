@@ -75,4 +75,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.updateProductByPdNumUserNo(sqlSession, product);
 	}
 
+	@Override
+	public List<Object> favoriteList(int userNo, RowBounds rowBounds) {
+		return dao.favoriteList(sqlSession, userNo, rowBounds);
+	}
+
 }
