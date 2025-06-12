@@ -25,7 +25,7 @@ public interface UserQnaService {
     List<UserQnaInfo> selectUserQnaByUser(int userNo);
     
     // 신고 문의사항 목록 조회
-    List<UserQnaInfo> selectReportQna(int exuserNum);
+    List<UserQnaInfo> selectReportQna(int douserNum);
     
     // 문의사항 검색
     List<UserQnaInfo> searchUserQna(String keyword);

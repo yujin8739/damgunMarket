@@ -12,6 +12,6 @@ public class UserQnaInfo {
     private int userNo;         // USER_NO NUMBER(11) - 유저번호
     private String userQnaTitle; // USERQNA_TITLE VARCHAR2(255) - 문의제목
     private String userQna;     // USERQNA CLOB - 문의내용
-    private int exuserNum;      // EXUSER_NUM NUMBER(11) - 신고유저번호
+    private int douserNum;      // DOUSER_NUM NUMBER(11) - 신고유저번호
     private String userQnaImg;  // USERQNA_IMG VARCHAR2(255) - 문의이미지
 }

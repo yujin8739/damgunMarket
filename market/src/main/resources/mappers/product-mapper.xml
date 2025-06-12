@@ -174,7 +174,33 @@
 			#{stationNo}
 		)
 	</insert>
-
+	
+	<select id="selectFavoriteList" parameterType="Product" resultMap="productResultMap">
+		SELECT 
+		    p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        PF.pd_url
+		FROM PRODUCT P
+		JOIN FAVORITE F ON P.PD_NUM = F.PD_NUM
+		LEFT JOIN (
+		    SELECT USER_NO, PD_NUM, PD_URL
+		    FROM PD_FILE
+		    WHERE ISTHUMBNAIL = 'Y'
+		) PF ON P.USER_NO = PF.USER_NO AND P.PD_NUM = PF.PD_NUM
+		WHERE F.USER_NO = #{userNo}
+	</select>
 
 </mapper>
 	

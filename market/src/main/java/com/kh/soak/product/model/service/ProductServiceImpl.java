@@ -65,4 +65,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.insertPdStation(sqlSession,userNo,pdNum,stationNo);
 	}
 
+	@Override
+	public List<Object> favoriteList(int userNo, RowBounds rowBounds) {
+		return dao.favoriteList(sqlSession, userNo, rowBounds);
+	}
+
 }

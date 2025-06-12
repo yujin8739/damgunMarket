@@ -119,9 +119,9 @@ public class UserQnaController {
     // 신고 문의사항 조회 (AJAX)
     @ResponseBody
     @RequestMapping(value="reportQna.uq", produces = "application/json;charset=UTF-8")
-    public List<UserQnaInfo> getReportQna(@RequestParam("exuserNum") int exuserNum) {
+    public List<UserQnaInfo> getReportQna(@RequestParam("douserNum") int douserNum) {
         
-        List<UserQnaInfo> reportQnaList = service.selectReportQna(exuserNum);
+        List<UserQnaInfo> reportQnaList = service.selectReportQna(douserNum);
         
         return reportQnaList;
     }
