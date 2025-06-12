@@ -80,47 +80,6 @@
                     
                     $('<p>').text(product.pdBoard).appendTo($productDiv);
                     $('<p>').text(`가격: \${product.pdPrice}원`).appendTo($productDiv);
-                    
-                    
-                    // 상품 삭제버튼, 로그인한 사용자가 본인 상품일 때만 표시 // 김진우작성
-                    if (product.userNo === sessionUserNo) {
-                    	// 상품 수정버튼 추가 (김진우 작성)
-                        const $editBtn = $('<button>')
-                            .text('수정')
-                            .addClass('btn btn-primary btn-sm')
-                            .css({ marginTop: '10px', marginRight: '10px' })
-                            .on('click', function (e) {
-                                e.stopPropagation(); // 상품 div 클릭 이벤트 막음
-                                // 수정 페이지로 이동 (컨트롤러가 받도록 URL 맞춤)
-                                window.location.href = `/soak/product/edit?pdNum=${product.pdNum}&userNo=${sessionUserNo}`;
-                            });
-                        $productDiv.append($editBtn);
-                    	
-                        //상품 삭제버튼 추가 (김진우 작성)
-                        const $deleteBtn = $('<button>')
-                            .text('삭제')
-                            .addClass('btn btn-danger btn-sm')
-                            .css({ marginTop: '10px' })
-                            .on('click', function (e) {
-                                e.stopPropagation(); // 상품 div 클릭 이벤트 막음
-                                if (!confirm('정말 삭제하시겠습니까?')) return;
-
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/soak/product/delete',
-                                    data: { pdNum: product.pdNum, userNo: sessionUserNo },
-                                    success: function (res) {
-                                        alert('삭제되었습니다.');
-                                        $productDiv.remove(); // 화면에서 해당 상품 제거
-                                    },
-                                    error: function () {
-                                        alert('삭제 실패');
-                                    }
-                                });
-                            });
-
-                        $productDiv.append($deleteBtn);
-                    }
 
                     $('#product-container').append($productDiv);
                 });
@@ -164,26 +123,5 @@
     }
     #product-container {
         text-align: center;
-    }
-    
-    /* 삭제버튼 css */
-    
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    
-    /* 수정버튼 css */
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
     }
 </style>
