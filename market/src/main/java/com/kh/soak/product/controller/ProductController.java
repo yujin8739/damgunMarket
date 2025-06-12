@@ -45,7 +45,7 @@ public class ProductController {
 		return "error-403";
 	}
 
-    // AJAX濡� �긽�뭹 紐⑸줉 媛��졇�삤湲� (臾댄븳 �뒪�겕濡�)
+    // AJAX
 	@RequestMapping(value = "product/load",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public List<Product> loadProducts(
@@ -150,6 +150,11 @@ public class ProductController {
     		) {
         Member loginMember = (Member) session.getAttribute("loginUser");
       //  int userNo = (int) loginMember.getUserNo();
+        
+        if(loginMember == null || loginMember.getUserNo() != userNo) {
+            // 권한이 없으면 에러 페이지나 권한 없음 페이지 리턴
+            return "error-403";
+        }
 
         int result = service.deleteProduct(pdNum, userNo);
 

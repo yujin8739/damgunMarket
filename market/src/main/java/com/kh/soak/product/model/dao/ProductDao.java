@@ -34,7 +34,7 @@ public class ProductDao {
 	}
 
 	public Product selectOneProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
-		//selectOne�� �븯�굹�쓽 �뙆�씪誘명꽣留� �쟾�떖 媛��뒫�븯湲� �븣臾몄뿉 HashMap�쑝濡� 臾띠뼱�꽌 �쟾�떖
+		//selectOn
 	    Map<String, Object> param = new HashMap<>();
 	    param.put("pdNum", pdNum);
 	    param.put("userNo", userNo);

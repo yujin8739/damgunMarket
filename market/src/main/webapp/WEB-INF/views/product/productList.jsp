@@ -1,4 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<!--
+	상품을 올린 사용자가 상품을 삭제할 수 있게  
+	로그인 사용자 번호를 JS에 전달 
+-->
+<%
+    int sessionUserNo = (session.getAttribute("userNo") != null) ? (int) session.getAttribute("userNo") : -1;
+%>
+<script>
+    const sessionUserNo = <%= sessionUserNo %>; // JS에서 로그인한 사용자 번호 확인용
+</script>
+
 <div id="product-container"></div>
 <div id="loading" style="display:none;">로딩 중...</div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
@@ -80,6 +91,34 @@
                     
                     $('<p>').text(product.pdBoard).appendTo($productDiv);
                     $('<p>').text(`가격: \${product.pdPrice}원`).appendTo($productDiv);
+                    
+                    
+                    // 상품 삭제버튼, 로그인한 사용자가 본인 상품일 때만 표시 // 김진우작성
+                    if (product.userNo === sessionUserNo) {
+                        const $deleteBtn = $('<button>')
+                            .text('삭제')
+                            .addClass('btn btn-danger btn-sm')
+                            .css({ marginTop: '10px' })
+                            .on('click', function (e) {
+                                e.stopPropagation(); // 상품 div 클릭 이벤트 막음
+                                if (!confirm('정말 삭제하시겠습니까?')) return;
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/soak/product/delete',
+                                    data: { pdNum: product.pdNum, userNo: sessionUserNo },
+                                    success: function (res) {
+                                        alert('삭제되었습니다.');
+                                        $productDiv.remove(); // 화면에서 해당 상품 제거
+                                    },
+                                    error: function () {
+                                        alert('삭제 실패');
+                                    }
+                                });
+                            });
+
+                        $productDiv.append($deleteBtn);
+                    }
 
                     $('#product-container').append($productDiv);
                 });
@@ -123,5 +162,16 @@
     }
     #product-container {
         text-align: center;
+    }
+    
+    <!-- 삭제버튼 css -->
+    
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
     }
 </style>
