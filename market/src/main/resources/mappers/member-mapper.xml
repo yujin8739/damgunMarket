@@ -12,8 +12,7 @@
 		<result property="userName" column="USERNAME" />
 		<result property="email" column="EMAIL" />
 		<result property="status" column="STATUS" />
-		<result property="latitude" column="LATITUDE" />
-		<result property="longitude" column="LONGITUDE" />
+		<result property="userRank" column="USERRANK" />
 	</resultMap>
 	
 	<!-- 로그인 시 아이디로만 조회 (비밀번호는 컨트롤러에서 bcrypt로 비교) -->
@@ -25,8 +24,6 @@
 			  ,EMAIL
 			  ,STATUS
 			  ,USERRANK
-			  ,LATITUDE
-	  	      ,LONGITUDE
 		FROM USER_INFO 
 		WHERE USERID = '${userId}'
 		AND STATUS = 'Y'
@@ -40,26 +37,20 @@
 						  ,USERNAME
 						  ,EMAIL
 						  ,STATUS
-						  ,USERRANK
-						  ,LATITUDE
-	  	                  ,LONGITUDE)
+						  ,USERRANK)
            		    VALUES(USER_INFO_SEQ.NEXTVAL
            		    	  ,#{userId}
            		    	  ,#{passWord}
            		    	  ,#{userName}
            		    	  ,#{email}
            		    	  ,'Y'
-           		    	  ,1
-           		    	  ,#{latitude} 
-           		    	  ,#{longitude})
+           		    	  ,1)
 	</insert>
 	
 	<update id="updateMember" parameterType="Member">
 		UPDATE USER_INFO
 		SET USERNAME = #{userName}
 		   ,EMAIL = #{email}
-		   ,LATITUDE = #{latitude}
-	  	   ,LONGITUDE = #{longitude}
 		WHERE USERID = #{userId}
 		AND STATUS = 'Y'	
 	</update>
@@ -75,24 +66,6 @@
 		FROM USER_INFO
 		WHERE USERID = #{userId}
 		AND STATUS = 'Y'
-	</select>
-	
-	<insert id="saveFavorite">
-		INSERT INTO FAVORITE (PD_NUM, USER_NO)
-		VALUES(#{pdNum},#{userNo})
-	</insert>
-	
-	<delete id="deleteFavorite">
-		DELETE FROM FAVORITE
-		WHERE PD_NUM = #{pdNum}
-		AND USER_NO = #{userNo}
-	</delete>
-	
-	<select id="selectFavorite" resultType="_int">
-		SELECT COUNT(*)
-		FROM FAVORITE
-		WHERE PD_NUM = #{pdNum}
-		AND USER_NO = #{userNo}
 	</select>
 
 </mapper>

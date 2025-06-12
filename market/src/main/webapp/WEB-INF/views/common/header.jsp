@@ -71,17 +71,6 @@
 		font-weight: 600;
 	}
 	
-	#categorySearch {
-	width: 100%;
-	padding: 8px 10px;
-	margin-bottom: 15px;
-	border: 1px solid #cfcfff;
-	border-radius: 4px;
-	font-size: 14px;
-	box-sizing: border-box;
-}
-	
-	
 	/* header */
 	#header {
 		width: 100%;
@@ -294,21 +283,16 @@
    <!-- 햄버거 버튼 -->
    <button id="hamburger" onclick="toggleSidebar()">☰</button>
 
-    <!-- 사이드바 -->
+   <!-- 사이드바 -->
    <div class="sidebar" id="sidebar">
       <h3>카테고리</h3>
-      <input type="text" id="categorySearch" placeholder="카테고리 검색"/>
-      <ul id="categoryList">
-         <li data-category="디지털기기">디지털기기</li>
-         <li data-category="생활가전">생활가전</li>
-         <li data-category="가구/인테리어">가구/인테리어</li>
-         <li data-category="유아동">유아동</li>
-         <li data-category="스포츠/레저">스포츠/레저</li>
-         <li data-category="도서/음반">도서/음반</li>
-         <li data-category="패션의류">패션의류</li>
-         <li data-category="패션잡화">패션잡화</li>
-         <li data-category="반련동물">반려동물</li>
-         <li data-category="게임/취미">게임/취미</li>
+      <ul>
+         <li>전자기기</li>
+         <li>의류</li>
+         <li>가구</li>
+         <li>도서</li>
+         <li>운동용품</li>
+         <li>기타</li>
       </ul>
    </div>
 
@@ -320,29 +304,20 @@
          	<p>묻고 따지지 말고 그냥 담금마켓 하세요. 후회하지 않습니다.</p>
          </div>		   	
          <div id="header_1_right">
-				<c:choose>
-					<c:when test="${empty loginUser and empty loginAdmin}">
-						<a href="${contextRoot}/insert.me">회원가입</a> 
-						<a href="#"id="loginLink">로그인</a>
-						<a href="#" id="adminLoginLink">관리자로그인</a>
-					</c:when>
-					<c:otherwise>
-						<c:choose>
-							<c:when test="${not empty loginUser}">
-								<span>${loginUser.userName}님 환영합니다.</span>
-								<a href="${contextRoot}/mypage.me">마이페이지</a>
-								<a href="${contextRoot}/logout.me">로그아웃</a>
-							</c:when>
-							<c:when test="${not empty loginAdmin}">
-								<span>${loginAdmin.adminName}님 환영합니다.</span>
-								<a href="${contextRoot}/admin/main.ad">관리자 페이지</a>
-								<a href="${contextRoot}/admin/logout.ad">로그아웃</a>
-							</c:when>
-						</c:choose>
-
-					</c:otherwise>
-				</c:choose>
-			</div>
+            <c:choose>
+               <c:when test="${empty loginUser}">
+                  <!-- 로그인 전 -->
+                  <a href="${contextRoot}/insert.me">회원가입</a>
+                  <a href="#" id="loginLink">로그인</a>
+               </c:when>
+               <c:otherwise>
+                  <!-- 로그인 후 -->
+                  <label>${loginUser.userName}님 환영합니다</label> &nbsp;&nbsp;
+                  <a href="${contextRoot}/mypage.me">마이페이지</a>
+                  <a href="${contextRoot}/logout.me">로그아웃</a>
+               </c:otherwise>
+            </c:choose>
+         </div>
       </div>
 
       <div id="header_2">
@@ -379,30 +354,6 @@
          </form>
       </div>
    </div>
-
-
-	<!-- 관리자 로그인 모달 -->
-   <div class="modal" id="adminLoginModal">
-      <div class="modal-content">
-         <span class="close-btn" id="closeAdminModal">&times;</span>
-         <h4>관리자 로그인</h4>
-         <form action="${contextRoot}/admin/login.ad" method="post">
-            <label for="adminId">관리자 ID:</label>
-            <input type="text" id="adminId" name="adminId" required />
-
-            <label for="adminPw">비밀번호:</label>
-            <input type="password" id="adminPw" name="adminPw" required />
-
-            <div style="text-align: center;">
-               <button type="submit" class="btn-primary">관리자 로그인</button>
-               <button type="button" class="btn-danger" id="cancelAdminBtn">취소</button>
-            </div>
-         </form>
-      </div>
-   </div>
-
-
-
 
    <br clear="both" />
 
@@ -449,42 +400,6 @@
          }
       });
    </script>
-   
-   
-   <!-- 관리자 로그인 모달 제어 스크립트 -->
-   <script>
-      const adminLoginLink = document.getElementById('adminLoginLink');
-      const adminModal = document.getElementById('adminLoginModal');
-      const closeAdminBtn = document.getElementById('closeAdminModal');
-      const cancelAdminBtn = document.getElementById('cancelAdminBtn');
-
-      // 관리자 로그인 링크 클릭 시 모달 열기
-      if (adminLoginLink) {
-         adminLoginLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            adminModal.classList.add('show');
-         });
-      }
-
-      // 닫기 버튼 클릭 시 모달 닫기
-      if (closeAdminBtn) {
-         closeAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
-      }
-
-      // 취소 버튼 클릭 시 모달 닫기
-      if (cancelAdminBtn) {
-         cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
-      }
-
-      // 모달 바깥 클릭 시 모달 닫기
-      adminModal.addEventListener('click', (e) => {
-         if (e.target === adminModal) {
-            adminModal.classList.remove('show');
-         }
-      });
-   </script>
-   
-   
 </body>
 
 </html>

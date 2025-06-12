@@ -59,15 +59,20 @@ public class ProductServiceImpl implements ProductService {
 	public int insertPdFiles(PdFile pdFiles) {
 		return dao.insertPdFiles(sqlSession,pdFiles);
 	}
+	
+	@Override
+    public int deleteProduct(int pdNum, int userNo) {
+		return dao.deleteProduct(sqlSession, pdNum, userNo);
+    }
 
 	@Override
 	public int insertPdStation(int userNo, int pdNum, int stationNo) {
 		return dao.insertPdStation(sqlSession,userNo,pdNum,stationNo);
 	}
-
+	
 	@Override
-	public List<Object> favoriteList(int userNo, RowBounds rowBounds) {
-		return dao.favoriteList(sqlSession, userNo, rowBounds);
+	public int updateProductByPdNumUserNo(Product product) {
+		return dao.updateProductByPdNumUserNo(sqlSession, product);
 	}
 
 }
