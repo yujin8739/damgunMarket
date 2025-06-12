@@ -164,7 +164,7 @@
         text-align: center;
     }
     
-    <!-- 삭제버튼 css -->
+    /* 삭제버튼 css */
     
     .btn-danger {
         background-color: #dc3545;
