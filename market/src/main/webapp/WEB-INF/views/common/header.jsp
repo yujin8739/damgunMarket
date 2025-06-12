@@ -11,267 +11,283 @@
    <title>담금마켓</title>
 
 	<style>
-	body {
-		font-family: 'Noto Sans KR', sans-serif;
-		margin: 0;
-		padding: 0;
-		background: #fafafa;
-	}
-	
-	/* 햄버거 버튼 */
-	#hamburger {
-		position: fixed;
-		top: 15px;
-		left: 15px;
-		font-size: 28px;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		color: #7b68ee;
-		z-index: 1100;
-		outline: none;
-	}
-	
-	/* 사이드바 */
-	.sidebar {
-		position: fixed;
-		top: 0;
-		left: -260px;
-		width: 260px;
-		height: 100vh;
-		background-color: #e6e6fa;
-		box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-		padding: 20px;
-		box-sizing: border-box;
-		transition: left 0.3s ease;
-		z-index: 1050;
-	}
-	
-	.sidebar.open {
-		left: 0;
-	}
-	
-	.sidebar h3 {
-		margin-top: 0;
-		color: #5a4fcf;
-		margin-bottom: 20px;
-	}
-	
-	.sidebar ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-	
-	.sidebar ul li {
-		padding: 12px 0;
-		border-bottom: 1px solid #cfcfff;
-		cursor: pointer;
-		color: #4b3bdb;
-		font-weight: 600;
-	}
-	
-	/* header */
-	#header {
-		width: 100%;
-		background-color: #a798f7;
-		padding-top: 60px;
-		box-sizing: border-box;
-		color: white;
-	}
-	
-	#header_1 {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0 20px;
-		height: 50px;
-	}
-	
-	#header_1_center {
-		flex: 1;
-		text-align: center;
-	}
-	
-	#header_1_center h1 {
-		font-size: 45px;
-		margin: 0;
-	}
-	
-	#header_1_center p {
-		margin: 5px 0 0;
-		font-size: 16px;
-		color: #f0f0f0; /* 연보라 배경에서 잘 보이도록 */
-	}
-	
-	#header_1_right a {
-		color: white;
-		margin-left: 15px;
-		text-decoration: none;
-		font-weight: 500;
-		cursor: pointer;
-	}
-	
-	#header_1_right label {
-		font-weight: 600;
-	}
-	
-	#header_2 {
-		background-color: #8c7ae6;
-		padding: 0 20px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end; /* 오른쪽 정렬 */
-	}
-	
-	#header_2 ul {
-		display: flex;
-		justify-content: flex-end;
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		gap: 20px;
-	}
-	
-	#header_2 ul li {
-		/* margin-right 제거 - 대신 gap 사용 */
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+			margin: 0;
+			padding: 0;
+			background: #fafafa;
+		}
 		
-	}
-	
-	#header_2 ul li a {
-		color: white;
-		text-decoration: none;
-		font-weight: 600;
-		padding: 6px 10px; /* 클릭 영역 넓게 */
-		display: inline-block;
-		line-height: 1;
-	}
-	
-	#header_2 ul li a:hover {
-		text-decoration: underline;
-	}
-	
-	/* Hero Section */
-	.hero {
-		padding: 10px 20px;
-		min-height: 200px;
-		background: linear-gradient(135deg, #d3cce3 0%, #e9e4f0 100%);
-		text-align: center;
-		color: #5a4fcf;
-		position: relative;
-		z-index: 1;
-	}
-	
-	.hero h1 {
-		font-size: 20px;
-		margin-bottom: 15px;
-		font-weight: 700;
-		color: #5a4fcf;
-	}
-	
-	.hero p {
-		font-size: 20px;
-		font-weight: 500;
-		color: #7b68ee;
-	}
-	
-	/* 로그인 모달 스타일 */
-	.modal {
-		display: none;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background: rgba(0, 0, 0, 0.5);
-		justify-content: center;
-		align-items: center;
-		z-index: 1200;
-	}
-	
-	.modal.show {
-		display: flex;
-	}
-	
-	.modal-content {
-		background: white;
-		padding: 20px 30px;
-		border-radius: 8px;
-		width: 320px;
-		box-sizing: border-box;
-		position: relative;
-		box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-	}
-	
-	.modal-content h4 {
-		margin-top: 0;
-		margin-bottom: 20px;
-		color: #5a4fcf;
-		font-weight: 700;
-		text-align: center;
-	}
-	
-	.modal-content label {
-		display: block;
-		margin-bottom: 5px;
-		font-weight: 600;
-		color: #4b3bdb;
-	}
-	
-	.modal-content input[type="text"], .modal-content input[type="password"]
-		{
-		width: 100%;
-		padding: 8px 10px;
-		margin-bottom: 15px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-		box-sizing: border-box;
-		font-size: 14px;
-	}
-	
-	.modal-content button {
-		padding: 10px 18px;
-		border: none;
-		border-radius: 4px;
-		font-weight: 600;
-		cursor: pointer;
-		font-size: 14px;
-	}
-	
-	.btn-primary {
-		background-color: #7b68ee;
-		color: white;
-		margin-right: 10px;
-	}
-	
-	.btn-primary:hover {
-		background-color: #5a4fcf;
-	}
-	
-	.btn-danger {
-		background-color: #e57373;
-		color: white;
-	}
-	
-	.btn-danger:hover {
-		background-color: #d32f2f;
-	}
-	
-	.close-btn {
-		position: absolute;
-		top: 10px;
-		right: 15px;
-		font-size: 24px;
-		font-weight: bold;
-		color: #7b68ee;
-		cursor: pointer;
-	}
+		/* 햄버거 버튼 */
+		#hamburger {
+			position: fixed;
+			top: 15px;
+			left: 15px;
+			font-size: 28px;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			color: #7b68ee;
+			z-index: 1100;
+			outline: none;
+		}
+		
+		/* 사이드바 */
+		.sidebar {
+			position: fixed;
+			top: 0;
+			left: -260px;
+			width: 260px;
+			height: 100vh;
+			background-color: #e6e6fa;
+			box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+			padding: 20px;
+			box-sizing: border-box;
+			transition: left 0.3s ease;
+			z-index: 1050;
+		}
+		
+		.sidebar.open {
+			left: 0;
+		}
+		
+		.sidebar h3 {
+			margin-top: 0;
+			color: #5a4fcf;
+			margin-bottom: 20px;
+		}
+		
+		.sidebar ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+		
+		.sidebar ul li {
+			padding: 12px 0;
+			border-bottom: 1px solid #cfcfff;
+			cursor: pointer;
+			color: #4b3bdb;
+			font-weight: 600;
+		}
+		
+		   #categorySearch {
+	        width: 100%;
+	        padding: 8px 10px;
+	        margin-bottom: 15px;
+	        border: 1px solid #cfcfff;
+	        border-radius: 4px;
+	        font-size: 14px;
+	        box-sizing: border-box;
+   	    }
+		
+		
+		/* header */
+		#header {
+			width: 100%;
+			background-color: #a798f7;
+			padding-top: 60px;
+			box-sizing: border-box;
+			color: white;
+		}
+		
+		#header_1 {
+			position: relative;
+			height: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0 20px;
+			box-sizing: border-box;
+		}
+		
+		#header_1_center {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			text-align: center;
+		}
+		
+		#header_1_center h1 {
+			font-size: 32px;
+			margin: 0;
+		}
+		
+		#header_1_center p {
+			margin: 5px 0 0;
+			font-size: 16px;
+			color: #f0f0f0;
+		}
+		
+		#header_1_right {
+			position: absolute;
+			right: 20px;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		
+		#header_1_right a {
+			color: white;
+			margin-left: 15px;
+			text-decoration: none;
+			font-weight: 500;
+			cursor: pointer;
+		}
+		
+		#header_1_right label {
+			font-weight: 600;
+		}
+		
+		#header_2 {
+			background-color: #8c7ae6;
+			padding: 0 20px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+		}
+		
+		#header_2 ul {
+			display: flex;
+			justify-content: flex-end;
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			gap: 20px;
+		}
+		
+		#header_2 ul li a {
+			color: white;
+			text-decoration: none;
+			font-weight: 600;
+			padding: 6px 10px;
+			display: inline-block;
+			line-height: 1;
+		}
+		
+		#header_2 ul li a:hover {
+			text-decoration: underline;
+		}
+		
+		/* Hero Section */
+		.hero {
+			padding: 10px 20px;
+			min-height: 200px;
+			background: linear-gradient(135deg, #d3cce3 0%, #e9e4f0 100%);
+			text-align: center;
+			color: #5a4fcf;
+			position: relative;
+			z-index: 1;
+		}
+		
+		.hero h1 {
+			font-size: 20px;
+			margin-bottom: 15px;
+			font-weight: 700;
+			color: #5a4fcf;
+		}
+		
+		.hero p {
+			font-size: 20px;
+			font-weight: 500;
+			color: #7b68ee;
+		}
+		
+		/* 로그인 모달 스타일 */
+		.modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background: rgba(0, 0, 0, 0.5);
+			justify-content: center;
+			align-items: center;
+			z-index: 1200;
+		}
+		
+		.modal.show {
+			display: flex;
+		}
+		
+		.modal-content {
+			background: white;
+			padding: 20px 30px;
+			border-radius: 8px;
+			width: 320px;
+			box-sizing: border-box;
+			position: relative;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+		}
+		
+		.modal-content h4 {
+			margin-top: 0;
+			margin-bottom: 20px;
+			color: #5a4fcf;
+			font-weight: 700;
+			text-align: center;
+		}
+		
+		.modal-content label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: 600;
+			color: #4b3bdb;
+		}
+		
+		.modal-content input[type="text"], .modal-content input[type="password"]
+			{
+			width: 100%;
+			padding: 8px 10px;
+			margin-bottom: 15px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+			font-size: 14px;
+		}
+		
+		.modal-content button {
+			padding: 10px 18px;
+			border: none;
+			border-radius: 4px;
+			font-weight: 600;
+			cursor: pointer;
+			font-size: 14px;
+		}
+		
+		.btn-primary {
+			background-color: #7b68ee;
+			color: white;
+			margin-right: 10px;
+		}
+		
+		.btn-primary:hover {
+			background-color: #5a4fcf;
+		}
+		
+		.btn-danger {
+			background-color: #e57373;
+			color: white;
+		}
+		
+		.btn-danger:hover {
+			background-color: #d32f2f;
+		}
+		
+		.close-btn {
+			position: absolute;
+			top: 10px;
+			right: 15px;
+			font-size: 24px;
+			font-weight: bold;
+			color: #7b68ee;
+			cursor: pointer;
+		}
 	</style>
 </head>
 
 <body>
    <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
-
    <script>
       var msg = "${alertMsg}";
       if (msg != "") {
@@ -282,17 +298,22 @@
 
    <!-- 햄버거 버튼 -->
    <button id="hamburger" onclick="toggleSidebar()">☰</button>
-
+	
    <!-- 사이드바 -->
    <div class="sidebar" id="sidebar">
       <h3>카테고리</h3>
-      <ul>
-         <li>전자기기</li>
-         <li>의류</li>
-         <li>가구</li>
-         <li>도서</li>
-         <li>운동용품</li>
-         <li>기타</li>
+      <input type="text" id="categorySearch" placeholder="카테고리 검색"/>
+      <ul id="categoryList">
+         <li data-category="디지털기기">디지털기기</li>
+         <li data-category="생활가전">생활가전</li>
+         <li data-category="가구/인테리어">가구/인테리어</li>
+         <li data-category="유아동">유아동</li>
+         <li data-category="스포츠/레저">스포츠/레저</li>
+         <li data-category="도서/음반">도서/음반</li>
+         <li data-category="패션의류">패션의류</li>
+         <li data-category="패션잡화">패션잡화</li>
+         <li data-category="반련동물">반려동물</li>
+         <li data-category="게임/취미">게임/취미</li>
       </ul>
    </div>
 
@@ -356,9 +377,9 @@
    </div>
 
    <br clear="both" />
-
-   <!-- 사이드바 자동 닫힘 스크립트 -->
+   
    <script>
+   <!-- 사이드바 자동 닫힘 스크립트 -->
       let sidebarTimer;
 
       function toggleSidebar() {
@@ -369,9 +390,22 @@
             clearTimeout(sidebarTimer);
             sidebarTimer = setTimeout(() => {
                sidebar.classList.remove('open');
-            }, 5000);
+            }, 8000);
          }
       }
+      
+      <!-- 카테고리 검색 기능 -->    
+      const searchInput = document.getElementById('categorySearch');
+      const items = document.querySelectorAll('#categoryList li');
+
+      searchInput.addEventListener('input',(e) => {
+         const query = e.target.value.toLowerCase();
+
+         items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(query) ? 'list-item' : 'none';
+         });
+      });
    </script>
 
    <!-- 로그인 모달 제어 스크립트 -->
@@ -400,6 +434,8 @@
          }
       });
    </script>
+   
+   
 </body>
 
 </html>
