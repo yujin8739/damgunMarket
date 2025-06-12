@@ -97,19 +97,15 @@
             <div class="footer-section">
                <h3>서비스</h3>
                <ul>
-                  <li><a href="#">중고거래</a></li>
-                  <li><a href="#">넣고싶은거 넣지</a></li>
                   <li><a href="#">판매자인증</a></li>
                    <li><a href="#">광고문의</a></li>
                </ul>
             </div>
             <div class="footer-section">
                <h3>고객지원</h3>
-               <ul>
-                  <li><a href="#">FAQ</a></li>
+               <ul>                 
                   <li><a href="#">공지사항</a></li>
-                  <li><a href="#">문의사항</a></li>
-                  <li><a href="#">신고하기</a></li>
+
                </ul>
             </div>
             <div class="footer-section">
