@@ -66,25 +66,7 @@
         <br><br>
         
     </div>
-    
-    <script>
-    	//남여 체크박스 체크시키기 
-    	$(function(){
-    		//var gender = "${loginUser.gender}";
-    		//console.log(gender);
-    		$("input[value=${loginUser.gender}]").attr("checked",true);
-    	});
-    
-    </script>
-    
-    
-    <!-- 
-    	성공시 회원 탈퇴 성공 메시지와 함께 메인페이지로 이동(재요청) - 세션에 담긴 로그인정보 삭제하기 
-    	실패시 회원 탈퇴 실패 메시지와 함께 마이페이지로 이동(재요청) 	
-    	회원탈퇴 처리도 update로 작성하기 (STATUS 에 Y를 N으로 변경하는 처리)   
-     -->
-    
-    
+
 
     <!-- 회원탈퇴 버튼 클릭 시 보여질 Modal -->
     <div class="modal fade" id="deleteForm">
