@@ -71,6 +71,17 @@
 		font-weight: 600;
 	}
 	
+	#categorySearch {
+	width: 100%;
+	padding: 8px 10px;
+	margin-bottom: 15px;
+	border: 1px solid #cfcfff;
+	border-radius: 4px;
+	font-size: 14px;
+	box-sizing: border-box;
+}
+	
+	
 	/* header */
 	#header {
 		width: 100%;
@@ -283,16 +294,21 @@
    <!-- 햄버거 버튼 -->
    <button id="hamburger" onclick="toggleSidebar()">☰</button>
 
-   <!-- 사이드바 -->
+    <!-- 사이드바 -->
    <div class="sidebar" id="sidebar">
       <h3>카테고리</h3>
-      <ul>
-         <li>전자기기</li>
-         <li>의류</li>
-         <li>가구</li>
-         <li>도서</li>
-         <li>운동용품</li>
-         <li>기타</li>
+      <input type="text" id="categorySearch" placeholder="카테고리 검색"/>
+      <ul id="categoryList">
+         <li data-category="디지털기기">디지털기기</li>
+         <li data-category="생활가전">생활가전</li>
+         <li data-category="가구/인테리어">가구/인테리어</li>
+         <li data-category="유아동">유아동</li>
+         <li data-category="스포츠/레저">스포츠/레저</li>
+         <li data-category="도서/음반">도서/음반</li>
+         <li data-category="패션의류">패션의류</li>
+         <li data-category="패션잡화">패션잡화</li>
+         <li data-category="반련동물">반려동물</li>
+         <li data-category="게임/취미">게임/취미</li>
       </ul>
    </div>
 

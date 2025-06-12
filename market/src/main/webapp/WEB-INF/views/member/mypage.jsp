@@ -32,17 +32,7 @@
         <br><br>
         <div class="innerOuter">
             <h2>마이페이지</h2>
-            <br>
-            
-            <!-- 
-            	updateMember() 메소드를 작성하여 정보수정 처리해보기 
-            	성공시 : 정보수정 성공! 메시지와 함께 마이페이지로 되돌아오기 (변경된 정보 갱신)
-            	실패시 : 에러페이지로 정보수정 실패! 메시지와 함께 위임시키기(model 이용)
-            	
-            	마이바티스 메소드와 태그는 update() / <update> 를 이용하시면 됩니다. 
-            
-             -->
-
+            <br>           
             <form action="${contextRoot }/update.me" method="post">
                 <div class="form-group">
                     <label for="userId">* ID : </label>
@@ -52,9 +42,7 @@
                     <input type="text" class="form-control" id="userName" value="${loginUser.userName }" name="userName" required> <br>
 
                     <label for="email"> &nbsp; Email : </label>
-                    <input type="text" class="form-control" id="email" value="${loginUser.email }" name="email"> <br>
-
-                   
+                    <input type="text" class="form-control" id="email" value="${loginUser.email }" name="email"> <br>                 
                 </div> 
                 <br>
                 <div class="btns" align="center">
@@ -66,7 +54,6 @@
         <br><br>
         
     </div>
-
 
     <!-- 회원탈퇴 버튼 클릭 시 보여질 Modal -->
     <div class="modal fade" id="deleteForm">

@@ -139,7 +139,6 @@
 					<input type="hidden" class="form-control" id="latitude" name="latitude">
 					<input type="hidden" class="form-control" id="longitude" name="longitude">
 					
-					<!-- 확인 버튼 영역 -->
 					<div class="btns" align="center" >
 						<div id="confirmBox" style="display:none;" class="innerOuter">
 							<h1 style="color: #7c5cc4;">해당 위치가 맞습니까?<br><br> </h1>
