@@ -378,7 +378,7 @@
             });
             
             // 폼 제출 전 유효성 검사
-            $('#Product').submit(function(e) {
+            $('#product').submit(function(e) {
             	
             	const checkedStations = $('input[name="station"]:checked');
             	

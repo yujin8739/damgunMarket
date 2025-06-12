@@ -102,11 +102,12 @@
 	    <form id="searchForm" onsubmit="return false;">
 	        <input type="text" id="searchKeyword" placeholder="상품명 검색">
 	        <button onclick="startSearch()">검색</button>
+	        <button onclick="location.href='${pageContext.request.contextPath}/product/regist'">상품등록</button>
+	        <button id="chat-move" onclick="location.href='${pageContext.request.contextPath}/chat/roomList'">채팅이동</button>
 	    </form>
 	    <hr>
 		<jsp:include page="/WEB-INF/views/product/productList.jsp"/>
 	</div>
-	 <p><a href="${pageContext.request.contextPath}/chat/roomList">채팅방으로 이동</a></p>
 	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 

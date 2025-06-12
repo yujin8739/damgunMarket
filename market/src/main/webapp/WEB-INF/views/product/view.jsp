@@ -43,6 +43,9 @@
 		    color: #888888;  
 		}
 		#category {
+		    max-width: 800px;
+		    margin: 0 auto 20px auto;
+		    padding: 0 30px; /* .product-detail과 같은 좌우 패딩 */
 		}
 		.image-scroll-wrapper {
 			overflow-x: auto;
@@ -57,11 +60,13 @@
 	</style>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <p id="category"><strong>카테고리:</strong> ${product.bigCate} > ${product.midCate} > ${product.smallCate}</p>
 <div class="product-detail">
     <p>
     <h1 style="display: flex; justify-content: space-between; align-items: center;">
     	${product.pdTitle}
+    	<button onclick="location.href='${pageContext.request.contextPath}/chat/roomList'">채팅하기</button>
     	<span id="favoriteStar" style="cursor: pointer; color: gold; font-size: 24px;">☆</span>
 	</h1>
     
@@ -141,5 +146,6 @@
         <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p>
     </div>
 </div>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
