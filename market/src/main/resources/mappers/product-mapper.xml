@@ -162,6 +162,18 @@
 	        #{fileNo}
 	    )
 	</insert>
+	
+	<insert id="insertPdStation">
+		INSERT INTO TRADE_STATION (
+			USER_NO,
+			PD_NUM,
+			STATION_NUM
+		) VALUES (
+			#{userNo},
+			#{pdNum},
+			#{stationNo}
+		)
+	</insert>
 
 
 </mapper>

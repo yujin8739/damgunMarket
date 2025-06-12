@@ -16,7 +16,7 @@
 	</resultMap>
 	
 	<!-- 로그인 시 아이디로만 조회 (비밀번호는 컨트롤러에서 bcrypt로 비교) -->
-	<select id="loginMember" parameterType="Member" resultType="Member">
+	<select id="loginMember" parameterType="Member" resultType="Member" resultMap="memberResultMap">
 		SELECT USER_NO
 			  ,USERID 
 			  ,PASSWORD

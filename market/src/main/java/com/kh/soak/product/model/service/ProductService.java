@@ -17,4 +17,5 @@ public interface ProductService {
 	List<String> selectFiles(int pdNum, int userNo);
 	int insertProduct(Product product);
 	int insertPdFiles(PdFile pdFiles);
+	int insertPdStation(int userNo, int pdNum, int stationNo);
 }
