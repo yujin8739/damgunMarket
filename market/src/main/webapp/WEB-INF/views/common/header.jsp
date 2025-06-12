@@ -330,7 +330,16 @@
                   <!-- 로그인 전 -->
                   <a href="${contextRoot}/insert.me">회원가입</a>
                   <a href="#" id="loginLink">로그인</a>
+                  <a href="#" id="adminLoginLink">관리자 로그인</a>
                </c:when>
+               
+               <c:when test="${not empty loginAdmin}">
+		          <!-- 관리자 로그인 후 -->
+		          <label>${loginAdmin.adminName}님 환영합니다 <span class="admin-badge">ADMIN</span></label> &nbsp;&nbsp;
+		          <a href="${contextRoot}/admin/main.ad">관리자 페이지</a>
+		          <a href="${contextRoot}/admin/logout.ad">로그아웃</a>
+               </c:when>
+               
                <c:otherwise>
                   <!-- 로그인 후 -->
                   <label>${loginUser.userName}님 환영합니다</label> &nbsp;&nbsp;
@@ -376,10 +385,34 @@
       </div>
    </div>
 
+
+	<!-- 관리자 로그인 모달 -->
+   <div class="modal" id="adminLoginModal">
+      <div class="modal-content">
+         <span class="close-btn" id="closeAdminModal">&times;</span>
+         <h4>관리자 로그인</h4>
+         <form action="${contextRoot}/admin/login.ad" method="post">
+            <label for="adminId">관리자 ID:</label>
+            <input type="text" id="adminId" name="adminId" required />
+
+            <label for="adminPw">비밀번호:</label>
+            <input type="password" id="adminPw" name="adminPw" required />
+
+            <div style="text-align: center;">
+               <button type="submit" class="btn-primary">관리자 로그인</button>
+               <button type="button" class="btn-danger" id="cancelAdminBtn">취소</button>
+            </div>
+         </form>
+      </div>
+   </div>
+
+
+
+
    <br clear="both" />
-   
-   <script>
+
    <!-- 사이드바 자동 닫힘 스크립트 -->
+   <script>
       let sidebarTimer;
 
       function toggleSidebar() {
@@ -390,22 +423,9 @@
             clearTimeout(sidebarTimer);
             sidebarTimer = setTimeout(() => {
                sidebar.classList.remove('open');
-            }, 8000);
+            }, 5000);
          }
       }
-      
-      <!-- 카테고리 검색 기능 -->    
-      const searchInput = document.getElementById('categorySearch');
-      const items = document.querySelectorAll('#categoryList li');
-
-      searchInput.addEventListener('input',(e) => {
-         const query = e.target.value.toLowerCase();
-
-         items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(query) ? 'list-item' : 'none';
-         });
-      });
    </script>
 
    <!-- 로그인 모달 제어 스크립트 -->
@@ -431,6 +451,42 @@
       modal.addEventListener('click', (e) => {
          if (e.target === modal) {
             modal.classList.remove('show');
+         }
+      });
+   </script>
+   
+   
+   
+   
+   <!-- 관리자 로그인 모달 제어 스크립트 -->
+   <script>
+      const adminLoginLink = document.getElementById('adminLoginLink');
+      const adminModal = document.getElementById('adminLoginModal');
+      const closeAdminBtn = document.getElementById('closeAdminModal');
+      const cancelAdminBtn = document.getElementById('cancelAdminBtn');
+
+      // 관리자 로그인 링크 클릭 시 모달 열기
+      if (adminLoginLink) {
+         adminLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            adminModal.classList.add('show');
+         });
+      }
+
+      // 닫기 버튼 클릭 시 모달 닫기
+      if (closeAdminBtn) {
+         closeAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+      }
+
+      // 취소 버튼 클릭 시 모달 닫기
+      if (cancelAdminBtn) {
+         cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+      }
+
+      // 모달 바깥 클릭 시 모달 닫기
+      adminModal.addEventListener('click', (e) => {
+         if (e.target === adminModal) {
+            adminModal.classList.remove('show');
          }
       });
    </script>
