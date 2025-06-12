@@ -122,7 +122,7 @@ public class ProductController {
 	                
 	                PdFile pdFile = new PdFile();
 	                pdFile.setUserNo(userNo);
-	                pdFile.setPdNum(pdNum);
+	                pdFile.setPdNum(pdNum);  
 	                pdFile.setFileNo(i);
 	                pdFile.setPdUrl(getServerUrl(request)+"/file/view?types=product&fileName=" + renamedFilename);
 	                pdFile.setFileType("IMG");
