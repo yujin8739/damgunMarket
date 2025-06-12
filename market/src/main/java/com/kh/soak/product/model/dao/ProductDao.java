@@ -55,4 +55,12 @@ public class ProductDao {
 	public int insertPdFiles(SqlSessionTemplate sqlSession, PdFile pdFile) {
 		return sqlSession.insert("productMapper.insertProductFile", pdFile);
 	}
+
+	public int insertPdStation(SqlSessionTemplate sqlSession, int userNo, int pdNum, int stationNo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("pdNum", pdNum);
+		param.put("stationNo", stationNo);
+		return sqlSession.insert("productMapper.insertPdStation", param);
+	}
 }

@@ -31,6 +31,7 @@
 			<exclude-mapping path="/login.me" /> <!-- 특정 요청 제외 -->
 			<exclude-mapping path="/insert.me" />
 			<exclude-mapping path="/idCheck.me" />
+			<exclude-mapping path="/mypage.me"/>
 
 			<!-- beans:bean class : 등록할 인터셉터의 풀 경로 -->
 			<beans:bean
