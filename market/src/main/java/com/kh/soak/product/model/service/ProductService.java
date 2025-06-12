@@ -22,10 +22,10 @@ public interface ProductService {
 	int deleteProduct(int pdNum, int userNo);
 
 	int insertPdStation(int userNo, int pdNum, int stationNo);
-	
+
 	//Product selectOneProduct(int pdNum, int userNo);
 	int updateProductByPdNumUserNo(Product product);
-	
-	
+
+	List<Object> favoriteList(int userNo, RowBounds rowBounds);
 
 }

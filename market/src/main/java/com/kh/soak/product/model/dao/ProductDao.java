@@ -80,4 +80,7 @@ public class ProductDao {
 		return sqlSession.update("productMapper.updateProductByPdNumUserNo", product);
 	}
 
+	public List<Object> favoriteList(SqlSessionTemplate sqlSession, int userNo,RowBounds rowBounds) {
+		return sqlSession.selectList("productMapper.selectFavoriteList",userNo, rowBounds);
+	}
 }

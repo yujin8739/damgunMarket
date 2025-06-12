@@ -182,7 +182,14 @@ public class ProductController {
     }
 
 	
-	
+	@RequestMapping(value = "product/favoriteList",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Object> favoriteList(@RequestParam int offset,
+						    	     @RequestParam int limit,
+									 @RequestParam(required = false) int userNo) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+	    return service.favoriteList(userNo,rowBounds);        
+	}
 	
 	public String getServerUrl(HttpServletRequest request) {
 	    String scheme = request.getScheme(); // http 또는 https
