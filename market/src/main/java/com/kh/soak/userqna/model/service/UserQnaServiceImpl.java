@@ -49,8 +49,8 @@ public class UserQnaServiceImpl implements UserQnaService {
     }
     
     @Override
-    public List<UserQnaInfo> selectReportQna(int douserNum) {
-        return dao.selectReportQna(sqlSession, douserNum);
+    public List<UserQnaInfo> selectReportQna(int exuserNum) {
+        return dao.selectReportQna(sqlSession, exuserNum);
     }
     
     @Override

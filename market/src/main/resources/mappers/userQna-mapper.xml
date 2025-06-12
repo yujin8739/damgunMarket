@@ -9,7 +9,7 @@
         <result column="USER_NO" property="userNo"/>
         <result column="USERQNA_TITLE" property="userQnaTitle"/>
         <result column="USERQNA" property="userQna"/>
-        <result column="DOUSER_NUM" property="douserNum"/>
+        <result column="EXUSER_NUM" property="exuserNum"/>
         <result column="USERQNA_IMG" property="userQnaImg"/>
     </resultMap>
     
@@ -22,8 +22,8 @@
     </select>
     
     <insert id="insertUserQna" parameterType="UserQnaInfo">
-        INSERT INTO USERQNA (USERQNA_NUM, USER_NO, USERQNA_TITLE, USERQNA, DOUSER_NUM, USERQNA_IMG)
-        VALUES (SEQ_USERQNA.NEXTVAL, #{userNo}, #{userQnaTitle}, #{userQna}, #{douserNum}, #{userQnaImg})
+        INSERT INTO USERQNA (USERQNA_NUM, USER_NO, USERQNA_TITLE, USERQNA, EXUSER_NUM, USERQNA_IMG)
+        VALUES (SEQ_USERQNA.NEXTVAL, #{userNo}, #{userQnaTitle}, #{userQna}, #{exuserNum}, #{userQnaImg})
     </insert>
     
     <update id="updateUserQna" parameterType="UserQnaInfo">
@@ -43,7 +43,7 @@
     </select>
     
     <select id="selectReportQna" parameterType="_int" resultMap="userQnaResultSet">
-        SELECT * FROM USERQNA WHERE DOUSER_NUM = #{douserNum} ORDER BY USERQNA_NUM DESC
+        SELECT * FROM USERQNA WHERE EXUSER_NUM = #{exuserNum} ORDER BY USERQNA_NUM DESC
     </select>
     
     <select id="searchUserQna" parameterType="string" resultMap="userQnaResultSet">

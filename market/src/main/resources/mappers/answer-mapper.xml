@@ -8,7 +8,7 @@
         <result column="USERQNA_NUM" property="userQnaNum"/>
         <result column="USER_NO" property="userNo"/>
         <result column="ANSWER_TITLE" property="answerTitle"/>
-        <result column="ANSWER_CNA" property="answerContent"/>
+        <result column="ANSWER_QNA" property="answerQna"/>
         <result column="ANSWER_IMG" property="answerImg"/>
         <result column="PRODUCT_NUM" property="productNum"/>
         <result column="ADMIN_NAME" property="adminName"/>
@@ -23,14 +23,14 @@
     </select>
     
     <insert id="insertAnswer" parameterType="AnswerInfo">
-        INSERT INTO ANSWER (USERQNA_NUM, USER_NO, ANSWER_TITLE, ANSWER_CNA, ANSWER_IMG, PRODUCT_NUM, ADMIN_NAME)
-        VALUES (#{userQnaNum}, #{userNo}, #{answerTitle}, #{answerContent}, #{answerImg}, #{productNum}, #{adminName})
+        INSERT INTO ANSWER (USERQNA_NUM, USER_NO, ANSWER_TITLE, ANSWER_QNA, ANSWER_IMG, PRODUCT_NUM, ADMIN_NAME)
+        VALUES (#{userQnaNum}, #{userNo}, #{answerTitle}, #{answerQna}, #{answerImg}, #{productNum}, #{adminName})
     </insert>
     
     <update id="updateAnswer" parameterType="AnswerInfo">
         UPDATE ANSWER SET 
             ANSWER_TITLE = #{answerTitle},
-            ANSWER_CNA = #{answerContent},
+            ANSWER_QNA = #{answerQna},
             ANSWER_IMG = #{answerImg}
         WHERE USERQNA_NUM = #{userQnaNum}
     </update>

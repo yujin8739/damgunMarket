@@ -54,15 +54,6 @@
         <br><br>
         
     </div>
-    
-    <script>
-    	//남여 체크박스 체크시키기 
-    	$(function(){
-    		//var gender = "${loginUser.gender}";
-    		//console.log(gender);
-    		$("input[value=${loginUser.gender}]").attr("checked",true);
-    	});   
-    </script>
 
     <!-- 회원탈퇴 버튼 클릭 시 보여질 Modal -->
     <div class="modal fade" id="deleteForm">
