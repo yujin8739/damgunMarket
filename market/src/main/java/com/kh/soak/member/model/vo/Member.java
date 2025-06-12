@@ -13,14 +13,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @Data 
 public class Member {
-	private int userNo;		//	USERNO	NUMBER(11,0))
-	private String userId;	//	USERID	VARCHAR2
-	private String passWord;//	PASSWORD	VARCHAR
-	private String userName; //	USERNAME VARCHAR2(20
-	private String email;	//	EMAIL	VARCHAR2(25
-	private String status;//	STATUS	VARCHAR2(
-	private int userRank;	//	USERRANK	NUMBER(38,0
-//	private String address;// ADDRESS VARCHAR2(100 BYTE)
-//	private Date enrollDate;// ENROLL_DATE DATE
-//	private Date modifyDate;// MODIFY_DATE DATEs
-	}
+	private int userNo;		//	USERNO	NUMBER(11,0) 유저번호 (유저 이미지나 영상 판매물품 외례키)
+	private String userId;	//	USERID	VARCHAR2(255 BYTE) 유저아이디
+	private String passWord;//	PASSWORD	VARCHAR2(255 BYTE) 유저비밀번호
+	private String userName; //	USERNAME VARCHAR2(20 BYTE) 유저이름(닉네임)
+	private String email;	//	EMAIL	VARCHAR2(255 BYTE) 이메일 
+	private String status;//	STATUS	VARCHAR2(1 BYTE) 유저상태(회원 탈퇴 유무)
+	private int userRank;	//	USERRANK	NUMBER(38,0) 유저 매너 지수
+	private double latitude;
+	private double longitude;
+}
