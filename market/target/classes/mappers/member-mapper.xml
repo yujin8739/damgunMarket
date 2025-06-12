@@ -76,5 +76,23 @@
 		WHERE USERID = #{userId}
 		AND STATUS = 'Y'
 	</select>
+	
+	<insert id="saveFavorite">
+		INSERT INTO FAVORITE (PD_NUM, USER_NO)
+		VALUES(#{pdNum},#{userNo})
+	</insert>
+	
+	<delete id="deleteFavorite">
+		DELETE FROM FAVORITE
+		WHERE PD_NUM = #{pdNum}
+		AND USER_NO = #{userNo}
+	</delete>
+	
+	<select id="selectFavorite" resultType="_int">
+		SELECT COUNT(*)
+		FROM FAVORITE
+		WHERE PD_NUM = #{pdNum}
+		AND USER_NO = #{userNo}
+	</select>
 
 </mapper>

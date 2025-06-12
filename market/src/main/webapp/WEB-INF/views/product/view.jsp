@@ -78,9 +78,34 @@
 	</c:if>
 	
 	<div id="json-data" data-json='${fileListJson}' style="display:none;"></div>
-	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+	    const serverPath = '${pageContext.request.contextPath}';
+	</script>
 	<script>
+	
+		function selectFavorite(){
+			const star = document.getElementById("favoriteStar");
+			let userNo = '${loginUser.userNo}';
+			 console.log("확인용")
+			let pdNum = '${product.pdNum}';
+			$.ajax({
+                url: serverPath+"/user/selectFavorite",
+                data: {
+                    userNo : userNo,
+                    pdNum : pdNum
+                },
+                success: function (fCount) {
+     	            star.textContent = fCount>0 ? "★" : "☆";
+                },
+                error: function (){
+                	 alert("저장 실패");
+                }
+        	});
+		}
+	
 		document.addEventListener("DOMContentLoaded", function() {
+			selectFavorite();
 	        // 기존 이미지 로딩 스크립트
 	        const imageContainer = document.getElementById("imageContainer");
 	        const jsonData = document.getElementById("json-data").dataset.json;
@@ -98,14 +123,14 @@
 
 	        // 즐겨찾기 별 클릭 처리
 	        const star = document.getElementById("favoriteStar");
-	        let isFavorite = false;
 	        star.addEventListener("click", function () {
-	        	let userNo = 0;
-	        	let pdNum = product.pdNum;
+	        	let isFavorite = star.textContent === "★";
+	        	let userNo = '${loginUser.userNo}';
+	        	let pdNum = '${product.pdNum}';
 	        	isFavorite = !isFavorite;
-	        	if(favorite){
+	        	if(isFavorite){
 		            $.ajax({
-		                url: "user/seveFavorite",
+		                url: serverPath+"/user/saveFavorite",
 		                data: {
 		                    userNo : userNo,
 		                    pdNum : pdNum
@@ -119,7 +144,7 @@
 		        	});
 	        	} else {
 	        		 $.ajax({
-			                url: "user/Favorite",
+			                url: serverPath+"/user/deleteFavorite",
 			                data: {
 			                    userNo : userNo,
 			                    pdNum : pdNum

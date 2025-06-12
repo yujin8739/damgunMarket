@@ -18,4 +18,5 @@ public interface ProductService {
 	int insertProduct(Product product);
 	int insertPdFiles(PdFile pdFiles);
 	int insertPdStation(int userNo, int pdNum, int stationNo);
+	List<Object> favoriteList(int userNo, RowBounds rowBounds);
 }

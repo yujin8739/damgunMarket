@@ -50,13 +50,15 @@ public class MemberDao {
 	}
 
 	public int saveFavorite(SqlSessionTemplate sqlSession, Map<String, Object> param) {
-		// TODO Auto-generated method stub
 		return sqlSession.insert("memberMapper.saveFavorite",param);
 	}
 	
 	public int deleteFavorite(SqlSessionTemplate sqlSession, Map<String, Object> param) {
-		// TODO Auto-generated method stub
-		return sqlSession.delete("memberMapper.delete Favorite",param);
+		return sqlSession.delete("memberMapper.deleteFavorite",param);
+	}
+
+	public int selectFavorite(SqlSessionTemplate sqlSession, Map<String, Object> param) {
+		return sqlSession.selectOne("memberMapper.selectFavorite",param);
 	}
 	
 }

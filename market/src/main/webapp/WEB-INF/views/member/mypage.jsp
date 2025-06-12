@@ -94,7 +94,6 @@
         <br><br>
         
     </div>
-<<<<<<< HEAD
     
     <script>
     	function geoCodingRun(lat,lng,answer){
@@ -145,11 +144,7 @@
     	실패시 회원 탈퇴 실패 메시지와 함께 마이페이지로 이동(재요청) 	
     	회원탈퇴 처리도 update로 작성하기 (STATUS 에 Y를 N으로 변경하는 처리)   
      -->
-    
-    
-=======
-
->>>>>>> branch 'main' of https://github.com/yujin8739/damgunMarket.git
+   
 
     <!-- 회원탈퇴 버튼 클릭 시 보여질 Modal -->
     <div class="modal fade" id="deleteForm">

@@ -63,4 +63,8 @@ public class ProductDao {
 		param.put("stationNo", stationNo);
 		return sqlSession.insert("productMapper.insertPdStation", param);
 	}
+
+	public List<Object> favoriteList(SqlSessionTemplate sqlSession, int userNo,RowBounds rowBounds) {
+		return sqlSession.selectList("productMapper.selectFavoriteList",userNo, rowBounds);
+	}
 }

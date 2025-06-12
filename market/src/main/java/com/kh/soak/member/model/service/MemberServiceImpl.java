@@ -76,12 +76,21 @@ public class MemberServiceImpl implements MemberService{
 	    param.put("userNo", userNo);
 		return dao.saveFavorite(sqlSession, param);
 	}
+	
 	@Override
 	public int deleteFavorite(int userNo, int pdNum) {
 		Map<String, Object> param = new HashMap<>();
 	    param.put("pdNum", pdNum);
 	    param.put("userNo", userNo);
 		return dao.deleteFavorite(sqlSession, param);
+	}
+
+	@Override
+	public int selectFavorite(int userNo, int pdNum) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+		return  dao.selectFavorite(sqlSession, param);
 	}
 	
 	
