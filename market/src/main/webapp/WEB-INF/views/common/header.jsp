@@ -304,29 +304,29 @@
          	<p>묻고 따지지 말고 그냥 담금마켓 하세요. 후회하지 않습니다.</p>
          </div>		   	
          <div id="header_1_right">
-            <c:choose>
-               <c:when test="${empty loginUser}">
-                  <!-- 로그인 전 -->
-                  <a href="${contextRoot}/insert.me">회원가입</a>
-                  <a href="#" id="loginLink">로그인</a>
-                  <a href="#" id="adminLoginLink">관리자 로그인</a>
-               </c:when>
-               
-               <c:when test="${not empty loginAdmin}">
-		          <!-- 관리자 로그인 후 -->
-		          <label>${loginAdmin.adminName}님 환영합니다 <span class="admin-badge">ADMIN</span></label> &nbsp;&nbsp;
-		          <a href="${contextRoot}/admin/main.ad">관리자 페이지</a>
-		          <a href="${contextRoot}/admin/logout.ad">로그아웃</a>
-               </c:when>
-               
-               <c:otherwise>
-                  <!-- 로그인 후 -->
-                  <label>${loginUser.userName}님 환영합니다</label> &nbsp;&nbsp;
-                  <a href="${contextRoot}/mypage.me">마이페이지</a>
-                  <a href="${contextRoot}/logout.me">로그아웃</a>
-               </c:otherwise>
-            </c:choose>
-         </div>
+				<c:choose>
+					<c:when test="${empty loginUser and empty loginAdmin}">
+						<a href="${contextRoot}/insert.me">회원가입</a> 
+						<a href="#"id="loginLink">로그인</a>
+						<a href="#" id="adminLoginLink">관리자로그인</a>
+					</c:when>
+					<c:otherwise>
+						<c:choose>
+							<c:when test="${not empty loginUser}">
+								<span>${loginUser.userName}님 환영합니다.</span>
+								<a href="${contextRoot}/mypage.me">마이페이지</a>
+								<a href="${contextRoot}/logout.me">로그아웃</a>
+							</c:when>
+							<c:when test="${not empty loginAdmin}">
+								<span>${loginAdmin.adminName}님 환영합니다.</span>
+								<a href="${contextRoot}/admin/main.ad">관리자 페이지</a>
+								<a href="${contextRoot}/admin/logout.ad">로그아웃</a>
+							</c:when>
+						</c:choose>
+
+					</c:otherwise>
+				</c:choose>
+			</div>
       </div>
 
       <div id="header_2">

@@ -20,7 +20,7 @@
 		<typeAlias type="com.kh.soak.product.model.vo.PdFile" alias="PdFile"/>
 		<typeAlias type="com.kh.soak.etc.model.vo.Station" alias="Station"/>
 		<typeAlias type="com.kh.soak.etc.model.vo.TradeStation" alias="TradeStation"/>
-				<typeAlias type="com.kh.soak.answer.model.vo.AnswerInfo" alias="AnswerInfo"/>
+		<typeAlias type="com.kh.soak.answer.model.vo.AnswerInfo" alias="AnswerInfo"/>
         <typeAlias type="com.kh.soak.board.model.vo.Board" alias="Board"/>
         <typeAlias type="com.kh.soak.userqna.model.vo.UserQnaInfo" alias="UserQnaInfo"/>
         <typeAlias type="com.kh.soak.admin.model.vo.Admin" alias="Admin"/>

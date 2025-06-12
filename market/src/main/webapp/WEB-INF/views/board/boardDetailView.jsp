@@ -15,7 +15,7 @@
     <div class="detail-container">
         <h2>${board.noticeTitle}</h2>
         <div class="content">
-            ${board.noticeContent}
+            ${board.notice}
         </div>
         <c:if test="${not empty board.noticeImg}">
             <img src="${board.noticeImg}" alt="공지이미지" style="max-width: 100%;">
