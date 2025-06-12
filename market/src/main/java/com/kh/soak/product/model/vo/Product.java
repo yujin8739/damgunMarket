@@ -29,6 +29,10 @@ public class Product {
 		
 		return 0;
 	}
+	public int getPdNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 	

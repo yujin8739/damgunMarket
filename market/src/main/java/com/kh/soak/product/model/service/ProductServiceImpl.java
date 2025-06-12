@@ -1,6 +1,8 @@
 package com.kh.soak.product.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -62,5 +64,10 @@ public class ProductServiceImpl implements ProductService {
     public int deleteProduct(int pdNum, int userNo) {
 		return dao.deleteProduct(sqlSession, pdNum, userNo);
     }
+
+	@Override
+	public int insertPdStation(int userNo, int pdNum, int stationNo) {
+		return dao.insertPdStation(sqlSession,userNo,pdNum,stationNo);
+	}
 
 }

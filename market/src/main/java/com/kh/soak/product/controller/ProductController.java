@@ -78,7 +78,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("product/regist")
-	public String showRegist(Model model) {
+	public String showRegist(Model model,HttpSession session) {
 		
 		List<String> bigCategoryList = eService.selectBigCateList();
 		
@@ -92,16 +92,32 @@ public class ProductController {
 	public String insertProduct(
 	        @ModelAttribute Product product,
 	        @RequestParam("uploadFile") MultipartFile[] uploadFiles,
-	        @RequestParam(value = "station", required = false) List<String> stations,
+	        @RequestParam(value = "station", required = false) List<Integer> stations,
 	        HttpSession session,
 	        HttpServletRequest request) throws Exception {
-
+		
+       // Member loginMember = (Member) session.getAttribute("loginUser");
+        //int userNo = (int) loginMember.getUserNo();
+       // product.setUserNo(userNo);
+        
 	    int result = service.insertProduct(product);
 
 	    if (result > 0) {
+
 	        int pdNum = product.getpdNum();
 	        Member loginMember = (Member) session.getAttribute("loginUser");
 	        int userNo = (int) loginMember.getUserNo();
+
+	    	
+	    	for(int stationNo :stations) {
+	    		int sResult = service.insertPdStation(userNo,product.getPdNum(),stationNo);
+	    		if(sResult<=0) {
+	    			 return "errorPage";
+	    		}
+	    	}
+	    	
+	        int pdNum = product.getPdNum();
+
 
 	        String savePath = "C:\\damgunUpload\\files\\product\\";
 	        File dir = new File(savePath);
@@ -129,16 +145,22 @@ public class ProductController {
 	                pdFile.setIsThumbnail(i == 0 ? "Y" : "N"); //
 	                pdFile.setIsSub("N");
 
+
 	                // 
 	                int fileUpResult = service.insertPdFiles(pdFile);
 	                if (fileUpResult <= 0) {
+
+	                // DB 저장 (서비스에서 batch처리 메서드 있다면 변경 가능)
+	                int fResult = service.insertPdFiles(pdFile);
+	                if (fResult <= 0) {
+
 	                    return "errorPage";
 	                }
 	            }
 	        }
 
-	        return "redirect:/product/view?pdNum=" + pdNum + "&userNo=" + userNo;
-	    } else {
+	        return "redirect:/product/view?pdNum=" + pdNum + "&userNo=" + userNo;}}
+	     else {
 	        return "errorPage";
 	    }
 	}

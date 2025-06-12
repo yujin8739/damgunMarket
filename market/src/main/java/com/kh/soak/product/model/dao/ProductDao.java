@@ -55,6 +55,7 @@ public class ProductDao {
 	public int insertPdFiles(SqlSessionTemplate sqlSession, PdFile pdFile) {
 		return sqlSession.insert("productMapper.insertProductFile", pdFile);
 	}
+
 	
 	public int deleteProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
 		
@@ -65,4 +66,14 @@ public class ProductDao {
 	    return productDeleteCount > 0 ? 1 : 0;
 	}
 	
+
+
+	public int insertPdStation(SqlSessionTemplate sqlSession, int userNo, int pdNum, int stationNo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("pdNum", pdNum);
+		param.put("stationNo", stationNo);
+		return sqlSession.insert("productMapper.insertPdStation", param);
+	}
+
 }

@@ -163,6 +163,7 @@
 	    )
 	</insert>
 	
+
 	<!--  상품 파일 삭제 -->
 	<delete id="deleteProductFilesByPdNumUserNo">
 	    DELETE FROM PD_FILE
@@ -174,6 +175,18 @@
 	    DELETE FROM PRODUCT
 	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</delete>
+
+	<insert id="insertPdStation">
+		INSERT INTO TRADE_STATION (
+			USER_NO,
+			PD_NUM,
+			STATION_NUM
+		) VALUES (
+			#{userNo},
+			#{pdNum},
+			#{stationNo}
+		)
+	</insert>
 
 
 </mapper>
