@@ -1,10 +1,10 @@
 package com.kh.soak.product.model.vo;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,4 +17,8 @@ public class PdFile {
 	 private String isThumbnail = "N";
 	 private String isSub;
 	 private int fileNo;
+	public void setUserNo(int userNo2) {
+		// TODO Auto-generated method stub
+		
+	}
 }

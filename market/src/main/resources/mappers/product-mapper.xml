@@ -162,6 +162,18 @@
 	        #{fileNo}
 	    )
 	</insert>
+	
+	<!--  상품 파일 삭제 -->
+	<delete id="deleteProductFilesByPdNumUserNo">
+	    DELETE FROM PD_FILE
+	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
+	</delete>
+	
+	<!-- 상품 자체 삭제 -->
+	<delete id="deleteProductByPdNumUserNo">
+	    DELETE FROM PRODUCT
+	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
+	</delete>
 
 
 </mapper>

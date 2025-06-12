@@ -34,7 +34,7 @@ public class ProductDao {
 	}
 
 	public Product selectOneProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
-		//selectOne은 하나의 파라미터만 전달 가능하기 때문에 HashMap으로 묶어서 전달
+		//selectOne�� �븯�굹�쓽 �뙆�씪誘명꽣留� �쟾�떖 媛��뒫�븯湲� �븣臾몄뿉 HashMap�쑝濡� 臾띠뼱�꽌 �쟾�떖
 	    Map<String, Object> param = new HashMap<>();
 	    param.put("pdNum", pdNum);
 	    param.put("userNo", userNo);
@@ -55,4 +55,14 @@ public class ProductDao {
 	public int insertPdFiles(SqlSessionTemplate sqlSession, PdFile pdFile) {
 		return sqlSession.insert("productMapper.insertProductFile", pdFile);
 	}
+	
+	public int deleteProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		
+	    //(deleteProductFilesByPdNumUserNo, deleteProductByPdNumUserNo)
+	    int fileDeleteCount = sqlSession.delete("productMapper.deleteProductFilesByPdNumUserNo", Map.of("pdNum", pdNum, "userNo", userNo));
+	    int productDeleteCount = sqlSession.delete("productMapper.deleteProductByPdNumUserNo", Map.of("pdNum", pdNum, "userNo", userNo));
+	    
+	    return productDeleteCount > 0 ? 1 : 0;
+	}
+	
 }

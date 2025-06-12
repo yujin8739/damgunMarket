@@ -57,5 +57,10 @@ public class ProductServiceImpl implements ProductService {
 	public int insertPdFiles(PdFile pdFiles) {
 		return dao.insertPdFiles(sqlSession,pdFiles);
 	}
+	
+	@Override
+    public int deleteProduct(int pdNum, int userNo) {
+		return dao.deleteProduct(sqlSession, pdNum, userNo);
+    }
 
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -19,16 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.soak.etc.model.service.EtcService;
+import com.kh.soak.product.model.vo.PdFile;
 import com.kh.soak.member.model.vo.Member;
 import com.kh.soak.product.model.service.ProductService;
-import com.kh.soak.product.model.service.ProductServiceImpl;
-import com.kh.soak.product.model.vo.PdFile;
 import com.kh.soak.product.model.vo.Product;
 
 @Controller
@@ -49,7 +45,7 @@ public class ProductController {
 		return "error-403";
 	}
 
-    // AJAX로 상품 목록 가져오기 (무한 스크롤)
+    // AJAX濡� �긽�뭹 紐⑸줉 媛��졇�삤湲� (臾댄븳 �뒪�겕濡�)
 	@RequestMapping(value = "product/load",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public List<Product> loadProducts(
@@ -74,10 +70,10 @@ public class ProductController {
 
 	    List<String> fileList = service.selectFiles(pdNum, userNo);
 	    ObjectMapper mapper = new ObjectMapper();
-	    String fileListJson = mapper.writeValueAsString(fileList); // JSON 문자열로 변환
+	    String fileListJson = mapper.writeValueAsString(fileList); // JSON 臾몄옄�뿴濡� 蹂��솚
 
 	    model.addAttribute("product", product);
-	    model.addAttribute("fileListJson", fileListJson); // 문자열 그대로 전달
+	    model.addAttribute("fileListJson", fileListJson); // 臾몄옄�뿴 洹몃�濡� �쟾�떖
 	    return "product/view";
 	}
 	
@@ -103,16 +99,15 @@ public class ProductController {
 	    int result = service.insertProduct(product);
 
 	    if (result > 0) {
-	        int pdNum = product.getPdNum();
+	        int pdNum = product.getpdNum();
 	        Member loginMember = (Member) session.getAttribute("loginUser");
 	        int userNo = (int) loginMember.getUserNo();
 
-	        // 저장 경로 설정
 	        String savePath = "C:\\damgunUpload\\files\\product\\";
 	        File dir = new File(savePath);
 	        if (!dir.exists()) dir.mkdirs();
 
-	        // 파일 5개까지 처리
+	        
 	        for (int i = 0; i < uploadFiles.length && i < 5; i++) {
 	            MultipartFile uploadFile = uploadFiles[i];
 	            if (!uploadFile.isEmpty()) {
@@ -120,21 +115,21 @@ public class ProductController {
 	                String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
 	                String renamedFilename = UUID.randomUUID().toString() + extension;
 
-	                // 파일 저장
+	                
 	                File dest = new File(savePath + renamedFilename);
 	                uploadFile.transferTo(dest);
 
-	                // PdFile 객체 생성 및 세팅
+	                
 	                PdFile pdFile = new PdFile();
 	                pdFile.setUserNo(userNo);
 	                pdFile.setPdNum(pdNum);
 	                pdFile.setFileNo(i);
 	                pdFile.setPdUrl(getServerUrl(request)+"/file/view?types=product&fileName=" + renamedFilename);
 	                pdFile.setFileType("IMG");
-	                pdFile.setIsThumbnail(i == 0 ? "Y" : "N"); // 첫번째만 썸네일로 예시
+	                pdFile.setIsThumbnail(i == 0 ? "Y" : "N"); //
 	                pdFile.setIsSub("N");
 
-	                // DB 저장 (서비스에서 batch처리 메서드 있다면 변경 가능)
+	                // 
 	                int fileUpResult = service.insertPdFiles(pdFile);
 	                if (fileUpResult <= 0) {
 	                    return "errorPage";
@@ -148,10 +143,27 @@ public class ProductController {
 	    }
 	}
 	
+	@RequestMapping(value = "product/delete", method = RequestMethod.POST)
+    public String deleteProduct(
+            @RequestParam("pdNum") int pdNum, @RequestParam("userNo") int userNo,
+            HttpSession session
+    		) {
+        Member loginMember = (Member) session.getAttribute("loginUser");
+      //  int userNo = (int) loginMember.getUserNo();
+
+        int result = service.deleteProduct(pdNum, userNo);
+
+        if (result > 0) {
+            return "redirect:/product/list"; // 삭제 후 상품 리스트 페이지 등으로 이동
+        } else {
+            return "errorPage";
+        }
+    }
+	
 	public String getServerUrl(HttpServletRequest request) {
-	    String scheme = request.getScheme(); // http 또는 https
-	    String serverName = request.getServerName(); // 서버ip
-	    int serverPort = request.getServerPort(); // 포트 번호
+	    String scheme = request.getScheme();
+	    String serverName = request.getServerName(); 
+	    int serverPort = request.getServerPort(); 
 	    String contextPath = request.getContextPath();
 
 	    return scheme + "://" + serverName + ":" + serverPort + contextPath;
