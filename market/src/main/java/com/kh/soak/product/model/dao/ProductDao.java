@@ -34,7 +34,7 @@ public class ProductDao {
 	}
 
 	public Product selectOneProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
-		//selectOne은 하나의 파라미터만 전달 가능하기 때문에 HashMap으로 묶어서 전달
+		//selectOn
 	    Map<String, Object> param = new HashMap<>();
 	    param.put("pdNum", pdNum);
 	    param.put("userNo", userNo);
@@ -56,12 +56,28 @@ public class ProductDao {
 		return sqlSession.insert("productMapper.insertProductFile", pdFile);
 	}
 
+	
+	public int deleteProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		
+	    //(deleteProductFilesByPdNumUserNo, deleteProductByPdNumUserNo)
+	    int fileDeleteCount = sqlSession.delete("productMapper.deleteProductFilesByPdNumUserNo", Map.of("pdNum", pdNum, "userNo", userNo));
+	    int productDeleteCount = sqlSession.delete("productMapper.deleteProductByPdNumUserNo", Map.of("pdNum", pdNum, "userNo", userNo));
+	    
+	    return productDeleteCount > 0 ? 1 : 0;
+	}
+	
+
+
 	public int insertPdStation(SqlSessionTemplate sqlSession, int userNo, int pdNum, int stationNo) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("userNo", userNo);
 		param.put("pdNum", pdNum);
 		param.put("stationNo", stationNo);
 		return sqlSession.insert("productMapper.insertPdStation", param);
+	}
+	
+	public int updateProductByPdNumUserNo(SqlSessionTemplate sqlSession, Product product) {
+		return sqlSession.update("productMapper.updateProductByPdNumUserNo", product);
 	}
 
 	public List<Object> favoriteList(SqlSessionTemplate sqlSession, int userNo,RowBounds rowBounds) {

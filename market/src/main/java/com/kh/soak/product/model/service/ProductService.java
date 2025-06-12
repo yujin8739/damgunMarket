@@ -17,6 +17,15 @@ public interface ProductService {
 	List<String> selectFiles(int pdNum, int userNo);
 	int insertProduct(Product product);
 	int insertPdFiles(PdFile pdFiles);
+
+	
+	int deleteProduct(int pdNum, int userNo);
+
 	int insertPdStation(int userNo, int pdNum, int stationNo);
+
+	//Product selectOneProduct(int pdNum, int userNo);
+	int updateProductByPdNumUserNo(Product product);
+
 	List<Object> favoriteList(int userNo, RowBounds rowBounds);
+
 }
