@@ -80,4 +80,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.favoriteList(sqlSession, userNo, rowBounds);
 	}
 
+	@Override
+	public List<Object> selectMyPdList(RowBounds rowBounds, int userNo) {
+		return dao.selectMyPdList(sqlSession, rowBounds, userNo);
+	}
+
 }

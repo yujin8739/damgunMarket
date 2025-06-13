@@ -81,6 +81,10 @@ public class ProductDao {
 	}
 
 	public List<Object> favoriteList(SqlSessionTemplate sqlSession, int userNo,RowBounds rowBounds) {
-		return sqlSession.selectList("productMapper.selectFavoriteList",userNo, rowBounds);
+		return sqlSession.selectList("productMapper.selectFavoriteList", userNo, rowBounds);
+	}
+
+	public List<Object> selectMyPdList(SqlSessionTemplate sqlSession, RowBounds rowBounds, int userNo) {
+		return sqlSession.selectList("productMapper.selectMyPdList", userNo, rowBounds);
 	}
 }

@@ -17,8 +17,4 @@ public class PdFile {
 	 private String isThumbnail = "N";
 	 private String isSub;
 	 private int fileNo;
-	public void setUserNo(int userNo2) {
-		// TODO Auto-generated method stub
-		
-	}
 }
