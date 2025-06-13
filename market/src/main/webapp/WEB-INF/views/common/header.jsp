@@ -429,36 +429,76 @@
             clearTimeout(sidebarTimer);
             sidebarTimer = setTimeout(() => {
                sidebar.classList.remove('open');
-            }, 5000);
+            }, 8000);
          }
       }
    </script>
 
    <!-- 로그인 모달 제어 스크립트 -->
    <script>
-      const loginLink = document.getElementById('loginLink');
-      const modal = document.getElementById('loginModal');
-      const closeBtn = document.getElementById('closeModal');
-      const cancelBtn = document.getElementById('cancelBtn');
+   document.addEventListener('DOMContentLoaded', function() {
+	    // 로그인 모달 관련 요소들
+	    const loginLink = document.getElementById('loginLink');
+	    const modal = document.getElementById('loginModal');
+	    const closeBtn = document.getElementById('closeModal');
+	    const cancelBtn = document.getElementById('cancelBtn');
 
-      // 로그인 링크 클릭 시 모달 열기
-      loginLink.addEventListener('click', (e) => {
-         e.preventDefault();
-         modal.classList.add('show');
-      });
+	    // null 체크 후 이벤트 추가
+	    if (loginLink) {
+	        loginLink.addEventListener('click', (e) => {
+	            e.preventDefault();
+	            if (modal) modal.classList.add('show');
+	        });
+	    }
 
-      // 닫기 버튼 클릭 시 모달 닫기
-      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+	    if (closeBtn) {
+	        closeBtn.addEventListener('click', () => {
+	            if (modal) modal.classList.remove('show');
+	        });
+	    }
 
-      // 취소 버튼 클릭 시 모달 닫기
-      cancelBtn.addEventListener('click', () => modal.classList.remove('show'));
+	    if (cancelBtn) {
+	        cancelBtn.addEventListener('click', () => {
+	            if (modal) modal.classList.remove('show');
+	        });
+	    }
 
-      // 모달 바깥 클릭 시 모달 닫기
-      modal.addEventListener('click', (e) => {
-         if (e.target === modal) {
-            modal.classList.remove('show');
-         }
-      });
+	    if (modal) {
+	        modal.addEventListener('click', (e) => {
+	            if (e.target === modal) {
+	                modal.classList.remove('show');
+	            }
+	        });
+	    }
+	});
+   
+   // === 카테고리 검색 기능 추가 ===
+   const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
+   
+   categoryItems.forEach(function(item) {
+       item.addEventListener('click', function() {
+           const category = this.getAttribute('data-category');
+           console.log('카테고리 선택:', category);
+           
+           // 검색어 입력창에 카테고리명 설정
+           const searchInput = document.getElementById('searchKeyword');
+           if (searchInput) {
+               searchInput.value = category;
+           }
+           
+           // 검색 실행 (전역 함수 호출)
+           if (typeof startSearch === 'function') {
+               startSearch();
+           }
+           
+           // 사이드바 닫기
+           const sidebar = document.getElementById('sidebar');
+           if (sidebar) {
+               sidebar.classList.remove('open');
+           }
+       });
+   });
+});
    </script>
    
    
@@ -493,8 +533,57 @@
             adminModal.classList.remove('show');
          }
       });
-   </script>
-   
+   </script>   
+   <!-- 6/13 양찬우 추가작성
+   		카테고리 항목 선택, 수정중 
+    -->
+ 	
+  <script> 
+	 document.addEventListener('DOMContentLoaded', function() {
+	       const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
+	       
+	       categoryItems.forEach(function(item) {
+	           item.addEventListener('click', function() {
+	               const category = this.getAttribute('data-category');
+	               console.log('카테고리 선택:', category);
+	               
+	               // 검색어 설정
+	               const searchInput = document.getElementById('searchKeyword');
+	               if (searchInput) {
+	                   searchInput.value = category;
+	               }
+	               
+	               // 사이드바 닫기
+	               const sidebar = document.getElementById('sidebar');
+	               if (sidebar) {
+	                   sidebar.classList.remove('open');
+	               }
+	               
+	               // 검색 실행 (강제 초기화로 재선택 문제 해결)
+	               setTimeout(function() {
+	                   // 기존 상품 목록 완전 초기화
+	                   $("#product-container").empty();
+	                   
+	                   // 검색 변수들 초기화
+	                   if (typeof window.offset !== 'undefined') window.offset = 0;
+	                   if (typeof window.isLoading !== 'undefined') window.isLoading = false;
+	                   if (typeof window.noMoreData !== 'undefined') window.noMoreData = false;
+	                   if (typeof window.keyword !== 'undefined') window.keyword = category;
+	                   
+	                   // 로딩 표시 제거
+	                   $("#loading").hide();
+	                   
+	                   // 검색 실행
+	                   if (typeof window.loadProducts === 'function') {
+	                       window.loadProducts();
+	                   } else if (typeof startSearch === 'function') {
+	                       startSearch();
+	                   }
+	               }, 100);
+	           });
+	       });
+	   });
+	   </script>
    
 </body>
 
