@@ -471,7 +471,9 @@
 	        });
 	    }
 	});
+   </script>
    
+   <script>
    // === 카테고리 검색 기능 추가 ===
    const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
    
@@ -535,55 +537,62 @@
       });
    </script>   
    <!-- 6/13 양찬우 추가작성
-   		카테고리 항목 선택, 수정중 
+   		카테고리 항목 선택, 아직 수정중 
     -->
  	
-  <script> 
-	 document.addEventListener('DOMContentLoaded', function() {
-	       const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
-	       
-	       categoryItems.forEach(function(item) {
-	           item.addEventListener('click', function() {
-	               const category = this.getAttribute('data-category');
-	               console.log('카테고리 선택:', category);
-	               
-	               // 검색어 설정
-	               const searchInput = document.getElementById('searchKeyword');
-	               if (searchInput) {
-	                   searchInput.value = category;
-	               }
-	               
-	               // 사이드바 닫기
-	               const sidebar = document.getElementById('sidebar');
-	               if (sidebar) {
-	                   sidebar.classList.remove('open');
-	               }
-	               
-	               // 검색 실행 (강제 초기화로 재선택 문제 해결)
-	               setTimeout(function() {
-	                   // 기존 상품 목록 완전 초기화
-	                   $("#product-container").empty();
-	                   
-	                   // 검색 변수들 초기화
-	                   if (typeof window.offset !== 'undefined') window.offset = 0;
-	                   if (typeof window.isLoading !== 'undefined') window.isLoading = false;
-	                   if (typeof window.noMoreData !== 'undefined') window.noMoreData = false;
-	                   if (typeof window.keyword !== 'undefined') window.keyword = category;
-	                   
-	                   // 로딩 표시 제거
-	                   $("#loading").hide();
-	                   
-	                   // 검색 실행
-	                   if (typeof window.loadProducts === 'function') {
-	                       window.loadProducts();
-	                   } else if (typeof startSearch === 'function') {
-	                       startSearch();
-	                   }
-	               }, 100);
-	           });
-	       });
-	   });
-	   </script>
+
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	    const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
+	    
+	    categoryItems.forEach(function(item) {
+	        item.addEventListener('click', function() {
+	            const category = this.getAttribute('data-category');
+	            console.log('카테고리 선택:', category);
+	            
+	            // 검색어 설정
+	            const searchInput = document.getElementById('searchKeyword');
+	            if (searchInput) {
+	                searchInput.value = category;
+	            }
+	            
+	            // 사이드바 닫기
+	            const sidebar = document.getElementById('sidebar');
+	            if (sidebar) {
+	                sidebar.classList.remove('open');
+	            }
+	            
+	            // 검색 실행 (강제 초기화로 재선택 문제 해결)
+	            setTimeout(function() {
+	                // 기존 상품 목록 완전 초기화 (순수 JavaScript)
+	                const productContainer = document.getElementById('product-container');
+	                if (productContainer) {
+	                    productContainer.innerHTML = '';
+	                }
+	                
+	                // 검색 변수들 초기화
+	                if (typeof window.offset !== 'undefined') window.offset = 0;
+	                if (typeof window.isLoading !== 'undefined') window.isLoading = false;
+	                if (typeof window.noMoreData !== 'undefined') window.noMoreData = false;
+	                if (typeof window.keyword !== 'undefined') window.keyword = category;
+	                
+	                // 로딩 표시 제거 (순수 JavaScript)
+	                const loading = document.getElementById('loading');
+	                if (loading) {
+	                    loading.style.display = 'none';
+	                }
+	                
+	                // 검색 실행
+	                if (typeof window.loadProducts === 'function') {
+	                    window.loadProducts();
+	                } else if (typeof startSearch === 'function') {
+	                    startSearch();
+	                }
+	            }, 100);
+	        });
+	    });
+	});
+	</script>
    
 </body>
 
