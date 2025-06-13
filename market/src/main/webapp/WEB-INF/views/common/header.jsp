@@ -335,8 +335,6 @@
 						<c:choose>
 							<c:when test="${not empty loginUser}">
 								<span>${loginUser.userName}님 환영합니다.</span>
-								<a href="${contextRoot}/user/FavoriteList">장바구니</a>
-								<a href="${contextRoot}/product/pd-view">내 상품</a>
 								<a href="${contextRoot}/mypage.me">마이페이지</a>
 								<a href="${contextRoot}/logout.me">로그아웃</a>
 							</c:when>
@@ -354,8 +352,13 @@
 
       <div id="header_2">
          <ul>
-         	<li><a href="">찜목록</a></li>
-            <li><a href="${contextRoot}">HOME</a></li>
+         <li><a href="${contextRoot}">HOME</a></li>
+	       <c:choose>
+				<c:when test="${not empty loginUser or not empty loginAdmin}">
+					<li><a href="${contextRoot}/product/pd-view">내상품</a>
+		         	<li><a href="${contextRoot}/user/FavoriteList">찜목록</a></li>
+		        </c:when>
+	        </c:choose>
          </ul>
       </div>
    </div>
