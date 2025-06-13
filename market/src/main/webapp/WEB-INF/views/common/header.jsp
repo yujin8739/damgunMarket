@@ -352,8 +352,13 @@
 
       <div id="header_2">
          <ul>
-         	<li><a href="">찜목록</a></li>
-            <li><a href="${contextRoot}">HOME</a></li>
+         <li><a href="${contextRoot}">HOME</a></li>
+	       <c:choose>
+				<c:when test="${not empty loginUser or not empty loginAdmin}">
+					<li><a href="${contextRoot}/product/pd-view">내상품</a>
+		         	<li><a href="${contextRoot}/user/FavoriteList">찜목록</a></li>
+		        </c:when>
+	        </c:choose>
          </ul>
       </div>
    </div>
