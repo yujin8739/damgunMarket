@@ -95,7 +95,8 @@
 				ON p.user_no = pd.user_no 
 				AND p.pd_num = pd.pd_num
 		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) 
-		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%')
+		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%' 
+     	OR BIG_CATE LIKE '%${keyword}%' OR MID_CATE LIKE '%${keyword}%' OR SMALL_CATE LIKE '%${keyword}%')
 		ORDER BY p.update_time DESC
 	</select>
 	<select id="selectOneProduct" resultMap="productResultMap" resultType="Product">
