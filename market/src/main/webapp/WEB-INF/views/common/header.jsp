@@ -115,14 +115,14 @@
 	}
 	
 	#header_1_center h1 {
-		font-size: 32px;
+		font-size: 34px;
 		margin: 0;
 	}
 	
 	#header_1_center p {
 		margin: 5px 0 0;
 		font-size: 16px;
-		color: #f0f0f0; /* 연보라 배경에서 잘 보이도록 */
+		color: #f0f0f0;
 	}
 	
 	#header_1_right {
