@@ -32,6 +32,13 @@
 		outline: none;
 	}
 	
+	#hamburger.hide {
+	    opacity: 0;
+	    visibility: hidden;
+	    pointer-events: none;
+	    transition: all 0.3s ease;
+	}	
+	
 	/* 사이드바 */
 	.sidebar {
 		position: fixed;
@@ -422,16 +429,24 @@
       let sidebarTimer;
 
       function toggleSidebar() {
-         const sidebar = document.getElementById('sidebar');
-         sidebar.classList.toggle('open');
+    	    const sidebar = document.getElementById('sidebar');
+    	    const hamburger = document.getElementById('hamburger');
+    	    
+    	    sidebar.classList.toggle('open');
 
-         if (sidebar.classList.contains('open')) {
-            clearTimeout(sidebarTimer);
-            sidebarTimer = setTimeout(() => {
-               sidebar.classList.remove('open');
-            }, 8000);
-         }
-      }
+    	    if (sidebar.classList.contains('open')) {
+    	        // 사이드바 열릴 때: 햄버거 천천히 사라짐
+    	        hamburger.classList.add('hide');
+    	        clearTimeout(sidebarTimer);
+    	        sidebarTimer = setTimeout(() => {
+    	            sidebar.classList.remove('open');
+    	            hamburger.classList.remove('hide');
+    	        }, 5000);
+    	    } else {
+    	        // 사이드바 닫힐 때: 햄버거 즉시 나타남
+    	        hamburger.classList.remove('hide');
+    	    }
+    	}
    </script>
 
    <!-- 로그인 모달 제어 스크립트 -->
