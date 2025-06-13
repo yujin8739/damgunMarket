@@ -110,7 +110,7 @@ public class ChatController {
 		mv.addObject("currentUserId", userId);
 		mv.setViewName("chat/chatDetail");
 		
-
+//커밋하고 풀 해보자 
 		return mv;
 	}
 }
