@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory; // 추가
 @Controller
 @RequestMapping("/chat")
 public class ChatController {
-	private static final Logger logger = LoggerFactory.getLogger(ChatController.class); // 추가
 
 
 	@Autowired
@@ -76,7 +75,7 @@ public class ChatController {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 
 		if (loginUser == null) {
-			mv.setViewName("redirect:/member/login");
+			mv.setViewName("redirect:/");
 			return mv;
 		}
 
@@ -111,8 +110,7 @@ public class ChatController {
 		mv.addObject("currentUserId", userId);
 		mv.setViewName("chat/chatDetail");
 		
-        logger.debug("ChatRoom object passed to JSP: {}", chatRoom); // 전체 ChatRoomVO 객체 로깅
-
+//커밋하고 풀 해보자 
 		return mv;
 	}
 }
