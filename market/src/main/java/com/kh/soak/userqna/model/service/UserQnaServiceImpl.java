@@ -5,6 +5,7 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.soak.userqna.model.dao.UserQnaDao;
 import com.kh.soak.userqna.model.vo.UserQnaInfo;
@@ -28,16 +29,22 @@ public class UserQnaServiceImpl implements UserQnaService {
         return dao.selectUserQna(sqlSession, userQnaNum);
     }
     
+    @Transactional
     @Override
     public int insertUserQna(UserQnaInfo userQna) {
-        return dao.insertUserQna(sqlSession, userQna);
+        System.out.println("Service - insertUserQna 호출: " + userQna);
+        int result = dao.insertUserQna(sqlSession, userQna);
+        System.out.println("Service - insertUserQna 결과: " + result);
+        return result;
     }
     
+    @Transactional
     @Override
     public int updateUserQna(UserQnaInfo userQna) {
         return dao.updateUserQna(sqlSession, userQna);
     }
     
+    @Transactional
     @Override
     public int deleteUserQna(int userQnaNum) {
         return dao.deleteUserQna(sqlSession, userQnaNum);
@@ -49,12 +56,16 @@ public class UserQnaServiceImpl implements UserQnaService {
     }
     
     @Override
-    public List<UserQnaInfo> selectReportQna(int douserNum) {
-        return dao.selectReportQna(sqlSession, douserNum);
+    public List<UserQnaInfo> selectReportQna(int exuserNum) {
+        return dao.selectReportQna(sqlSession, exuserNum);
     }
     
     @Override
     public List<UserQnaInfo> searchUserQna(String keyword) {
         return dao.searchUserQna(sqlSession, keyword);
+    }
+    @Override
+    public Integer selectLatestUserQnaNum(int userNo) {
+        return dao.selectLatestUserQnaNum(sqlSession, userNo);
     }
 }
