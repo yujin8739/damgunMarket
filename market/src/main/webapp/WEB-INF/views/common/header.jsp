@@ -376,7 +376,6 @@
          <h1 class="floating">광고</h1>
       </div>
    </section>
-
 	
    <!-- 로그인 모달 -->
    <div class="modal" id="loginModal">
