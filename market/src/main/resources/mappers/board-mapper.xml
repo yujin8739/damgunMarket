@@ -7,39 +7,42 @@
     <resultMap id="boardResultSet" type="Board">
         <result column="NOTICE_NUM" property="noticeNum"/>
         <result column="NOTICE_TITLE" property="noticeTitle"/>
-        <result column="NOTICE_CONTENT" property="noticeContent"/>
+        <result column="NOTICE" property="notice"/>  
         <result column="NOTICE_IMG" property="noticeImg"/>
+        <result column="CREATEDATE" property="createdate"/>
+        <result column="MODIFYDATE" property="modifydate"/>
     </resultMap>
     
     <select id="selectBoardList" resultMap="boardResultSet">
-        SELECT * FROM NOTICE ORDER BY NOTICE_NUM DESC
+        SELECT * FROM BOARD ORDER BY NOTICE_NUM DESC
     </select>
     
     <select id="selectBoard" parameterType="_int" resultMap="boardResultSet">
-        SELECT * FROM NOTICE WHERE NOTICE_NUM = #{noticeNum}
+        SELECT * FROM BOARD WHERE NOTICE_NUM = #{noticeNum}
     </select>
     
     <insert id="insertBoard" parameterType="Board">
-        INSERT INTO NOTICE (NOTICE_NUM, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_IMG)
-        VALUES (SEQ_NOTICE.NEXTVAL, #{noticeTitle}, #{noticeContent}, #{noticeImg})
+        INSERT INTO BOARD (NOTICE_NUM, NOTICE_TITLE, NOTICE, NOTICE_IMG)
+        VALUES (BOARD_NOTICE_NUM_SEQ.NEXTVAL, #{noticeTitle}, #{notice}, #{noticeImg})
     </insert>
     
     <update id="updateBoard" parameterType="Board">
-        UPDATE NOTICE SET 
-            NOTICE_TITLE = #{noticeTitle},
-            NOTICE_CONTENT = #{noticeContent},
-            NOTICE_IMG = #{noticeImg}
-        WHERE NOTICE_NUM = #{noticeNum}
-    </update>
+    UPDATE BOARD SET 
+        NOTICE_TITLE = #{noticeTitle},
+        NOTICE = #{notice},
+        NOTICE_IMG = #{noticeImg},
+        MODIFYDATE = SYSDATE
+    WHERE NOTICE_NUM = #{noticeNum}
+</update>
     
     <delete id="deleteBoard" parameterType="_int">
-        DELETE FROM NOTICE WHERE NOTICE_NUM = #{noticeNum}
+        DELETE FROM BOARD WHERE NOTICE_NUM = #{noticeNum}
     </delete>
     
     <select id="searchBoard" parameterType="string" resultMap="boardResultSet">
-        SELECT * FROM NOTICE 
+        SELECT * FROM BOARD 
         WHERE NOTICE_TITLE LIKE '%'||#{keyword}||'%' 
-           OR NOTICE_CONTENT LIKE '%'||#{keyword}||'%'
+           OR NOTICE LIKE '%'||#{keyword}||'%'
         ORDER BY NOTICE_NUM DESC
     </select>
     

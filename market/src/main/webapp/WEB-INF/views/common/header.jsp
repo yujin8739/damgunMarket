@@ -32,6 +32,13 @@
 		outline: none;
 	}
 	
+	#hamburger.hide {
+	    opacity: 0;
+	    visibility: hidden;
+	    pointer-events: none;
+	    transition: all 0.1s ease;
+	}	
+	
 	/* 사이드바 */
 	.sidebar {
 		position: fixed;
@@ -369,7 +376,6 @@
          <h1 class="floating">광고</h1>
       </div>
    </section>
-
 	
    <!-- 로그인 모달 -->
    <div class="modal" id="loginModal">
@@ -391,7 +397,6 @@
       </div>
    </div>
 
-
 	<!-- 관리자 로그인 모달 -->
    <div class="modal" id="adminLoginModal">
       <div class="modal-content">
@@ -412,9 +417,6 @@
       </div>
    </div>
 
-
-
-
    <br clear="both" />
 
    <!-- 사이드바 자동 닫힘 스크립트 -->
@@ -422,80 +424,137 @@
       let sidebarTimer;
 
       function toggleSidebar() {
-         const sidebar = document.getElementById('sidebar');
-         sidebar.classList.toggle('open');
+    	    const sidebar = document.getElementById('sidebar');
+    	    const hamburger = document.getElementById('hamburger');
+    	    
+    	    sidebar.classList.toggle('open');
 
-         if (sidebar.classList.contains('open')) {
-            clearTimeout(sidebarTimer);
-            sidebarTimer = setTimeout(() => {
-               sidebar.classList.remove('open');
-            }, 5000);
-         }
-      }
+    	    if (sidebar.classList.contains('open')) {
+    	        // 사이드바 열릴 때: 햄버거 천천히 사라짐
+    	        hamburger.classList.add('hide');
+    	        clearTimeout(sidebarTimer);
+    	        sidebarTimer = setTimeout(() => {
+    	            sidebar.classList.remove('open');
+    	            hamburger.classList.remove('hide');
+    	        }, 5000);
+    	    } else {
+    	        // 사이드바 닫힐 때: 햄버거 즉시 나타남
+    	        hamburger.classList.remove('hide');
+    	    }
+    	}
    </script>
 
-   <!-- 로그인 모달 제어 스크립트 -->
+   <!-- 통합된 DOM 로딩 완료 후 초기화 스크립트 -->
    <script>
-      const loginLink = document.getElementById('loginLink');
-      const modal = document.getElementById('loginModal');
-      const closeBtn = document.getElementById('closeModal');
-      const cancelBtn = document.getElementById('cancelBtn');
+   document.addEventListener('DOMContentLoaded', function() {
+	    // 로그인 모달 초기화
+	    initLoginModal();
+	    
+	    // 관리자 모달 초기화
+	    initAdminModal();
+	    
+	    // 카테고리 이벤트 초기화
+	    initCategoryEvents();
+	});
 
-      // 로그인 링크 클릭 시 모달 열기
-      loginLink.addEventListener('click', (e) => {
-         e.preventDefault();
-         modal.classList.add('show');
-      });
+	// 로그인 모달 관련 함수
+	function initLoginModal() {
+	    const loginLink = document.getElementById('loginLink');
+	    const modal = document.getElementById('loginModal');
+	    const closeBtn = document.getElementById('closeModal');
+	    const cancelBtn = document.getElementById('cancelBtn');
 
-      // 닫기 버튼 클릭 시 모달 닫기
-      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+	    if (loginLink && modal) {
+	        loginLink.addEventListener('click', (e) => {
+	            e.preventDefault();
+	            modal.classList.add('show');
+	        });
+	    }
 
-      // 취소 버튼 클릭 시 모달 닫기
-      cancelBtn.addEventListener('click', () => modal.classList.remove('show'));
+	    if (closeBtn && modal) {
+	        closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+	    }
 
-      // 모달 바깥 클릭 시 모달 닫기
-      modal.addEventListener('click', (e) => {
-         if (e.target === modal) {
-            modal.classList.remove('show');
-         }
-      });
+	    if (cancelBtn && modal) {
+	        cancelBtn.addEventListener('click', () => modal.classList.remove('show'));
+	    }
+
+	    if (modal) {
+	        modal.addEventListener('click', (e) => {
+	            if (e.target === modal) {
+	                modal.classList.remove('show');
+	            }
+	        });
+	    }
+	}
+
+	// 관리자 모달 관련 함수
+	function initAdminModal() {
+	    const adminLoginLink = document.getElementById('adminLoginLink');
+	    const adminModal = document.getElementById('adminLoginModal');
+	    const closeAdminBtn = document.getElementById('closeAdminModal');
+	    const cancelAdminBtn = document.getElementById('cancelAdminBtn');
+
+	    if (adminLoginLink && adminModal) {
+	        adminLoginLink.addEventListener('click', (e) => {
+	            e.preventDefault();
+	            adminModal.classList.add('show');
+	        });
+	    }
+
+	    if (closeAdminBtn && adminModal) {
+	        closeAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+	    }
+
+	    if (cancelAdminBtn && adminModal) {
+	        cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+	    }
+
+	    if (adminModal) {
+	        adminModal.addEventListener('click', (e) => {
+	            if (e.target === adminModal) {
+	                adminModal.classList.remove('show');
+	            }
+	        });
+	    }
+	}
+
+	// 카테고리 이벤트 관련 함수
+	function initCategoryEvents() {
+	    const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
+	    
+	    categoryItems.forEach(function(item) {
+	        item.addEventListener('click', function() {
+	            const category = this.getAttribute('data-category');
+	            console.log('카테고리 선택:', category);
+	            
+	            // 검색어 설정
+	            const searchInput = document.getElementById('searchKeyword');
+	            if (searchInput) {
+	                searchInput.value = category;
+	            }
+	            
+	            // 사이드바 닫기 + 햄버거 버튼 복원
+	            const sidebar = document.getElementById('sidebar');
+	            const hamburger = document.getElementById('hamburger');
+	            if (sidebar) {
+	                sidebar.classList.remove('open');
+	            }
+	            if (hamburger) {
+	                hamburger.classList.remove('hide');
+	            }
+	            
+	            // 검색 실행 (안전한 호출)
+	            if (typeof window.startSearch === 'function') {
+	                window.startSearch();
+	            } else {
+	                console.warn('startSearch 함수를 찾을 수 없습니다.');
+	            }
+	        });
+	    });
+	}
    </script>
-   
-   
-   <!-- 관리자 로그인 모달 제어 스크립트 -->
-   <script>
-      const adminLoginLink = document.getElementById('adminLoginLink');
-      const adminModal = document.getElementById('adminLoginModal');
-      const closeAdminBtn = document.getElementById('closeAdminModal');
-      const cancelAdminBtn = document.getElementById('cancelAdminBtn');
 
-      // 관리자 로그인 링크 클릭 시 모달 열기
-      if (adminLoginLink) {
-         adminLoginLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            adminModal.classList.add('show');
-         });
-      }
-
-      // 닫기 버튼 클릭 시 모달 닫기
-      if (closeAdminBtn) {
-         closeAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
-      }
-
-      // 취소 버튼 클릭 시 모달 닫기
-      if (cancelAdminBtn) {
-         cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
-      }
-
-      // 모달 바깥 클릭 시 모달 닫기
-      adminModal.addEventListener('click', (e) => {
-         if (e.target === adminModal) {
-            adminModal.classList.remove('show');
-         }
-      });
-   </script>
-   
-   
 </body>
 
 </html>

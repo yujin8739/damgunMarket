@@ -41,12 +41,15 @@ public class UserQnaDao {
     }
     
     // 신고 문의사항 목록 조회
-    public List<UserQnaInfo> selectReportQna(SqlSessionTemplate sqlSession, int douserNum) {
-        return sqlSession.selectList("userQnaMapper.selectReportQna", douserNum);
+    public List<UserQnaInfo> selectReportQna(SqlSessionTemplate sqlSession, int exuserNum) {
+        return sqlSession.selectList("userQnaMapper.selectReportQna", exuserNum);
     }
     
     // 문의사항 검색
     public List<UserQnaInfo> searchUserQna(SqlSessionTemplate sqlSession, String keyword) {
         return sqlSession.selectList("userQnaMapper.searchUserQna", keyword);
+    }
+    public Integer selectLatestUserQnaNum(SqlSessionTemplate sqlSession, int userNo) {
+        return sqlSession.selectOne("userQnaMapper.selectLatestUserQnaNum", userNo);
     }
 }

@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -6,77 +7,150 @@
 <head>
 <title>${chatRoom.otherUserName}(${chatRoom.otherUserId})채팅방</title>
 <style>
+/* 기존 헤더/푸터와 어울리도록 body 스타일 조정 */
 body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
+	font-family: 'Noto Sans KR', sans-serif; /* 헤더의 폰트와 통일 */
+	margin: 0; /* 기본 마진 제거 */
+	padding: 0; /* 기본 패딩 제거 */
+	background: #fafafa; /* 헤더의 배경색과 유사하게 설정 */
 }
 
+/* 메인 콘텐츠 영역을 위한 래퍼 */
+.main-content {
+	margin-top: 60px; /* 헤더 높이만큼 여백 추가 */
+	padding: 20px;
+	max-width: 800px; /* 너무 넓어지지 않도록 최대 너비 설정 */
+	margin-left: auto;
+	margin-right: auto; /* 중앙 정렬 */
+	background-color: #fff; /* 콘텐츠 배경색 */
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative; /* Add this to make it the positioning context for absolute children */
+    min-height: calc(100vh - 120px); /* Adjust based on actual header/footer heights */
+                                   /* Example: 100vh - header_height - footer_height */
+                                   /* This prevents footer from floating up on short content */
+    display: flex;
+    flex-direction: column; /* Allows content to stack vertically */
+}
+
+
+/* h2 스타일 조정 */
 h2 {
-	color: #333;
+	color: #5a4fcf; /* 헤더의 주요 색상과 맞춤 */
+	text-align: center;
+	margin-bottom: 20px;
+	font-size: 24px;
+	font-weight: 700;
 }
 
 .chat-container {
-	border: 1px solid #ccc;
+	border: 1px solid #e0e0e0; /* 테두리 색상 밝게 조정 */
 	padding: 10px;
 	height: 400px;
 	overflow-y: scroll;
 	margin-bottom: 10px;
+	background-color: #fdfdfd; /* 채팅 배경색 */
+	border-radius: 8px;
+    flex-grow: 1; /* Allow chat container to take available vertical space */
 }
 
 .message {
-	margin-bottom: 5px;
-	padding: 5px;
-	border-radius: 5px;
+	margin-bottom: 8px; /* 메시지 간 간격 증가 */
+	padding: 8px 12px; /* 패딩 조정 */
+	border-radius: 18px; /* 더 부드러운 모서리 */
+	max-width: 70%; /* 메시지 너비 제한 */
+	word-wrap: break-word;
+	line-height: 1.4;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); /* 그림자 추가 */
 }
 
 .my-message {
-	text-align: right;
-	color: blue;
-	background-color: #e3f2fd;
+	margin-left: auto; /* 오른쪽 정렬 */
+	background-color: #7b68ee; /* 헤더 강조색과 통일 */
+	color: white;
+	text-align: left; /* 메시지 내용은 왼쪽 정렬 유지 */
 }
 
 .other-message {
+	margin-right: auto; /* 왼쪽 정렬 */
+	background-color: #e6e6fa; /* 헤더 배경색과 통일 */
+	color: #333;
 	text-align: left;
-	color: green;
-	background-color: #f1f8e9;
 }
 
 .sender {
 	font-weight: bold;
+	margin-bottom: 2px; /* 보낸 사람과 메시지 내용 사이 간격 */
+	display: block; /* 줄바꿈 */
+	font-size: 0.9em;
+	color: rgba(255, 255, 255, 0.9); /* 내 메시지의 보낸 사람 색상 */
+}
+
+.other-message .sender {
+	color: #4b3bdb; /* 상대 메시지의 보낸 사람 색상 */
 }
 
 .time {
-	font-size: 0.8em;
-	color: #888;
-	margin-left: 5px;
+	font-size: 0.75em; /* 시간 글씨 크기 조정 */
+	color: rgba(255, 255, 255, 0.7); /* 내 메시지의 시간 색상 */
+	margin-top: 3px;
+	display: block; /* 줄바꿈 */
+	text-align: right; /* 시간 오른쪽 정렬 */
+}
+
+.other-message .time {
+	color: #888; /* 상대 메시지의 시간 색상 */
+}
+
+.message-content {
+	margin: 2px 0;
+	font-size: 0.95em;
+}
+
+.message-image {
+	max-width: 150px; /* 이미지 최대 너비 조정 */
+	max-height: 150px; /* 이미지 최대 높이 추가 */
+	margin-top: 8px; /* 이미지 위 간격 */
+	border-radius: 8px;
+	display: block; /* 이미지 아래 다른 요소와 분리 */
 }
 
 .message-input {
-	width: calc(100% - 80px);
-	padding: 8px;
+	width: calc(100% - 90px); /* 버튼과의 간격 고려 */
+	padding: 10px 12px; /* 패딩 증가 */
 	border: 1px solid #ccc;
-	border-radius: 4px;
+	border-radius: 20px; /* 더 둥근 입력창 */
+	font-size: 1em;
+	box-sizing: border-box;
+	vertical-align: middle; /* 버튼과 정렬 */
+    margin-bottom: 10px; /* Space between input and notification */
 }
 
 .send-button {
-	width: 70px;
-	padding: 8px;
-	background-color: #007bff;
+	width: 80px; /* 버튼 너비 조정 */
+	padding: 10px; /* 패딩 증가 */
+	background-color: #7b68ee; /* 헤더 강조색과 통일 */
 	color: white;
 	border: none;
-	border-radius: 4px;
+	border-radius: 20px; /* 더 둥근 버튼 */
 	cursor: pointer;
+	font-size: 1em;
+	font-weight: 600;
+	vertical-align: middle; /* 입력창과 정렬 */
+	transition: background-color 0.2s ease;
 }
 
 .send-button:hover {
-	background-color: #0056b3;
+	background-color: #5a4fcf; /* 호버 색상 */
 }
 
 .connection-status {
-	padding: 5px;
-	margin-bottom: 10px;
-	border-radius: 4px;
+	padding: 8px 12px; /* 패딩 조정 */
+	margin-bottom: 15px;
+	border-radius: 5px;
 	font-size: 0.9em;
+	text-align: center;
+	font-weight: 500;
 }
 
 .connected {
@@ -89,68 +163,79 @@ h2 {
 	color: #721c24;
 }
 
-.message-content {
-	word-wrap: break-word;
-	margin: 2px 0;
-}
-
-.message-image {
-	max-width: 200px;
-	margin-top: 5px;
-	border-radius: 5px;
-}
-
 .new-message-notification {
-	position: relative;
-	bottom: 10px;
+	position: absolute;
+	bottom: 80px; /* Adjust as needed, relative to the main-content bottom */
 	left: 50%;
 	transform: translateX(-50%);
-	background-color: #ffc107;
+	background-color: #ffc107; /* 알림 색상 유지 */
 	color: #333;
-	padding: 8px 15px;
-	border-radius: 20px;
+	padding: 10px 20px;
+	border-radius: 25px;
 	font-size: 0.9em;
 	cursor: pointer;
 	text-align: center;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 	display: none;
 	z-index: 1000;
+	white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+/* 채팅방 목록으로 돌아가기 링크 스타일 */
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    /* margin-bottom is implicitly handled by footer.jsp */
+    font-size: 1.05em;
+    color: #7b68ee; /* 헤더 강조색과 통일 */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #5a4fcf;
+    text-decoration: underline;
 }
 </style>
 </head>
 <body>
-	<h2>${chatRoom.otherUserName}(${chatRoom.otherUserId})채팅방(RoomNo:
-		${chatRoom.roomNo})</h2>
 
-	<div id="connectionStatus" class="connection-status disconnected">연결
-		중...</div>
+    <%-- Header Include --%>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-	<div class="chat-container" id="chatContainer">
-		<%-- 서버에서 미리 로드된 기존 메시지들 --%>
-		<c:forEach var="msg" items="${messages}">
-			<div
-				class="message <c:if test='${msg.userId eq currentUserId}'>my-message</c:if><c:if test='${msg.userId ne currentUserId}'>other-message</c:if>">
-				<span class="sender">${msg.userId}</span>
-				<div class="message-content">${msg.message}</div>
-				<span class="time">(<fmt:formatDate value="${msg.sendTime}"
-						pattern="HH:mm:ss" />)
-				</span>
-				<c:if test="${not empty msg.imageUrl}">
-					<br>
-					<img src="${msg.imageUrl}" class="message-image" alt="이미지">
-				</c:if>
-			</div>
-		</c:forEach>
-	</div>
+    <div class="main-content">
+        <h2>${chatRoom.otherUserName}(${chatRoom.otherUserId})채팅방(RoomNo: ${chatRoom.roomNo})</h2>
 
-	<div id="newMessageNotification" class="new-message-notification"
-		onclick="scrollToBottom()">새로운 메시지가 있습니다. 클릭하여 이동</div>
+        <div id="connectionStatus" class="connection-status disconnected">연결 중...</div>
 
-	<input type="text" id="messageInput" class="message-input"
-		placeholder="메시지를 입력하세요...">
-	<button onclick="sendMessage()" class="send-button">전송</button>
+        <div class="chat-container" id="chatContainer">
+            <%-- 서버에서 미리 로드된 기존 메시지들 --%>
+            <c:forEach var="msg" items="${messages}">
+                <div class="message <c:if test='${msg.userId eq currentUserId}'>my-message</c:if><c:if test='${msg.userId ne currentUserId}'>other-message</c:if>">
+                    <span class="sender">${msg.userId}</span>
+                    <div class="message-content">${msg.message}</div>
+                    <span class="time">(<fmt:formatDate value="${msg.sendTime}" pattern="HH:mm:ss" />)</span>
+                    <c:if test="${not empty msg.imageUrl}">
+                        <br>
+                        <img src="${msg.imageUrl}" class="message-image" alt="이미지">
+                    </c:if>
+                </div>
+            </c:forEach>
+        </div>
 
-	<script>
+        <div id="newMessageNotification" class="new-message-notification" onclick="scrollToBottom()">새로운 메시지가 있습니다. 클릭하여 이동</div>
+
+        <input type="text" id="messageInput" class="message-input" placeholder="메시지를 입력하세요...">
+        <button onclick="sendMessage()" class="send-button">전송</button>
+
+        <p>
+            <a href="${pageContext.request.contextPath}/chat/roomList" class="back-link">채팅방 목록으로 돌아가기</a>
+        </p>
+    </div>
+
+    <script>
         var websocket;
         var roomNo = ${chatRoom.roomNo};
         var currentUserId = '${currentUserId}';
@@ -562,9 +647,8 @@ h2 {
             }
         }
     </script>
-	<p>
-		<a href="${pageContext.request.contextPath}/chat/roomList">채팅방
-			목록으로 돌아가기</a>
-	</p>
+
+    <%-- Footer Include --%>
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
