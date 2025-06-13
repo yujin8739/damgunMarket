@@ -335,6 +335,8 @@
 						<c:choose>
 							<c:when test="${not empty loginUser}">
 								<span>${loginUser.userName}님 환영합니다.</span>
+								<a href="${contextRoot}/user/FavoriteList">장바구니</a>
+								<a href="${contextRoot}/product/pd-view">내 상품</a>
 								<a href="${contextRoot}/mypage.me">마이페이지</a>
 								<a href="${contextRoot}/logout.me">로그아웃</a>
 							</c:when>
