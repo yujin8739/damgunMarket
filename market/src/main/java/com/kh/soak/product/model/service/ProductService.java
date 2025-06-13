@@ -27,5 +27,6 @@ public interface ProductService {
 	int updateProductByPdNumUserNo(Product product);
 
 	List<Object> favoriteList(int userNo, RowBounds rowBounds);
+	List<Object> selectMyPdList(RowBounds rowBounds, int userNo);
 
 }

@@ -22,6 +22,7 @@ public class MessageVO {
 	private String userId;
 	private Date sendTime;
 	private String type; // "chat", "enter", "leave" 등
+	private String fileType; // <-- 이 필드를 추가해야 합니다!
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "Asia/Seoul")
 	public Date getSendTime() {

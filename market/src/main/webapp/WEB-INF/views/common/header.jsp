@@ -72,15 +72,14 @@
 	}
 	
 	#categorySearch {
-	width: 100%;
-	padding: 8px 10px;
-	margin-bottom: 15px;
-	border: 1px solid #cfcfff;
-	border-radius: 4px;
-	font-size: 14px;
-	box-sizing: border-box;
-}
-	
+		width: 100%;
+		padding: 8px 10px;
+		margin-bottom: 15px;
+		border: 1px solid #cfcfff;
+		border-radius: 4px;
+		font-size: 14px;
+		box-sizing: border-box;
+	}
 	
 	/* header */
 	#header {
@@ -92,20 +91,24 @@
 	}
 	
 	#header_1 {
+		position: relative;
+		height: 100px;
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		align-items: center;
 		padding: 0 20px;
-		height: 50px;
+		box-sizing: border-box;
 	}
 	
 	#header_1_center {
-		flex: 1;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
 		text-align: center;
 	}
 	
 	#header_1_center h1 {
-		font-size: 45px;
+		font-size: 32px;
 		margin: 0;
 	}
 	
@@ -113,6 +116,13 @@
 		margin: 5px 0 0;
 		font-size: 16px;
 		color: #f0f0f0; /* 연보라 배경에서 잘 보이도록 */
+	}
+	
+	#header_1_right {
+		position: absolute;
+		right: 20px;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 	
 	#header_1_right a {
@@ -132,7 +142,7 @@
 		padding: 0 20px;
 		display: flex;
 		align-items: center;
-		justify-content: flex-end; /* 오른쪽 정렬 */
+		justify-content: flex-end;
 	}
 	
 	#header_2 ul {
@@ -144,16 +154,11 @@
 		gap: 20px;
 	}
 	
-	#header_2 ul li {
-		/* margin-right 제거 - 대신 gap 사용 */
-		
-	}
-	
 	#header_2 ul li a {
 		color: white;
 		text-decoration: none;
 		font-weight: 600;
-		padding: 6px 10px; /* 클릭 영역 넓게 */
+		padding: 6px 10px;
 		display: inline-block;
 		line-height: 1;
 	}
@@ -347,7 +352,13 @@
 
       <div id="header_2">
          <ul>
-            <li><a href="${contextRoot}">HOME</a></li>
+         <li><a href="${contextRoot}">HOME</a></li>
+	       <c:choose>
+				<c:when test="${not empty loginUser or not empty loginAdmin}">
+					<li><a href="${contextRoot}/product/pd-view">내상품</a>
+		         	<li><a href="${contextRoot}/user/FavoriteList">찜목록</a></li>
+		        </c:when>
+	        </c:choose>
          </ul>
       </div>
    </div>

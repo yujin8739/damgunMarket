@@ -234,6 +234,32 @@
 		) PF ON P.USER_NO = PF.USER_NO AND P.PD_NUM = PF.PD_NUM
 		WHERE F.USER_NO = #{userNo}
 	</select>
+	
+	<select id="selectMyPdList" parameterType="Product" resultMap="productResultMap">
+	    SELECT 
+	        p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        pd.pd_url
+	    FROM Product p
+			LEFT JOIN pd_file pd 
+				ON p.user_no = pd.user_no 
+				AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) AND p.USER_NO = #{userNo} 
+		ORDER BY p.update_time DESC
+	
+	</select>
 
 </mapper>
 	
