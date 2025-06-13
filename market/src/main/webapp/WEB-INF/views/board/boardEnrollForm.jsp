@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,11 +15,12 @@
     </style>
 </head>
 <body>
+	
     <div class="form-container">
         <h2>공지사항 작성</h2>
         <form action="insert.bo" method="post">
             <input type="text" name="noticeTitle" placeholder="제목" required>
-            <textarea name="noticeContent" placeholder="내용" required></textarea>
+            <textarea name="notice" placeholder="내용" required></textarea>
             <input type="text" name="noticeImg" placeholder="이미지 URL (선택사항)">
             <button type="submit">등록</button>
             <button type="button" onclick="location.href='list.bo'">취소</button>
