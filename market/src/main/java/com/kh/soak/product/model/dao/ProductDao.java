@@ -87,4 +87,28 @@ public class ProductDao {
 	public List<Object> selectMyPdList(SqlSessionTemplate sqlSession, RowBounds rowBounds, int userNo) {
 		return sqlSession.selectList("productMapper.selectMyPdList", userNo, rowBounds);
 	}
+	
+	public String checkPdEnroll(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("pdNum", pdNum);
+		return sqlSession.selectOne("productMapper.checkPdEnroll",param);
+	}
+	
+	public String checkMyEnroll(SqlSessionTemplate sqlSession, int pdNum, int userNo, int enrollNo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("pdNum", pdNum);
+		param.put("enrollNo", enrollNo);
+		return sqlSession.selectOne("productMapper.checkMyEnroll",param);
+	}
+
+	public int tradeEnroll(SqlSessionTemplate sqlSession, int pdNum, int userNo, int enrollNo, String status) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("pdNum", pdNum);
+		param.put("enrollNo", enrollNo);
+		param.put("status", status);
+		return sqlSession.insert("productMapper.tradeEnroll",param);
+	}
 }

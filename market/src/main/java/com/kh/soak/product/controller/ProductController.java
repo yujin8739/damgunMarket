@@ -255,9 +255,42 @@ public class ProductController {
 	public String showMyPdList() {
 		return "product/myPdListView";
 	}
-
 	
-	
+	/**
+	 *  전부 있을때는 거래 신청 진행
+	 * @param pdNum
+	 * @param userNo  이것만 없을때는 거래신청중인지 확인
+	 * @param enrollNo 없을때는 처음 조회
+	 * @param status
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "product/trade-enroll", produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String tradeEnroll(@RequestParam int pdNum
+							 ,@RequestParam int userNo
+							 ,@RequestParam(required = false) String enrollNo
+							 ,@RequestParam(required = false) String status 
+						   	 ,HttpSession session) {
+		
+		if(enrollNo == null||enrollNo.equals("")){
+			return service.checkPdEnroll(pdNum, userNo);
+		} else { 		
+			int numEnroll = Integer.parseInt(enrollNo);
+			if(status == null || status.equals("")) {	
+				return service.checkMyEnroll(pdNum, userNo, numEnroll);
+			} else if (status.equals("거래신청")) {
+				int cResult = service.tradeEnroll(pdNum, userNo, numEnroll, status);
+				if(cResult<0) {
+					return "신청실패";
+				} else {
+					return status;
+				}
+			} else {
+				return "신청실패";
+			}
+		}
+	}
 	
 	
 

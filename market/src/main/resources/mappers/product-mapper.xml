@@ -258,8 +258,61 @@
 				AND p.pd_num = pd.pd_num
 		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) AND p.USER_NO = #{userNo} 
 		ORDER BY p.update_time DESC
-	
 	</select>
+	
+	<select id="checkPdEnroll" resultType="string">
+	    SELECT 
+	        CASE
+	            WHEN EXISTS (
+	                SELECT 1 FROM TRADE_ENROLL 
+	                WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '판매완료'
+	            ) THEN '판매완료'
+	            WHEN EXISTS (
+	                SELECT 1 FROM TRADE_ENROLL 
+	                WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '예약중'
+	            ) THEN '예약중'
+	            ELSE '판매중'
+	        END
+	    FROM DUAL
+	</select>
+
+	
+	<select id="checkEnroll" resultType="string">
+		SELECT STATUS  
+		FROM TRADE_ENROLL
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
+	</select>
+	
+	<select id="checkMyEnroll" resultType="string">
+<!-- 		SELECT STATUS  
+		FROM TRADE_ENROLL
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND ENROLL_NUM = #{enrollNo} -->
+		SELECT 
+		    CASE 
+		        WHEN EXISTS (
+		            SELECT 1 FROM TRADE_ENROLL 
+		            WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '판매완료'
+		        ) THEN '판매완료'
+		        WHEN EXISTS (
+		            SELECT 1 FROM TRADE_ENROLL 
+		            WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '예약중'
+		        ) THEN '예약중'
+		        WHEN EXISTS (
+		            SELECT 1 FROM TRADE_ENROLL 
+		            WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND ENROLL_NUM = #{enrollNo} AND STATUS = '거래신청'
+		        ) THEN '거래신청'
+		        ELSE '판매중'
+		    END AS STATUS
+		FROM DUAL
+		
+	</select>
+	
+	<insert id="tradeEnroll">
+		INSERT INTO TRADE_ENROLL 
+		(PD_NUM, USER_NO
+		,ENROLL_NUM, STATUS) VALUES
+		(#{pdNum}, #{userNo}, #{enrollNo}, #{status})
+	</insert>
 
 </mapper>
 	

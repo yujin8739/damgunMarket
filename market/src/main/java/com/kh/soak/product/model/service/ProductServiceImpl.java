@@ -85,4 +85,26 @@ public class ProductServiceImpl implements ProductService {
 		return dao.selectMyPdList(sqlSession, rowBounds, userNo);
 	}
 
+	@Override
+	public String checkPdEnroll(int pdNum, int userNo) {
+		return dao.checkPdEnroll(sqlSession, pdNum, userNo);
+	}
+
+	@Override
+	public String checkEnroll(int pdNum, int userNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public String checkMyEnroll(int pdNum, int userNo, int enrollNo) {
+		return dao.checkMyEnroll(sqlSession, pdNum, userNo, enrollNo);
+	}
+
+	@Override
+	public int tradeEnroll(int pdNum, int userNo, int enrollNo, String status) {
+		return dao.tradeEnroll(sqlSession, pdNum, userNo, enrollNo, status);
+	}
+
+
 }
