@@ -28,5 +28,9 @@ public interface ProductService {
 
 	List<Object> favoriteList(int userNo, RowBounds rowBounds);
 	List<Object> selectMyPdList(RowBounds rowBounds, int userNo);
+	String checkPdEnroll(int pdNum, int userNo);
+	String checkEnroll(int pdNum, int userNo);
+	String checkMyEnroll(int pdNum, int userNo, int enrollNo);
+	int tradeEnroll(int pdNum, int userNo, int enrollNo, String status);
 
 }
