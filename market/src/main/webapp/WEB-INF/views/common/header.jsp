@@ -36,7 +36,7 @@
 	    opacity: 0;
 	    visibility: hidden;
 	    pointer-events: none;
-	    transition: all 0.3s ease;
+	    transition: all 0.1s ease;
 	}	
 	
 	/* 사이드바 */
@@ -397,7 +397,6 @@
       </div>
    </div>
 
-
 	<!-- 관리자 로그인 모달 -->
    <div class="modal" id="adminLoginModal">
       <div class="modal-content">
@@ -417,9 +416,6 @@
          </form>
       </div>
    </div>
-
-
-
 
    <br clear="both" />
 
@@ -448,33 +444,39 @@
     	}
    </script>
 
-   <!-- 로그인 모달 제어 스크립트 -->
+   <!-- 통합된 DOM 로딩 완료 후 초기화 스크립트 -->
    <script>
    document.addEventListener('DOMContentLoaded', function() {
-	    // 로그인 모달 관련 요소들
+	    // 로그인 모달 초기화
+	    initLoginModal();
+	    
+	    // 관리자 모달 초기화
+	    initAdminModal();
+	    
+	    // 카테고리 이벤트 초기화
+	    initCategoryEvents();
+	});
+
+	// 로그인 모달 관련 함수
+	function initLoginModal() {
 	    const loginLink = document.getElementById('loginLink');
 	    const modal = document.getElementById('loginModal');
 	    const closeBtn = document.getElementById('closeModal');
 	    const cancelBtn = document.getElementById('cancelBtn');
 
-	    // null 체크 후 이벤트 추가
-	    if (loginLink) {
+	    if (loginLink && modal) {
 	        loginLink.addEventListener('click', (e) => {
 	            e.preventDefault();
-	            if (modal) modal.classList.add('show');
+	            modal.classList.add('show');
 	        });
 	    }
 
-	    if (closeBtn) {
-	        closeBtn.addEventListener('click', () => {
-	            if (modal) modal.classList.remove('show');
-	        });
+	    if (closeBtn && modal) {
+	        closeBtn.addEventListener('click', () => modal.classList.remove('show'));
 	    }
 
-	    if (cancelBtn) {
-	        cancelBtn.addEventListener('click', () => {
-	            if (modal) modal.classList.remove('show');
-	        });
+	    if (cancelBtn && modal) {
+	        cancelBtn.addEventListener('click', () => modal.classList.remove('show'));
 	    }
 
 	    if (modal) {
@@ -484,128 +486,75 @@
 	            }
 	        });
 	    }
-	});
+	}
+
+	// 관리자 모달 관련 함수
+	function initAdminModal() {
+	    const adminLoginLink = document.getElementById('adminLoginLink');
+	    const adminModal = document.getElementById('adminLoginModal');
+	    const closeAdminBtn = document.getElementById('closeAdminModal');
+	    const cancelAdminBtn = document.getElementById('cancelAdminBtn');
+
+	    if (adminLoginLink && adminModal) {
+	        adminLoginLink.addEventListener('click', (e) => {
+	            e.preventDefault();
+	            adminModal.classList.add('show');
+	        });
+	    }
+
+	    if (closeAdminBtn && adminModal) {
+	        closeAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+	    }
+
+	    if (cancelAdminBtn && adminModal) {
+	        cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
+	    }
+
+	    if (adminModal) {
+	        adminModal.addEventListener('click', (e) => {
+	            if (e.target === adminModal) {
+	                adminModal.classList.remove('show');
+	            }
+	        });
+	    }
+	}
+
+	// 카테고리 이벤트 관련 함수
+	function initCategoryEvents() {
+	    const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
+	    
+	    categoryItems.forEach(function(item) {
+	        item.addEventListener('click', function() {
+	            const category = this.getAttribute('data-category');
+	            console.log('카테고리 선택:', category);
+	            
+	            // 검색어 설정
+	            const searchInput = document.getElementById('searchKeyword');
+	            if (searchInput) {
+	                searchInput.value = category;
+	            }
+	            
+	            // 사이드바 닫기 + 햄버거 버튼 복원
+	            const sidebar = document.getElementById('sidebar');
+	            const hamburger = document.getElementById('hamburger');
+	            if (sidebar) {
+	                sidebar.classList.remove('open');
+	            }
+	            if (hamburger) {
+	                hamburger.classList.remove('hide');
+	            }
+	            
+	            // 검색 실행 (안전한 호출)
+	            if (typeof window.startSearch === 'function') {
+	                window.startSearch();
+	            } else {
+	                console.warn('startSearch 함수를 찾을 수 없습니다.');
+	            }
+	        });
+	    });
+	}
    </script>
-   
-   <script>
-   // === 카테고리 검색 기능 추가 ===
-   const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
-   
-   categoryItems.forEach(function(item) {
-       item.addEventListener('click', function() {
-           const category = this.getAttribute('data-category');
-           console.log('카테고리 선택:', category);
-           
-           // 검색어 입력창에 카테고리명 설정
-           const searchInput = document.getElementById('searchKeyword');
-           if (searchInput) {
-               searchInput.value = category;
-           }
-           
-           // 검색 실행 (전역 함수 호출)
-           if (typeof startSearch === 'function') {
-               startSearch();
-           }
-           
-           // 사이드바 닫기
-           const sidebar = document.getElementById('sidebar');
-           if (sidebar) {
-               sidebar.classList.remove('open');
-           }
-       });
-   });
-});
-   </script>
-   
-   
-   <!-- 관리자 로그인 모달 제어 스크립트 -->
-   <script>
-      const adminLoginLink = document.getElementById('adminLoginLink');
-      const adminModal = document.getElementById('adminLoginModal');
-      const closeAdminBtn = document.getElementById('closeAdminModal');
-      const cancelAdminBtn = document.getElementById('cancelAdminBtn');
 
-      // 관리자 로그인 링크 클릭 시 모달 열기
-      if (adminLoginLink) {
-         adminLoginLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            adminModal.classList.add('show');
-         });
-      }
-
-      // 닫기 버튼 클릭 시 모달 닫기
-      if (closeAdminBtn) {
-         closeAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
-      }
-
-      // 취소 버튼 클릭 시 모달 닫기
-      if (cancelAdminBtn) {
-         cancelAdminBtn.addEventListener('click', () => adminModal.classList.remove('show'));
-      }
-
-      // 모달 바깥 클릭 시 모달 닫기
-      adminModal.addEventListener('click', (e) => {
-         if (e.target === adminModal) {
-            adminModal.classList.remove('show');
-         }
-      });
-   </script>   
-   <!-- 6/13 양찬우 추가작성, 카테고리 항목 선택, 아직 수정중 -->
-   		 
-    
- 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-		    const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
-		    
-		    categoryItems.forEach(function(item) {
-		        item.addEventListener('click', function() {
-		            const category = this.getAttribute('data-category');
-		            console.log('카테고리 선택:', category);
-		            
-		            // 검색어 설정
-		            const searchInput = document.getElementById('searchKeyword');
-		            if (searchInput) {
-		                searchInput.value = category;
-		            }
-		            
-		            // 사이드바 닫기
-		            const sidebar = document.getElementById('sidebar');
-		            if (sidebar) {
-		                sidebar.classList.remove('open');
-		            }
-		            
-		            // 검색 실행 (강제 초기화로 재선택 문제 해결)
-		            setTimeout(function() {
-		                // 기존 상품 목록 완전 초기화 (순수 JavaScript)
-		                const productContainer = document.getElementById('product-container');
-		                if (productContainer) {
-		                    productContainer.innerHTML = '';
-		                }
-		                
-		                // 검색 변수들 초기화
-		                if (typeof window.offset !== 'undefined') window.offset = 0;
-		                if (typeof window.isLoading !== 'undefined') window.isLoading = false;
-		                if (typeof window.noMoreData !== 'undefined') window.noMoreData = false;
-		                if (typeof window.keyword !== 'undefined') window.keyword = category;
-		                
-		                // 로딩 표시 제거 (순수 JavaScript)
-		                const loading = document.getElementById('loading');
-		                if (loading) {
-		                    loading.style.display = 'none';
-		                }
-		                
-		                // 검색 실행
-		                if (typeof window.loadProducts === 'function') {
-		                    window.loadProducts();
-		                } else if (typeof startSearch === 'function') {
-		                    startSearch();
-		                }
-		            }, 100);
-		        });
-		    });
-		});
-	</script>
-   
 </body>
 
 </html>
