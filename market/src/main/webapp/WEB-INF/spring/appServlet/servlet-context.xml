@@ -21,21 +21,28 @@
 		ex)@RequestMapping,@Transaction,.... -->
 	<interceptors>
 		<interceptor>
-			<!-- /* : 첫번째 레벨 전체 요청 , /** : 추가레벨까지 전체 요청 -->
-			<!-- <mapping path="/*"/> --> <!-- mapping path : 어떤 요청에 동작시킬것인지 -->
-			<!-- <mapping path="/mypage.me"/> <mapping path="/update.me"/> <mapping 
-				path="/delete.me"/> <mapping path="/logout.me"/> <mapping path="/insert.bo"/> 
-				<mapping path="/update.bo"/> <mapping path="/delete.bo"/> -->
-			<!-- 매핑 묶어서 통합처리 해보기 -->
 			<mapping path="/*.me" /> <!-- .me 가 붙은 요청 전체 -->
 			<exclude-mapping path="/login.me" /> <!-- 특정 요청 제외 -->
 			<exclude-mapping path="/insert.me" />
 			<exclude-mapping path="/idCheck.me" />
+			<exclude-mapping path="/mypage.me"/>
 
 			<!-- beans:bean class : 등록할 인터셉터의 풀 경로 -->
 			<beans:bean
 				class="com.kh.soak.common.interceptor.LoginInterceptor" />
 		</interceptor>
+		
+		<interceptor>
+        <mapping path="/*.ad" /> <!-- admin 패키지의 .ad 요청 전체 -->
+        <exclude-mapping path="/loginForm.ad" /> <!-- 로그인 폼은 제외 -->
+        <exclude-mapping path="/login.ad" /> <!-- 로그인 처리는 제외 -->
+        <exclude-mapping path="/insert.ad" /> <!-- 관리자 등록은 제외 -->
+        <exclude-mapping path="/idCheck.ad" /> <!-- 아이디 중복체크는 제외 -->
+        <exclude-mapping path="/logout.ad" /> <!-- 로그아웃은 제외 -->
+        <!-- Admin 전용 인터셉터 -->
+        <beans:bean class="com.kh.soak.common.interceptor.AdminInterceptor" />
+    </interceptor>
+    
 	</interceptors>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 

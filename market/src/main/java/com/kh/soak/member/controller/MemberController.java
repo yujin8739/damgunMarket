@@ -147,19 +147,35 @@ public class MemberController {
 		}
 	}
 	
-	 // AJAX로 상품 목록 가져오기 (무한 스크롤)
-	@RequestMapping(value = "user/saveFavorite",produces = "text/html;charset=UTF-8")
+	//상품 조회시 찜여부 가져오기
 	@ResponseBody
-	public int saveFavorite(@RequestParam(required = false) int userNo 
-			              , @RequestParam(required = false) int pdNum) {
-	        return service.saveFavorite(userNo,pdNum);        
+	@RequestMapping(value="user/selectFavorite", produces = "application/json;charset=UTF-8")
+	public int selectFavorite(@RequestParam(required = false) int userNo, 
+            				  @RequestParam(required = false) int pdNum) {
+	    //찜여부 가져오기
+//	    Member loginMember = (Member) session.getAttribute("loginUser");
+//	    int userNo = loginMember.getUserNo();
+	    
+		return service.selectFavorite(userNo,pdNum);
+	    
 	}
 	
-	// AJAX로 상품 목록 가져오기 (무한 스크롤)
-	@RequestMapping(value = "user/deleteFavorite",produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "user/saveFavorite", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public int saveFavorite(@RequestParam(required = false) int userNo, 
+	                        @RequestParam(required = false) int pdNum) {
+	    return service.saveFavorite(userNo, pdNum);
+	}
+	
+	@RequestMapping(value = "user/deleteFavorite",produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public int deleteFavorite(@RequestParam(required = false) int userNo 
 			                , @RequestParam(required = false) int pdNum) {
-	        return service.deleteFavorite(userNo,pdNum);        
+	    return service.deleteFavorite(userNo,pdNum);        
+	}
+
+	@GetMapping("user/FavoriteList")
+	public String showFavoriteList() {
+		return "member/favorView";
 	}
 }

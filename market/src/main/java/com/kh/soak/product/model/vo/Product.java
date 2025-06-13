@@ -1,6 +1,7 @@
 package com.kh.soak.product.model.vo;
 
 import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,9 @@ public class Product {
 	private int pdStatus; //	PD_STATUS
 	private String isSub; //	IS_SUB
 	private String pd_url;
+	
+	
+	
 	
 	
 }

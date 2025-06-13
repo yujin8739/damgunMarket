@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,7 +83,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("product/regist")
-	public String showRegist(Model model) {
+	public String showRegist(Model model,HttpSession session) {
 		
 		List<String> bigCategoryList = eService.selectBigCateList();
 		
@@ -96,16 +97,26 @@ public class ProductController {
 	public String insertProduct(
 	        @ModelAttribute Product product,
 	        @RequestParam("uploadFile") MultipartFile[] uploadFiles,
-	        @RequestParam(value = "station", required = false) List<String> stations,
+	        @RequestParam(value = "station", required = false) List<Integer> stations,
 	        HttpSession session,
 	        HttpServletRequest request) throws Exception {
-
+		
+        Member loginMember = (Member) session.getAttribute("loginUser");
+        int userNo = (int) loginMember.getUserNo();
+        product.setUserNo(userNo);
+        
 	    int result = service.insertProduct(product);
 
 	    if (result > 0) {
+	    	
+	    	for(int stationNo :stations) {
+	    		int sResult = service.insertPdStation(userNo,product.getPdNum(),stationNo);
+	    		if(sResult<=0) {
+	    			 return "errorPage";
+	    		}
+	    	}
+	    	
 	        int pdNum = product.getPdNum();
-	        Member loginMember = (Member) session.getAttribute("loginUser");
-	        int userNo = (int) loginMember.getUserNo();
 
 	        // 저장 경로 설정
 	        String savePath = "C:\\damgunUpload\\files\\product\\";
@@ -135,8 +146,8 @@ public class ProductController {
 	                pdFile.setIsSub("N");
 
 	                // DB 저장 (서비스에서 batch처리 메서드 있다면 변경 가능)
-	                int fileUpResult = service.insertPdFiles(pdFile);
-	                if (fileUpResult <= 0) {
+	                int fResult = service.insertPdFiles(pdFile);
+	                if (fResult <= 0) {
 	                    return "errorPage";
 	                }
 	            }
@@ -148,6 +159,38 @@ public class ProductController {
 	    }
 	}
 	
+	@RequestMapping(value = "product/delete", method = RequestMethod.POST)
+    public String deleteProduct(
+            @RequestParam("pdNum") int pdNum, @RequestParam("userNo") int userNo,
+            HttpSession session
+    		) {
+        Member loginMember = (Member) session.getAttribute("loginUser");
+      //  int userNo = (int) loginMember.getUserNo();
+        
+        if(loginMember == null || loginMember.getUserNo() != userNo) {
+            // 권한이 없으면 에러 페이지나 권한 없음 페이지 리턴
+            return "error-403";
+        }
+
+        int result = service.deleteProduct(pdNum, userNo);
+
+        if (result > 0) {
+            return "redirect:/product/list"; // 삭제 후 상품 리스트 페이지 등으로 이동
+        } else {
+            return "errorPage";
+        }
+    }
+
+	
+	@RequestMapping(value = "product/favoriteList",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Object> favoriteList(@RequestParam int offset,
+						    	     @RequestParam int limit,
+									 @RequestParam(required = false) int userNo) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+	    return service.favoriteList(userNo,rowBounds);        
+	}
+	
 	public String getServerUrl(HttpServletRequest request) {
 	    String scheme = request.getScheme(); // http 또는 https
 	    String serverName = request.getServerName(); // 서버ip
@@ -156,6 +199,53 @@ public class ProductController {
 
 	    return scheme + "://" + serverName + ":" + serverPort + contextPath;
 	}
+	
+	//상품 정보를 DB에서 불러오고 수정 폼으로 이동
+		@GetMapping("product/edit")
+		public String showEditPage(@RequestParam("pdNum") int pdNum,
+								   @RequestParam("userNo") int userNo,
+								   Model model,
+								   HttpSession session) {
+			Member loginUser = (Member) session.getAttribute("loginUser");
+			if (loginUser == null || loginUser.getUserNo() != userNo) {
+				return "error-403";
+			}
+
+			Product product = service.selectOneProduct(pdNum, userNo);
+			if (product == null) return "errorPage";
+
+			List<String> bigCategoryList = eService.selectBigCateList();
+			model.addAttribute("product", product);
+			model.addAttribute("bigCategoryList", bigCategoryList);
+
+			return "product/pd-edit"; // 수정 폼 JSP
+		}
+		
+		
+		//사용자가 폼에 작성한 내용을 받아서 DB에 업데이트하고 상세보기 페이지로 리다이렉트
+		@PostMapping("product/edit")
+		public String submitEditProduct(@ModelAttribute Product product,
+										HttpSession session,
+										RedirectAttributes redirectAttributes) {
+			Member loginUser = (Member) session.getAttribute("loginUser");
+			if (loginUser == null || loginUser.getUserNo() != product.getUserNo()) {
+				return "error-403";
+			}
+
+			int result = service.updateProductByPdNumUserNo(product);
+			if (result > 0) {
+				redirectAttributes.addFlashAttribute("msg", "수정 성공");
+				return "redirect:/product/view?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
+			} else {
+				redirectAttributes.addFlashAttribute("msg", "수정 실패");
+				return "redirect:/product/edit?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
+			}
+		}
+
+	
+	
+	
+	
 
 
    

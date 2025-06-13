@@ -22,5 +22,7 @@ public interface MemberService {
 	int saveFavorite(int userNo, int pdNum);
 
 	int deleteFavorite(int userNo, int pdNum);
+
+	int selectFavorite(int userNo, int pdNum);
 	
 }

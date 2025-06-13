@@ -43,6 +43,9 @@
 		    color: #888888;  
 		}
 		#category {
+		    max-width: 800px;
+		    margin: 0 auto 20px auto;
+		    padding: 0 30px; /* .product-detail과 같은 좌우 패딩 */
 		}
 		.image-scroll-wrapper {
 			overflow-x: auto;
@@ -57,11 +60,13 @@
 	</style>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <p id="category"><strong>카테고리:</strong> ${product.bigCate} > ${product.midCate} > ${product.smallCate}</p>
 <div class="product-detail">
     <p>
     <h1 style="display: flex; justify-content: space-between; align-items: center;">
     	${product.pdTitle}
+    	<button onclick="location.href='${pageContext.request.contextPath}/chat/roomList'">채팅하기</button>
     	<span id="favoriteStar" style="cursor: pointer; color: gold; font-size: 24px;">☆</span>
 	</h1>
     
@@ -73,9 +78,34 @@
 	</c:if>
 	
 	<div id="json-data" data-json='${fileListJson}' style="display:none;"></div>
-	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+	    const serverPath = '${pageContext.request.contextPath}';
+	</script>
 	<script>
+	
+		function selectFavorite(){
+			const star = document.getElementById("favoriteStar");
+			let userNo = '${loginUser.userNo}';
+			 console.log("확인용")
+			let pdNum = '${product.pdNum}';
+			$.ajax({
+                url: serverPath+"/user/selectFavorite",
+                data: {
+                    userNo : userNo,
+                    pdNum : pdNum
+                },
+                success: function (fCount) {
+     	            star.textContent = fCount>0 ? "★" : "☆";
+                },
+                error: function (){
+                	 alert("저장 실패");
+                }
+        	});
+		}
+	
 		document.addEventListener("DOMContentLoaded", function() {
+			selectFavorite();
 	        // 기존 이미지 로딩 스크립트
 	        const imageContainer = document.getElementById("imageContainer");
 	        const jsonData = document.getElementById("json-data").dataset.json;
@@ -93,14 +123,14 @@
 
 	        // 즐겨찾기 별 클릭 처리
 	        const star = document.getElementById("favoriteStar");
-	        let isFavorite = false;
 	        star.addEventListener("click", function () {
-	        	let userNo = 0;
-	        	let pdNum = product.pdNum;
+	        	let isFavorite = star.textContent === "★";
+	        	let userNo = '${loginUser.userNo}';
+	        	let pdNum = '${product.pdNum}';
 	        	isFavorite = !isFavorite;
-	        	if(favorite){
+	        	if(isFavorite){
 		            $.ajax({
-		                url: "user/seveFavorite",
+		                url: serverPath+"/user/saveFavorite",
 		                data: {
 		                    userNo : userNo,
 		                    pdNum : pdNum
@@ -114,7 +144,7 @@
 		        	});
 	        	} else {
 	        		 $.ajax({
-			                url: "user/Favorite",
+			                url: serverPath+"/user/deleteFavorite",
 			                data: {
 			                    userNo : userNo,
 			                    pdNum : pdNum
@@ -141,5 +171,6 @@
         <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p>
     </div>
 </div>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

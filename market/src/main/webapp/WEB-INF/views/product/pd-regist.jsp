@@ -125,7 +125,6 @@
             <h2 class="form-title">상품 등록</h2>
             
             <form action="${pageContext.request.contextPath}/product/insert" method="post" enctype="multipart/form-data" id="Product">
-                
                 <!-- 상품명 -->
                 <div class="form-group">
                     <label for="pdTitle" class="form-label">상품명 <span class="required">*</span></label>
@@ -378,7 +377,7 @@
             });
             
             // 폼 제출 전 유효성 검사
-            $('#Product').submit(function(e) {
+            $('#product').submit(function(e) {
             	
             	const checkedStations = $('input[name="station"]:checked');
             	
