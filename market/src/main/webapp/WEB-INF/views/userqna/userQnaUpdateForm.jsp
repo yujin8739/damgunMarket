@@ -5,116 +5,238 @@
 <head>
     <meta charset="UTF-8">
     <title>문의사항 수정</title>
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>문의사항 수정</title>
     <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 20px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(180, 139, 255, 0.08);
+            border: 2px solid #f0ebff;
         }
         
         .form-header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #ffc107;
-            padding-bottom: 20px;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            border-radius: 15px;
+            border: 2px solid #e8e0ff;
+        }
+        
+        .form-header h1 {
+            color: #a88bff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-shadow: 0 2px 4px rgba(168, 139, 255, 0.15);
+        }
+        
+        .form-header p {
+            color: #8a7bcc;
+            font-size: 1.1rem;
+            margin: 0;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #f0ebff;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.05);
         }
         
         .form-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-weight: bold;
-            color: #333;
+            color: #a88bff;
+            font-size: 1rem;
         }
         
         .form-input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 15px;
+            border: 2px solid #e8e0ff;
+            border-radius: 10px;
             font-size: 14px;
             box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
         }
         
         .form-input:focus {
-            border-color: #ffc107;
+            border-color: #c8b8ff;
             outline: none;
-            box-shadow: 0 0 5px rgba(255,193,7,0.3);
+            box-shadow: 0 0 15px rgba(200, 184, 255, 0.3);
+            background: white;
         }
         
         .form-textarea {
             height: 200px;
             resize: vertical;
             font-family: inherit;
+            line-height: 1.6;
         }
         
         .btn-group {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            border-radius: 15px;
+            border: 2px solid #e8e0ff;
         }
         
         .btn {
-            padding: 12px 30px;
-            margin: 0 10px;
+            padding: 15px 35px;
+            margin: 0 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             text-decoration: none;
             display: inline-block;
+            transition: all 0.3s ease;
         }
         
         .btn-warning {
-            background-color: #ffc107;
-            color: #212529;
+            background: linear-gradient(135deg, #8b45ff 0%, #b45aff 100%);
+            color: white;
+            border: 2px solid #7b68ee;
+            box-shadow: 0 4px 15px rgba(139, 69, 255, 0.3);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #7b68ee 0%, #9370db 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 69, 255, 0.4);
         }
         
         .btn-secondary {
-            background-color: #6c757d;
+            background: linear-gradient(135deg, #b4a0ff 0%, #c8b8ff 100%);
             color: white;
+            border: 2px solid #a88bff;
+            box-shadow: 0 4px 15px rgba(180, 160, 255, 0.2);
         }
         
-        .btn:hover {
-            opacity: 0.8;
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #a88bff 0%, #b49fff 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(180, 160, 255, 0.3);
         }
         
         .required {
-            color: red;
+            color: #ff6b6b;
+            font-weight: bold;
         }
         
         .current-image {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f8f6ff 100%);
+            border-radius: 10px;
+            border: 2px solid #e8e0ff;
         }
         
         .current-image img {
             max-width: 200px;
             max-height: 150px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid #e8e0ff;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.1);
+        }
+        
+        .current-image p {
+            color: #8a7bcc;
+            margin: 5px 0;
         }
         
         .file-info {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            padding: 12px;
+            border-radius: 8px;
             margin-top: 10px;
             font-size: 12px;
-            color: #666;
+            color: #8a7bcc;
+            border: 1px solid #e8e0ff;
         }
         
         .info-box {
-            background-color: #d1ecf1;
-            border: 1px solid #bee5eb;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: #0c5460;
+            background: linear-gradient(135deg, #f0ebff 0%, #e8e0ff 100%);
+            border: 2px solid #d8ccf0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #6a5acd;
+            font-weight: 500;
+        }
+        
+        .info-box strong {
+            color: #a88bff;
+        }
+        
+        #imagePreview {
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 2px dashed #e8e0ff;
+            text-align: center;
+        }
+        
+        #imagePreview img {
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            .form-header {
+                padding: 20px;
+            }
+            
+            .form-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-group {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .btn-group {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                margin: 5px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
