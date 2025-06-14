@@ -39,5 +39,9 @@ public class EtcServiceImpl implements EtcService {
 		return dao.selectNearStations(sqlSession, lat, lng);
 	}
 	
+	@Override
+	public List<Station> selectPdStationList(int pdNum, int userNo) {
+		return dao.selectPdStationList(sqlSession, pdNum, userNo);
+	}
 
 }

@@ -48,5 +48,23 @@
 	    ]]>
 	</select>
 	
+	<select id="selectPdStationList" resultMap="stationResultMap" resultType="Station">
+	    SELECT 
+	        S.STATION_NUM,
+	        S.STATION_NAME,
+	        S.LINE_NAME,
+	        S.LATITUDE,
+	        S.LONGITDE,
+	        S.ADDRESS
+	    FROM STATION S
+	    WHERE S.STATION_NUM IN (
+	        SELECT TS.STATION_NUM
+	        FROM TRADE_STATION TS
+	        WHERE TS.USER_NO = #{userNo}
+	          AND TS.PD_NUM = #{pdNum}
+	    )
+	</select>
+	
+	
 
 </mapper> 

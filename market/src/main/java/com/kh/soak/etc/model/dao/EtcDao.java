@@ -34,5 +34,12 @@ public class EtcDao {
 		param.put("lng", lng);
 		return sqlSession.selectList("etcMapper.selectNearStations", param);
 	}
+	
+	public List<Station> selectPdStationList(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("pdNum", pdNum);
+		return sqlSession.selectList("etcMapper.selectPdStationList", param);
+	}
 
 }

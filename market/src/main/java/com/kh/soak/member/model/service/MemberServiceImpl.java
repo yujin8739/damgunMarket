@@ -1,6 +1,7 @@
 package com.kh.soak.member.model.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -91,6 +92,15 @@ public class MemberServiceImpl implements MemberService{
 	    param.put("pdNum", pdNum);
 	    param.put("userNo", userNo);
 		return  dao.selectFavorite(sqlSession, param);
+	}
+
+	@Override
+	public List<Member> selectEnrollMemberList(int userNo, int pdNum, String status) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("pdNum", pdNum);
+	    param.put("userNo", userNo);
+	    param.put("status", status);
+		return dao.selectEnrollMemberList(sqlSession, param);
 	}
 	
 	
