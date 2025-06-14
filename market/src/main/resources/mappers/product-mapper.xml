@@ -318,5 +318,54 @@
 		(#{pdNum}, #{userNo}, #{enrollNo}, #{status})
 	</insert>
 
+	<select id="selectHistoryList" resultMap="productResultMap">
+	    SELECT 
+	        P.USER_NO,
+	        P.PD_NUM,
+	        P.PD_TITLE,
+	        P.PD_BOARD,
+	        P.PD_PRICE,
+	        P.LATITUDE,
+	        P.LONGITUDE,
+	        P.BIG_CATE,
+	        P.MID_CATE,
+	        P.SMALL_CATE,
+	        P.UPDATE_TIME,
+	        P.PD_RANK,
+	        P.PD_STATUS,
+	        P.IS_SUB,
+	        PF.PD_URL
+	    FROM PRODUCT P
+	    LEFT JOIN (
+	        SELECT USER_NO, PD_NUM, PD_URL
+	        FROM PD_FILE
+	        WHERE ISTHUMBNAIL = 'Y'
+	    ) PF ON P.USER_NO = PF.USER_NO AND P.PD_NUM = PF.PD_NUM
+	    WHERE (P.USER_NO, P.PD_NUM) IN (
+	        SELECT T.USER_NO, T.PD_NUM
+	        FROM TRADE_ENROLL T
+	        WHERE T.USER_NO = #{userNo}
+	          AND T.STATUS = #{status}
+	          
+	          <if test="status == '거래신청'">
+	              AND NOT EXISTS (
+	                  SELECT 1
+	                  FROM TRADE_ENROLL T2
+	                  WHERE T2.USER_NO = T.USER_NO
+	                    AND T2.PD_NUM = T.PD_NUM
+	                    AND T2.STATUS IN ('예약중', '판매완료')
+	              )
+	          </if>
+	    )
+	</select>
+	
+	<update id="selectHistoryUpdate">
+		UPDATE TRADE_ENROLL
+	    SET STATUS = #{status}
+		WHERE PD_NUM = #{pdNum}
+		  AND USER_NO = #{userNo}
+		  AND ENROLL_NUM = #{enrollNo}
+	</update>
+
 </mapper>
 	

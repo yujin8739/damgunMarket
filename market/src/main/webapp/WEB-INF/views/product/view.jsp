@@ -6,12 +6,10 @@
 <head>
     <title>상품 상세 정보</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        .product-detail {
+        	font-family: 'Arial', sans-serif;
             background-color: #f5f5f5;
             padding: 20px;
-        }
-        .product-detail {
             max-width: 800px;
             margin: 0 auto;
             background: #fff;
@@ -57,6 +55,44 @@
 			margin-right: 10px;
 			max-height: 700px;
 		}
+		.station-section {
+		    background-color: #f9f5ff;
+		    padding: 20px;
+		    border-radius: 15px;
+		    box-shadow: 0 4px 12px rgba(106, 13, 173, 0.1);
+		    margin: 0 auto;
+		}
+		
+		.station-label {
+		    display: block;
+		    margin-bottom: 15px;
+		    font-size: 1.4rem;
+		    color: #6a0dad;
+		    font-weight: 600;
+		    text-align: center;
+		    border-bottom: 2px solid #d8bfff;
+		    padding-bottom: 10px;
+		}
+		
+		.station-list {
+		    display: flex;
+		    flex-direction: column;
+		    gap: 12px;
+		}
+		
+		.station-item {
+		    background-color: #fff;
+		    padding: 10px 15px;
+		    border-radius: 12px;
+		    border: 1px solid #ddd;
+		    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		    font-size: 1rem;
+		    color: #333;
+		}
+
 	</style>
 </head>
 <body>
@@ -76,13 +112,21 @@
 		    </div>
 		</c:if>
 		
-		<div id="json-data" data-json='${fileListJson}' style="display:none;"></div>
+		<div id="json-data" data-json='${fileListJson}' style="display:inline-block; ;"></div>
 	    <div class="product-info">
 	        <p><strong>가격:</strong> ${product.pdPrice} 원</p>
 	        <p><strong>설명:</strong> ${product.pdBoard}</p>
 	        <!-- <p><strong>위치:</strong> 위도 ${product.latitude}, 경도 ${product.longitude}</p> -->
 	        <!--<p><strong>랭크:</strong> ${product.pdRank}</p>-->
-	        <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p>
+	        <%-- <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p> --%>
+		    <div id="stationSelectionWrapper" style="display: none; margin-top: 20px;">
+		    <br><br>
+			<div class="station-section">
+			    <label class="station-label">거래 가능역</label>
+			    <div id="stationList" class="station-list">
+			        <!-- 역 정보가 여기에 들어갑니다 -->
+			    </div>
+			</div>
 	    </div>
 	    
 	    <c:if test="${sessionScope.loginUser.userNo == product.userNo}">
@@ -103,20 +147,21 @@
 	        	<input type="hidden" name="pdNum" value="${product.pdNum}" />
 	            <input type="hidden" name="userNo" value="${product.userNo}" />
 	            <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" />
-	            <button type="button" onclick=" location.href='${pageContext.request.contextPath}/chat/roomList'" style="cursor: pointer; background-color: black; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+	            <button id="chatButton" type="button" onclick=" location.href='${pageContext.request.contextPath}/chat/roomList'" style="cursor: pointer; background-color: black; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
 					채팅하기
 	            </button>
 	            <button id="tradeButton" type="button"  onclick="doEnrollProcess(${product.pdNum}, ${product.userNo},${sessionScope.loginUser.userNo},'거래신청')"  style="display: none; cursor: pointer; background-color: green; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
 					거래신청
 	            </button>
+	            <button id="enrollEndButton" type="button"  onclick="doEnrollProcess(${product.pdNum}, ${product.userNo},${sessionScope.loginUser.userNo},'거래신청')"  style="display: none; cursor: pointer; background-color: gray; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+					신청완료
+	            </button>
 	        </div>
 	    </c:if>
-	    
+	  </div>
 	</div>
 	<br><br>
-	<div class="product-detail">
-	</div>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
@@ -124,10 +169,54 @@
 	</script>
 	<script>
 	
+	 function checkStation() {
+	        if (navigator.geolocation) {
+	            navigator.geolocation.getCurrentPosition(function(position) {
+	    			let userNo = '${product.userNo}';
+	   				let pdNum = '${product.pdNum}';
+	                $.ajax({
+		                url: serverPath+'/product/get-station',
+		                data: { 
+		                	pdNum: pdNum,
+		 	                userNo: userNo
+		                },
+		                success: function(station) {
+		                    //console.log('데이터:', data);
+		                    $('#stationList').empty();
+	
+		                    if (!Array.isArray(station) || station.length === 0) {
+		                        $('#stationList').append('<p>조회된 역이 없습니다.</p>');
+		                        return;
+		                    }
+	
+		                    $.each(station, function(index, station) {
+		                        $('#stationList').append(
+		                            '<label class="station-item">' +
+		                            '<p type="text" name="station" value="' + station.stationNum + '" min="1"> ' +
+		                            station.stationName + ' (' + station.lineName + ')' +
+		                            '</label>'
+		                        );
+		                    });
+	
+		                    $('#stationList').prop('disabled', false);
+		                    $('#stationSelectionWrapper').show();  // 또는
+		                },
+		                error: function() {
+		                	alert('상품의 거래가능역 정보를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.');
+		                }
+		            });
+	                $('#locationInfo').show();
+	            }, function(error) {
+	                alert('상품의 거래가능역 정보를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.');
+	            });
+	        } else {
+	        	alert('상품의 거래가능역 정보를 가져올 수 없습니다. 브라우저 설정을 확인해주세요.');
+	        }
+	    }
+	
 		function selectFavorite(){
 			const star = document.getElementById("favoriteStar");
 			let userNo = '${loginUser.userNo}';
-			 console.log("확인용")
 			let pdNum = '${product.pdNum}';
 			$.ajax({
                 url: serverPath+"/user/selectFavorite",
@@ -161,16 +250,21 @@
 							alert("거래 신청이 완료 되었습니다.");
 	                	}
 						$('#tradeButton').hide()
+						if (loginUserNo) {
+							$('#enrollEndButton').show()
+						}
 						$('#enrollStatus').text('판매중');
 					} else if (status !== '예약중' && status !== '판매완료') {
 	                	$('#enrollStatus').text(status);
 						if (loginUserNo) {
 							$('#tradeButton').show();
+							$('#enrollEndButton').hide()
 						}
 					} else {
 	                    $('#enrollStatus').text(status);
 						if (loginUserNo) {
 							$('#tradeButton').show();
+							$('#enrollEndButton').hide()
 						}
 					}
 				},
@@ -190,9 +284,11 @@
 		    	selectFavorite();
 		    	doEnrollProcess(pdNum, sellerNo, userNo, null);
 		    } else{
-		    	// 거래상태확인
+		    	// 로그인한 사용자가 없을때
+		    	$('#chatButton').hide()
 		    	doEnrollProcess(pdNum, sellerNo, null, null);
 			}
+		    checkStation();
 	        // 기존 이미지 로딩 스크립트
 	        const imageContainer = document.getElementById("imageContainer");
 	        const jsonData = document.getElementById("json-data").dataset.json;
@@ -248,5 +344,6 @@
 	    });
 
 	</script>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

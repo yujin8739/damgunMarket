@@ -5,6 +5,7 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import com.kh.soak.history.model.vo.TradeHistory;
+import com.kh.soak.product.model.vo.Product;
 
 @Repository
 public class TradeHistoryDao {
@@ -22,5 +23,8 @@ public class TradeHistoryDao {
 	
 	public int insertHistory(SqlSessionTemplate sqlSession, TradeHistory t) {
 		return sqlSession.insert("historyMapper.insertHistory", t);
+	}
+	public List<Product> selectHistoryList(SqlSessionTemplate sqlSession, int userId, String status) {
+		return sqlSession.selectList("historyMapper.selectHistoryList",status);
 	}
 }

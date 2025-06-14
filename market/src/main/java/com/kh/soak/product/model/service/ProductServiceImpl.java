@@ -92,7 +92,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String checkEnroll(int pdNum, int userNo) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -105,6 +104,15 @@ public class ProductServiceImpl implements ProductService {
 	public int tradeEnroll(int pdNum, int userNo, int enrollNo, String status) {
 		return dao.tradeEnroll(sqlSession, pdNum, userNo, enrollNo, status);
 	}
+	
+	@Override
+	public List<Product> selectHistoryList(int userNo, String status, RowBounds rowBounds){
+		return dao.selectHistoryList(sqlSession, userNo, status, rowBounds);
+	}
 
+	@Override
+	public int selectHistoryUpdate(int pdNum, int userNo, String enrollNo, String status) {
+		return dao.selectHistoryUpdate(sqlSession, pdNum, userNo, enrollNo, status);
+	}
 
 }
