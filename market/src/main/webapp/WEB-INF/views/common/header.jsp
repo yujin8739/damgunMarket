@@ -614,6 +614,7 @@
 						<c:choose>
 							<c:when test="${not empty loginUser}">
 								<span>${loginUser.userName}님 환영합니다.</span>
+								<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;내 담구기 포인트 : ${loginUser.userRank}</span>
 								<a href="${contextRoot}/mypage.me">마이페이지</a>
 								<a href="${contextRoot}/logout.me">로그아웃</a>
 							</c:when>
@@ -650,31 +651,31 @@
    </div>
  
    <!-- 광고 영역 -->
-<section class="hero" id="home">
-   <div class="container">
-      <div class="banner-content">
-         <div class="banner-text">
-            <span class="banner-badge">🔥 HOT</span>
-            <h1>담금으로 시작해서<br><span class="highlight">담금으로 끝나는 중고거래</span></h1>
-            <p>합리적인 가격으로 담궈드립니다. 우리 동네 안전한 거래</p>
-         </div>
-         <div class="banner-stats">
-            <div class="stat-item">
-               <h3>10,000원</h3>
-               <p>VIP 서비스</p>
-            </div>
-            <div class="stat-item">
-               <h3>5,000원</h3>
-               <p>기본 서비스</p>
-            </div>
-            <div class="stat-item">
-               <h3>95%</h3>
-               <p>거래 만족도</p>
-            </div>
-         </div>
-      </div>
-   </div>
-</section>
+	<section class="hero" id="home">
+	   <div class="container">
+	      <div class="banner-content">
+	         <div class="banner-text">
+	            <span class="banner-badge">🔥 HOT</span>
+	            <h1>담금으로 시작해서<br><span class="highlight">담금으로 끝나는 중고거래</span></h1>
+	            <p>합리적인 가격으로 담궈드립니다. 우리 동네 안전한 거래</p>
+	         </div>
+	         <div class="banner-stats">
+	            <div class="stat-item">
+	               <h3>8,000원</h3>
+	               <p>100 포인트(20%할인)</p>
+	            </div>
+	            <div class="stat-item">
+	               <h3>5,000원</h3>
+	               <p>50 포인트</p>
+	            </div>
+	            <div class="stat-item">
+	               <h3>95%</h3>
+	               <p>거래 만족도</p>
+	            </div>
+	         </div>
+	      </div>
+	   </div>
+	</section>
 	
    <!-- 로그인 모달 -->
    <div class="modal" id="loginModal">

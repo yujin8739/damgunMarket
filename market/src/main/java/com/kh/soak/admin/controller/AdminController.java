@@ -152,4 +152,9 @@ public class AdminController {
             return "NNNNY"; // 사용가능
         }
     }
+    
+    @GetMapping("chargePoint")
+    public String chargePoint() {
+    	return "admin/chargePoint";
+    }
 }

@@ -353,7 +353,14 @@ public class ProductController {
 			 					  ,@RequestParam int userNo
 			 					  ,@RequestParam(required = false) String enrollNo
 			 					  ,@RequestParam String status) {
-		return service.selectHistoryUpdate(pdNum, userNo, enrollNo, status);
+		
+		int result = service.selectHistoryUpdate(pdNum, userNo, enrollNo, status);
+		
+//		if(result>0) {
+//			int pResult = eService.insertPoint(userNo,10);
+//		}
+		
+		return result;
 	}
 	
 	@GetMapping("product/History-view")
@@ -364,4 +371,6 @@ public class ProductController {
 			return "product/pdHistoryView";
 		}
 	}
+	
+	
 }
