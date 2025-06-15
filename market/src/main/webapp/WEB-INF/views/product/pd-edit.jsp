@@ -69,7 +69,7 @@
             </div>
 
             <!-- 카테고리: 대분류/중분류/소분류 -->
-            <div class="form-group">
+            <div class="form-group"> 
                 <label class="form-label">카테고리 <span class="required">*</span></label>
                 
                 <select class="form-select mb-2" id="bigCate" name="bigCate" required>
