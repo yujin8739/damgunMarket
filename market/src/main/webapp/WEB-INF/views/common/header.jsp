@@ -828,7 +828,7 @@
 	            console.log('카테고리 선택:', category);
 	            
 	            // 검색어 설정
-	            const searchInput = document.getElementById('searchKeyword');
+	            const searchInput = document.getElementById('searchCategory');
 	            if (searchInput) {
 	                searchInput.value = category;
 	            }

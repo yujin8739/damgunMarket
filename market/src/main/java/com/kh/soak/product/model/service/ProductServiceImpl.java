@@ -31,15 +31,25 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> searchAllProduct(RowBounds rowBounds) {
-		return dao.selectAllProdectList(sqlSession,rowBounds);
+	public List<Product> searchAllProduct(RowBounds rowBounds, double latitude, double longitude) {
+		return dao.selectAllProductList(sqlSession,rowBounds, latitude, longitude);
 	}
 
 	@Override
-	public List<Product> searchProduct(RowBounds rowBounds, String keyword) {
-		return dao.selectProducts(sqlSession, rowBounds, keyword);
+	public List<Product> searchProduct(RowBounds rowBounds, String keyword, double latitude, double longitude) {
+		return dao.selectProducts(sqlSession, rowBounds, keyword, latitude, longitude);
 	}
 
+	@Override
+	public List<Product> searchCategory(RowBounds rowBounds, String category, double latitude, double longitude) {
+		return dao.searchCategory(sqlSession, rowBounds, category, latitude, longitude);
+	}
+
+	@Override
+	public List<Product> searchProduct(RowBounds rowBounds, String keyword, String category, double latitude, double longitude) {
+		return dao.selectProducts(sqlSession, rowBounds, keyword, category, latitude, longitude);
+	}
+	
 	@Override
 	public Product selectOneProduct(int pdNum, int userNo) {
 		return dao.selectOneProduct(sqlSession, pdNum,userNo);

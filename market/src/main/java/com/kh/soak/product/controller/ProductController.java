@@ -57,13 +57,21 @@ public class ProductController {
     public List<Product> loadProducts(
     	    @RequestParam int offset,
     	    @RequestParam int limit,
-    	    @RequestParam(required = false) String keyword
+    	    @RequestParam(required = false) String keyword,
+    	    @RequestParam(required = false) String category,
+    	    @RequestParam double latitude,
+    	    @RequestParam double longitude
     	) {
         RowBounds rowBounds = new RowBounds(offset, limit);
-        if(keyword==null || keyword=="") {
-        	return service.searchAllProduct(rowBounds);
-        } 
-        return service.searchProduct(rowBounds,keyword);
+        if((keyword==null || keyword.equals("")) && (category==null || category.equals(""))) {
+        	return service.searchAllProduct(rowBounds, latitude, longitude);
+        } else if(keyword==null || keyword.equals("")) {
+        	return service.searchCategory(rowBounds,category, latitude, longitude);
+        } else if(category==null || category.equals("")) {
+        	return service.searchProduct(rowBounds,keyword, latitude, longitude);
+        } else { 
+        	return service.searchProduct(rowBounds,keyword,category, latitude, longitude); 
+        }
     }
 
     

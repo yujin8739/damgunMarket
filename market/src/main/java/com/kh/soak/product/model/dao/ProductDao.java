@@ -25,12 +25,36 @@ public class ProductDao {
 		return sqlSession.update("productMapper.upDateStatus",pdNum);
 	}
 
-	public List<Product> selectAllProdectList(SqlSessionTemplate sqlSession, RowBounds rowBounds) {
-		return sqlSession.selectList("productMapper.selectAllProducts", null, rowBounds);
+	public List<Product> selectAllProductList(SqlSessionTemplate sqlSession, RowBounds rowBounds, double latitude, double longitude) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("latitude", latitude);
+	    param.put("longitude", longitude);
+		return sqlSession.selectList("productMapper.selectAllProducts", param, rowBounds);
 	}
 
-	public List<Product> selectProducts(SqlSessionTemplate sqlSession, RowBounds rowBounds, String keyword) {
-		return sqlSession.selectList("productMapper.selectProducts", keyword, rowBounds);
+	public List<Product> selectProducts(SqlSessionTemplate sqlSession, RowBounds rowBounds, String keyword, double latitude, double longitude) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("keyword", keyword);
+	    param.put("latitude", latitude);
+	    param.put("longitude", longitude);
+		return sqlSession.selectList("productMapper.selectProducts", param, rowBounds);
+	}
+	
+	public List<Product> selectProducts(SqlSessionTemplate sqlSession, RowBounds rowBounds, String keyword, String category, double latitude, double longitude) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("keyword", keyword);
+	    param.put("category", category);
+	    param.put("latitude", latitude);
+	    param.put("longitude", longitude);
+		return sqlSession.selectList("productMapper.bothSelectProducts", param, rowBounds);	
+	}
+
+	public List<Product> searchCategory(SqlSessionTemplate sqlSession, RowBounds rowBounds, String category, double latitude, double longitude) {
+		Map<String, Object> param = new HashMap<>();
+	    param.put("category", category);
+	    param.put("latitude", latitude);
+	    param.put("longitude", longitude);
+		return sqlSession.selectList("productMapper.searchCategory", param, rowBounds);
 	}
 
 	public Product selectOneProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {

@@ -11,8 +11,10 @@ import com.kh.soak.product.model.vo.Product;
 public interface ProductService {
 
 	int tradeItem(int pdNum);
-	List<Product> searchAllProduct(RowBounds rowBounds);
-	List<Product> searchProduct(RowBounds rowBounds, String keyword);
+	List<Product> searchAllProduct(RowBounds rowBounds, double latitude, double longitude);
+	List<Product> searchProduct(RowBounds rowBounds, String keyword, double latitude, double longitude);
+	List<Product> searchCategory(RowBounds rowBounds, String category, double latitude, double longitude);
+	List<Product> searchProduct(RowBounds rowBounds, String keyword, String category, double latitude, double longitude);
 	Product selectOneProduct(int pdNum, int userNo);
 	List<String> selectFiles(int pdNum, int userNo);
 	int insertProduct(Product product);
