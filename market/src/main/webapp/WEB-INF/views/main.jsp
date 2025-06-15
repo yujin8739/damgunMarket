@@ -101,6 +101,9 @@
 	<div id=all-container >
 	    <form id="searchForm" onsubmit="return false;">
 	        <input type="text" id="searchKeyword" placeholder="상품명 검색">
+	        <input type="hidden" id="searchCategory">
+	        <input type="hidden" id="latitude" value="${loginUser.latitude}">
+			<input type="hidden" id="longitude" value="${loginUser.longitude}">
 	        <button onclick="startSearch()">검색</button>
 	        <c:choose>
 				<c:when test="${not empty loginUser or not empty loginAdmin}">

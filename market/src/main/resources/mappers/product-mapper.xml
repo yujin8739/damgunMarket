@@ -49,8 +49,9 @@
 	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</update>
 	
+	<!-- 전체 상품 조회 -->
 	<select id="selectAllProducts" resultMap="productResultMap" resultType="Product">
-	    SELECT 
+	   SELECT 
 	        p.USER_NO,
 	        p.PD_NUM,
 	        p.PD_TITLE,
@@ -67,41 +68,176 @@
 	        p.IS_SUB,
 	        pd.pd_url
 	    FROM Product p
-			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.user_no 
-				AND p.pd_num = pd.pd_num
-		WHERE pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL
-		ORDER BY p.update_time DESC
+	    LEFT JOIN pd_file pd 
+	        ON p.user_no = pd.user_no 
+	        AND p.pd_num = pd.pd_num
+	    WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+	      AND EXISTS (
+	        SELECT 1
+	        FROM TRADE_STATION ts
+	        WHERE ts.USER_NO = p.USER_NO
+	          AND ts.PD_NUM = p.PD_NUM
+	          AND ts.STATION_NUM IN (
+	              SELECT s2.STATION_NUM
+	              FROM STATION s2
+	              WHERE s2.LINE_NAME = (
+	                  SELECT LINE_NAME FROM (
+	                      SELECT s.LINE_NAME
+	                      FROM STATION s
+	                      ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+	                  ) WHERE ROWNUM = 1
+	              )
+	          )
+	    )
+	    ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
 	</select>
+	
+	<!-- 키워드 검색 -->
 	<select id="selectProducts" resultMap="productResultMap" resultType="Product">
 	    SELECT 
-	        p.USER_NO,
-	        p.PD_NUM,
-	        p.PD_TITLE,
-	        p.PD_BOARD,
-	        p.PD_PRICE,
-	        p.LATITUDE,
-	        p.LONGITUDE,
-	        p.BIG_CATE,
-	        p.MID_CATE,
-	        p.SMALL_CATE,
-	        p.UPDATE_TIME,
-	        p.PD_RANK,
-	        p.PD_STATUS,
-	        p.IS_SUB,
-	        pd.pd_url
-	    FROM Product p
-			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.user_no 
-				AND p.pd_num = pd.pd_num
-		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) 
-		AND (PD_TITLE LIKE '%${keyword}%' 
-			 OR PD_BOARD LIKE '%${keyword}%' 
-     		 OR BIG_CATE LIKE '%${keyword}%'
-     		 OR MID_CATE LIKE '%${keyword}%' 
-     		 OR SMALL_CATE LIKE '%${keyword}%')
-		ORDER BY p.update_time DESC
+		    p.USER_NO,
+		    p.PD_NUM,
+		    p.PD_TITLE,
+		    p.PD_BOARD,
+		    p.PD_PRICE,
+		    p.LATITUDE,
+		    p.LONGITUDE,
+		    p.BIG_CATE,
+		    p.MID_CATE,
+		    p.SMALL_CATE,
+		    p.UPDATE_TIME,
+		    p.PD_RANK,
+		    p.PD_STATUS,
+		    p.IS_SUB,
+		    pd.pd_url
+		FROM Product p
+		LEFT JOIN pd_file pd 
+		    ON p.user_no = pd.user_no 
+		    AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+		  AND (p.PD_TITLE LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%' 
+		       OR p.PD_BOARD LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%')
+		  AND EXISTS (
+		      SELECT 1
+		      FROM TRADE_STATION ts
+		      WHERE ts.USER_NO = p.USER_NO
+		        AND ts.PD_NUM = p.PD_NUM
+		        AND ts.STATION_NUM IN (
+		            SELECT s2.STATION_NUM
+		            FROM STATION s2
+		            WHERE s2.LINE_NAME = (
+		                SELECT LINE_NAME FROM (
+		                    SELECT s.LINE_NAME
+		                    FROM STATION s
+		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+		                ) WHERE ROWNUM = 1
+		            )
+		        )
+		  )
+		ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
 	</select>
+	
+	<!-- 카테고리 검색 -->
+	<select id="searchCategory" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+		    p.USER_NO,
+		    p.PD_NUM,
+		    p.PD_TITLE,
+		    p.PD_BOARD,
+		    p.PD_PRICE,
+		    p.LATITUDE,
+		    p.LONGITUDE,
+		    p.BIG_CATE,
+		    p.MID_CATE,
+		    p.SMALL_CATE,
+		    p.UPDATE_TIME,
+		    p.PD_RANK,
+		    p.PD_STATUS,
+		    p.IS_SUB,
+		    pd.pd_url
+		FROM Product p
+		LEFT JOIN pd_file pd 
+		    ON p.user_no = pd.user_no 
+		    AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+		  AND (p.BIG_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		       OR p.MID_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		       OR p.SMALL_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%')
+		  AND EXISTS (
+		      SELECT 1
+		      FROM TRADE_STATION ts
+		      WHERE ts.USER_NO = p.USER_NO
+		        AND ts.PD_NUM = p.PD_NUM
+		        AND ts.STATION_NUM IN (
+		            SELECT s2.STATION_NUM
+		            FROM STATION s2
+		            WHERE s2.LINE_NAME = (
+		                SELECT LINE_NAME FROM (
+		                    SELECT s.LINE_NAME
+		                    FROM STATION s
+		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+		                ) WHERE ROWNUM = 1
+		            )
+		        )
+		  )
+		ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
+	</select>
+	
+	<!-- 키워드 + 카테고리 동시 검색 -->
+	<select id="bothSelectProducts" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+		    p.USER_NO,
+		    p.PD_NUM,
+		    p.PD_TITLE,
+		    p.PD_BOARD,
+		    p.PD_PRICE,
+		    p.LATITUDE,
+		    p.LONGITUDE,
+		    p.BIG_CATE,
+		    p.MID_CATE,
+		    p.SMALL_CATE,
+		    p.UPDATE_TIME,
+		    p.PD_RANK,
+		    p.PD_STATUS,
+		    p.IS_SUB,
+		    pd.pd_url
+		FROM Product p
+		LEFT JOIN pd_file pd 
+		    ON p.user_no = pd.user_no 
+		    AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+		  AND (
+		      (p.PD_TITLE LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%' 
+		       OR p.PD_BOARD LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%')
+		      AND (
+		          p.BIG_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		          OR p.MID_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		          OR p.SMALL_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		      )
+		  )
+		  AND EXISTS (
+		      SELECT 1
+		      FROM TRADE_STATION ts
+		      WHERE ts.USER_NO = p.USER_NO
+		        AND ts.PD_NUM = p.PD_NUM
+		        AND ts.STATION_NUM IN (
+		            SELECT s2.STATION_NUM
+		            FROM STATION s2
+		            WHERE s2.LINE_NAME = (
+		                SELECT LINE_NAME FROM (
+		                    SELECT s.LINE_NAME
+		                    FROM STATION s
+		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+		                ) WHERE ROWNUM = 1
+		            )
+		        )
+		  )
+		ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
+
+	</select>
+
+
+
 	<select id="selectOneProduct" resultMap="productResultMap" resultType="Product">
 	    SELECT 
 	        p.USER_NO,
