@@ -329,6 +329,16 @@ public class ProductController {
 		return service.selectHistoryList(userNo, status, rowBounds);
 	}
 	
+	@RequestMapping(value = "product/HistoryMyList",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Product> selectMyHistoryList(@RequestParam int offset
+   	     								  ,@RequestParam int limit
+   	     								  ,@RequestParam int userNo
+   	     								  ,@RequestParam String status) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return service.selectMyHistoryList(userNo, status, rowBounds);
+	}
+	
 	@RequestMapping(value = "product/History-update",produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public int selectHistoryUpdate(@RequestParam int pdNum
@@ -339,7 +349,11 @@ public class ProductController {
 	}
 	
 	@GetMapping("product/History-view")
-	public String showMyHistoryList() {
-		return "product/myHistoryView";
+	public String showMyHistoryList(@RequestParam("role") String role) {
+		if(role.equals("buyer")) {
+			return "product/myHistoryView";
+		} else {
+			return "product/pdHistoryView";
+		}
 	}
 }

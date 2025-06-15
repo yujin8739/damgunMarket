@@ -129,11 +129,11 @@
 	        <div id="statusFilter">
 			    <button data-status="거래신청">거래신청</button>
 			    <button data-status="예약중">예약중</button>
-			    <button data-status="판매완료">구매완료</button>
+			    <button data-status="판매완료">판매완료</button>
 			</div>
 	    </form>
 	    <hr>
-		<jsp:include page="/WEB-INF/views/product/myHistoryList.jsp"/>
+		<jsp:include page="/WEB-INF/views/product/pdHistoryList.jsp"/>
 	</div>
 	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>

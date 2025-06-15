@@ -102,6 +102,12 @@ public class MemberServiceImpl implements MemberService{
 	    param.put("status", status);
 		return dao.selectEnrollMemberList(sqlSession, param);
 	}
+
+	@Override
+	public List<Member> selectHistoryMember(int userNo) {
+		// TODO Auto-generated method stub
+		return dao.selectHistoryMember(sqlSession, userNo);
+	}
 	
 	
 	

@@ -115,4 +115,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.selectHistoryUpdate(sqlSession, pdNum, userNo, enrollNo, status);
 	}
 
+	@Override
+	public List<Product> selectMyHistoryList(int userNo, String status, RowBounds rowBounds) {
+		return dao.selectyMyHistoryList(sqlSession, userNo, status, rowBounds);
+	}
+
 }

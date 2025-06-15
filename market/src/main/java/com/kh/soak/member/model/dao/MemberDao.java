@@ -66,5 +66,10 @@ public class MemberDao {
 		
 		return sqlSession.selectList("memberMapper.selectEnrollMemberList",param);
 	}
+
+	public List<Member> selectHistoryMember(SqlSessionTemplate sqlSession, int userNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberMapper.selectHistoryMember",userNo);
+	}
 	
 }

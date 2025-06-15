@@ -188,4 +188,11 @@ public class MemberController {
 			                				 , @RequestParam String status) {
 	    return service.selectEnrollMemberList(userNo,pdNum,status);        
 	}
+	
+	@RequestMapping(value = "user/s-list",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Member> selectHistoryMember(@RequestParam int userNo) {
+	    return service.selectHistoryMember(userNo);        
+	}
+	
 }
