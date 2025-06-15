@@ -9,7 +9,6 @@
         <result column="USER_NO" property="userNo"/>
         <result column="USERQNA_TITLE" property="userQnaTitle"/>
         <result column="USERQNA" property="userQna"/>
-        <result column="EXUSER_NUM" property="exuserNum"/> 
         <result column="USERQNA_IMG" property="userQnaImg"/>
     </resultMap>
     
@@ -21,57 +20,53 @@
         SELECT * FROM USERQNA_INFO WHERE USERQNA_NUM = #{userQnaNum}
     </select>
     
-    <!-- INSERT 문 수정: 시퀀스 처리 개선 -->
     <insert id="insertUserQna" parameterType="UserQnaInfo">
-        <selectKey keyProperty="userQnaNum" resultType="int" order="BEFORE">
-            SELECT USERQNA_NUM_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
         INSERT INTO USERQNA_INFO (
             USERQNA_NUM, 
             USER_NO, 
             USERQNA_TITLE, 
-            USERQNA, 
+            USERQNA
             <if test="userQnaImg != null and userQnaImg != ''">
-            USERQNA_IMG,
-            </if>
-            <if test="exuserNum != null and exuserNum > 0">
-            EXUSER_NUM
+            , USERQNA_IMG
             </if>
         ) VALUES (
-            #{userQnaNum}, 
+            USERQNA_NUM_SEQ.NEXTVAL, 
             #{userNo}, 
             #{userQnaTitle}, 
             #{userQna}
             <if test="userQnaImg != null and userQnaImg != ''">
             , #{userQnaImg}
             </if>
-            <if test="exuserNum != null and exuserNum > 0">
-            , #{exuserNum}
-            </if>
         )
     </insert>
     
-    <!-- UPDATE 문 수정: 동적 SQL 사용 -->
+    <!-- UPDATE 문 수정: MyBatis 방식으로 변경 -->
     <update id="updateUserQna" parameterType="UserQnaInfo">
-        UPDATE USERQNA_INFO SET 
+        UPDATE USERQNA_INFO 
+        SET 
             USERQNA_TITLE = #{userQnaTitle},
             USERQNA = #{userQna}
-            <if test="userQnaImg != null and userQnaImg != ''">
+            <if test="userQnaImg != null">
             , USERQNA_IMG = #{userQnaImg}
             </if>
-        WHERE USERQNA_NUM = #{userQnaNum}
+        WHERE USERQNA_NUM = #{userQnaNum} 
+          AND USER_NO = #{userNo}
     </update>
     
+    <!-- DELETE 문 수정: MyBatis 방식으로 변경 -->
     <delete id="deleteUserQna" parameterType="_int">
-        DELETE FROM USERQNA_INFO WHERE USERQNA_NUM = #{userQnaNum}
+        DELETE FROM USERQNA_INFO 
+        WHERE USERQNA_NUM = #{userQnaNum}
     </delete>
     
     <select id="selectUserQnaByUser" parameterType="_int" resultMap="userQnaResultSet">
         SELECT * FROM USERQNA_INFO WHERE USER_NO = #{userNo} ORDER BY USERQNA_NUM DESC
     </select>
     
+    <!-- 신고 관련 기능은 VO에 exuserNum이 없으므로 제거하거나 별도 처리 필요 -->
     <select id="selectReportQna" parameterType="_int" resultMap="userQnaResultSet">
-        SELECT * FROM USERQNA_INFO WHERE EXUSER_NUM = #{exuserNum} ORDER BY USERQNA_NUM DESC
+        <!-- exuserNum 필드가 VO에 없으므로 일단 빈 결과 반환 -->
+        SELECT * FROM USERQNA_INFO WHERE 1=0
     </select>
     
     <select id="searchUserQna" parameterType="string" resultMap="userQnaResultSet">

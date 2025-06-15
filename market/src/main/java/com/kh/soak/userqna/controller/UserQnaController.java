@@ -30,37 +30,72 @@ public class UserQnaController {
     
     // 문의사항 목록 페이지
     @RequestMapping("list.uq")
-    public String userQnaList(Model model) {
+    public String userQnaList(@RequestParam(value="keyword", required=false) String keyword, Model model) {
         
-        List<UserQnaInfo> list = service.selectUserQnaList();
+        List<UserQnaInfo> list;
+        
+        if(keyword != null && !keyword.trim().isEmpty()) {
+            // 검색어가 있으면 검색 결과
+            list = service.searchUserQna(keyword.trim());
+            model.addAttribute("keyword", keyword);
+        } else {
+            // 검색어가 없으면 전체 목록
+            list = service.selectUserQnaList();
+        }
         
         model.addAttribute("list", list);
         return "userqna/userQnaListView";
     }
     
     // 문의사항 상세보기
-    @RequestMapping("detail.uq")
+    @GetMapping("detail.uq")
     public String userQnaDetail(@RequestParam("qno") int userQnaNum, Model model) {
+        System.out.println("=== userQnaDetail 호출 ===");
+        System.out.println("요청된 문의번호: " + userQnaNum);
         
-        UserQnaInfo userQna = service.selectUserQna(userQnaNum);
-        
-        model.addAttribute("userQna", userQna);
-        return "userqna/userQnaDetailView";
+        try {
+            UserQnaInfo userQna = service.selectUserQna(userQnaNum);
+            
+            if(userQna == null) {
+                model.addAttribute("errorMsg", "존재하지 않는 문의사항입니다.");
+                return "common/errorPage";
+            }
+            
+            model.addAttribute("userQna", userQna);
+            return "userqna/userQnaDetailView";
+            
+        } catch (Exception e) {
+            System.out.println("문의사항 상세조회 중 오류: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("errorMsg", "문의사항 조회 중 오류가 발생했습니다.");
+            return "common/errorPage";
+        }
     }
     
     // 문의사항 작성 페이지 이동
     @GetMapping("enrollForm.uq")
-    public String userQnaEnrollForm() {
+    public String userQnaEnrollForm(HttpSession session, Model model) {
+        
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        if(loginUser == null) {
+            model.addAttribute("errorMsg", "로그인이 필요한 서비스입니다.");
+            return "common/errorPage";
+        }
+        
         return "userqna/userQnaEnrollForm";
     }
     
     // 문의사항 작성 처리
     @PostMapping("insert.uq")
     public String insertUserQna(UserQnaInfo userQna, 
-                               @RequestParam("upfile") MultipartFile upfile,
+                               @RequestParam(value="upfile", required=false) MultipartFile upfile,
                                HttpSession session, 
                                Model model,
                                HttpServletRequest request) {
+        
+        System.out.println("=== insertUserQna 시작 ===");
+        System.out.println("받은 데이터: " + userQna);
+        System.out.println("파일 정보: " + (upfile != null ? upfile.getOriginalFilename() : "null"));
         
         Member loginUser = (Member) session.getAttribute("loginUser");
         
@@ -69,25 +104,24 @@ public class UserQnaController {
             return "common/errorPage";
         }
         
+        // VO에 있는 userNo 필드에 로그인 사용자 번호 설정
         userQna.setUserNo(loginUser.getUserNo());
         
         // 파일 업로드 처리
-        String savedFileName = null;
-        if(!upfile.isEmpty()) {
+        if(upfile != null && !upfile.isEmpty()) {
             try {
-                savedFileName = saveFile(upfile, request);
+                String savedFileName = saveFile(upfile, request);
                 userQna.setUserQnaImg(savedFileName);
+                System.out.println("파일 업로드 성공: " + savedFileName);
             } catch (Exception e) {
                 System.out.println("파일 업로드 실패: " + e.getMessage());
                 e.printStackTrace();
-                // 파일 업로드 실패해도 문의사항은 등록되도록 처리
             }
         }
         
-        System.out.println("문의사항 작성 시도: " + userQna);
-        
         try {
             int result = service.insertUserQna(userQna);
+            System.out.println("DB 삽입 결과: " + result);
             
             if(result > 0) {
                 session.setAttribute("alertMsg", "문의사항이 성공적으로 등록되었습니다.");
@@ -97,7 +131,7 @@ public class UserQnaController {
                 return "common/errorPage";
             }
         } catch (Exception e) {
-            System.out.println("문의사항 등록 중 오류 발생: " + e.getMessage());
+            System.out.println("문의사항 등록 중 오류: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("errorMsg", "문의사항 등록 중 오류가 발생했습니다: " + e.getMessage());
             return "common/errorPage";
@@ -116,6 +150,11 @@ public class UserQnaController {
         
         UserQnaInfo userQna = service.selectUserQna(userQnaNum);
         
+        if(userQna == null) {
+            model.addAttribute("errorMsg", "존재하지 않는 문의사항입니다.");
+            return "common/errorPage";
+        }
+        
         // 작성자 본인만 수정 가능
         if(userQna.getUserNo() != loginUser.getUserNo()) {
             model.addAttribute("errorMsg", "본인이 작성한 문의사항만 수정할 수 있습니다.");
@@ -126,10 +165,10 @@ public class UserQnaController {
         return "userqna/userQnaUpdateForm";
     }
     
-    // 문의사항 수정 처리 (파일 업로드 처리 추가)
+    // 문의사항 수정 처리
     @PostMapping("update.uq")
     public String updateUserQna(UserQnaInfo userQna, 
-                               @RequestParam("upfile") MultipartFile upfile,
+                               @RequestParam(value="upfile", required=false) MultipartFile upfile,
                                HttpSession session, 
                                Model model,
                                HttpServletRequest request) {
@@ -143,15 +182,32 @@ public class UserQnaController {
         // 기존 문의사항 정보 가져오기
         UserQnaInfo existingQna = service.selectUserQna(userQna.getUserQnaNum());
         
+        if(existingQna == null) {
+            model.addAttribute("errorMsg", "존재하지 않는 문의사항입니다.");
+            return "common/errorPage";
+        }
+        
         // 작성자 본인만 수정 가능
         if(existingQna.getUserNo() != loginUser.getUserNo()) {
             model.addAttribute("errorMsg", "본인이 작성한 문의사항만 수정할 수 있습니다.");
             return "common/errorPage";
         }
         
+        // userNo 설정 (VO의 필드)
+        userQna.setUserNo(loginUser.getUserNo());
+        
         // 파일 업로드 처리
-        if(!upfile.isEmpty()) {
+        if(upfile != null && !upfile.isEmpty()) {
             try {
+                // 기존 파일이 있다면 삭제
+                if(existingQna.getUserQnaImg() != null && !existingQna.getUserQnaImg().isEmpty()) {
+                    String oldFilePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/" + existingQna.getUserQnaImg());
+                    File oldFile = new File(oldFilePath);
+                    if(oldFile.exists()) {
+                        oldFile.delete();
+                    }
+                }
+                
                 String savedFileName = saveFile(upfile, request);
                 userQna.setUserQnaImg(savedFileName);
             } catch (Exception e) {
@@ -183,8 +239,9 @@ public class UserQnaController {
         }
     }
     
+    // 문의사항 삭제 처리
     @PostMapping("delete.uq")
-    public String deleteUserQna(@RequestParam("qno") int userQnaNum, HttpSession session, Model model) {
+    public String deleteUserQna(@RequestParam("qno") int userQnaNum, HttpSession session, Model model, HttpServletRequest request) {
         
         Member loginUser = (Member) session.getAttribute("loginUser");
         if(loginUser == null) {
@@ -194,19 +251,40 @@ public class UserQnaController {
         
         UserQnaInfo userQna = service.selectUserQna(userQnaNum);
         
+        if(userQna == null) {
+            model.addAttribute("errorMsg", "존재하지 않는 문의사항입니다.");
+            return "common/errorPage";
+        }
+        
         // 작성자 본인만 삭제 가능
         if(userQna.getUserNo() != loginUser.getUserNo()) {
             model.addAttribute("errorMsg", "본인이 작성한 문의사항만 삭제할 수 있습니다.");
             return "common/errorPage";
         }
         
-        int result = service.deleteUserQna(userQnaNum);
-        
-        if(result > 0) {
-            session.setAttribute("alertMsg", "문의사항이 성공적으로 삭제되었습니다.");
-            return "redirect:/userqna/list.uq";
-        } else {
-            model.addAttribute("errorMsg", "문의사항 삭제에 실패하였습니다.");
+        try {
+            // 첨부파일이 있다면 삭제
+            if(userQna.getUserQnaImg() != null && !userQna.getUserQnaImg().isEmpty()) {
+                String filePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/" + userQna.getUserQnaImg());
+                File file = new File(filePath);
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+            
+            int result = service.deleteUserQna(userQnaNum);
+            
+            if(result > 0) {
+                session.setAttribute("alertMsg", "문의사항이 성공적으로 삭제되었습니다.");
+                return "redirect:/userqna/list.uq";
+            } else {
+                model.addAttribute("errorMsg", "문의사항 삭제에 실패하였습니다.");
+                return "common/errorPage";
+            }
+        } catch (Exception e) {
+            System.out.println("문의사항 삭제 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("errorMsg", "문의사항 삭제 중 오류가 발생했습니다: " + e.getMessage());
             return "common/errorPage";
         }
     }
@@ -215,20 +293,15 @@ public class UserQnaController {
     @ResponseBody
     @RequestMapping(value="myQna.uq", produces = "application/json;charset=UTF-8")
     public List<UserQnaInfo> getMyQna(@RequestParam("userNo") int userNo) {
-        
-        List<UserQnaInfo> myQnaList = service.selectUserQnaByUser(userNo);
-        
-        return myQnaList;
+        return service.selectUserQnaByUser(userNo);
     }
     
-    // 신고 문의사항 조회 (AJAX)
+    // 신고 문의사항 조회 (AJAX) - VO에 exuserNum이 없으므로 빈 리스트 반환
     @ResponseBody
     @RequestMapping(value="reportQna.uq", produces = "application/json;charset=UTF-8")
     public List<UserQnaInfo> getReportQna(@RequestParam("exuserNum") int exuserNum) {
-        
-        List<UserQnaInfo> reportQnaList = service.selectReportQna(exuserNum);
-        
-        return reportQnaList;
+        // exuserNum 필드가 VO에 없으므로 빈 리스트 반환
+        return service.selectReportQna(exuserNum);
     }
     
     // 파일 저장 메소드

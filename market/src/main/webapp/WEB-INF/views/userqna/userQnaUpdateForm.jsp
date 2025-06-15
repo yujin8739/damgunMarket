@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -131,7 +132,7 @@
             <strong>현재 상태:</strong> 답변대기
         </div>
         
-        <form action="${contextPath}/userqna/update.uq" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form action="${pageContext.request.contextPath}/userqna/update.uq" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <input type="hidden" name="userQnaNum" value="${userQna.userQnaNum}">
             
             <div class="form-group">
