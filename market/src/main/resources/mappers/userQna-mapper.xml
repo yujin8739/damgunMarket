@@ -40,7 +40,7 @@
         )
     </insert>
     
-    <!-- UPDATE 문 수정: MyBatis 방식으로 변경 -->
+
     <update id="updateUserQna" parameterType="UserQnaInfo">
         UPDATE USERQNA_INFO 
         SET 
@@ -53,7 +53,7 @@
           AND USER_NO = #{userNo}
     </update>
     
-    <!-- DELETE 문 수정: MyBatis 방식으로 변경 -->
+
     <delete id="deleteUserQna" parameterType="_int">
         DELETE FROM USERQNA_INFO 
         WHERE USERQNA_NUM = #{userQnaNum}
@@ -63,7 +63,7 @@
         SELECT * FROM USERQNA_INFO WHERE USER_NO = #{userNo} ORDER BY USERQNA_NUM DESC
     </select>
     
-    <!-- 신고 관련 기능은 VO에 exuserNum이 없으므로 제거하거나 별도 처리 필요 -->
+
     <select id="selectReportQna" parameterType="_int" resultMap="userQnaResultSet">
         <!-- exuserNum 필드가 VO에 없으므로 일단 빈 결과 반환 -->
         SELECT * FROM USERQNA_INFO WHERE 1=0

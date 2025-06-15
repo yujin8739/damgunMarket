@@ -296,7 +296,7 @@ public class UserQnaController {
         return service.selectUserQnaByUser(userNo);
     }
     
-    // 신고 문의사항 조회 (AJAX) - VO에 exuserNum이 없으므로 빈 리스트 반환
+    // 신고 문의사항 조회 (AJAX) 
     @ResponseBody
     @RequestMapping(value="reportQna.uq", produces = "application/json;charset=UTF-8")
     public List<UserQnaInfo> getReportQna(@RequestParam("exuserNum") int exuserNum) {

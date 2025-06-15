@@ -68,7 +68,7 @@ public class AnswerController {
         return "answer/answerEnrollForm";
     }
     
-    // 나머지 메서드들은 기존과 동일...
+
     @PostMapping("insert.an")
     public String insertAnswer(AnswerInfo answer, HttpSession session, Model model) {
         
