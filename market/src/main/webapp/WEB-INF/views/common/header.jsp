@@ -523,6 +523,35 @@
 		color: #7b68ee;
 		cursor: pointer;
 	}
+	.dropdown {
+    	position: relative;
+    	display: inline-block;
+	}
+	
+	.dropdown-content {
+	    display: none;
+	    position: absolute;
+	    min-width: 160px;
+	    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+	    z-index: 1;
+	    border-radius: 4px;
+	}
+	
+	.dropdown-content a {
+	    color: black;
+	    padding: 10px 16px;
+	    text-decoration: none;
+	    display: block;
+	}
+	
+	.dropdown-content a:hover {
+	    background-color: #f1f1f1;
+	}
+	
+	.dropdown:hover .dropdown-content {
+	    display: block;
+	}
+
 </style>
 </head>
 
@@ -553,7 +582,7 @@
          <li data-category="도서/음반">도서/음반</li>
          <li data-category="패션의류">패션의류</li>
          <li data-category="패션잡화">패션잡화</li>
-         <li data-category="반련동물">반려동물</li>
+         <li data-category="반려동물">반려동물</li>
          <li data-category="게임/취미">게임/취미</li>
       </ul>
    </div>
@@ -607,7 +636,13 @@
 				<c:when test="${not empty loginUser or not empty loginAdmin}">
 					<li><a href="${contextRoot}/product/pd-view">내상품</a></li>
 		         	<li><a href="${contextRoot}/user/FavoriteList">찜목록</a></li>
-		         	<li><a href="${contextRoot}/product/History-view">거래신청내역</a></li>
+		         	<li class="dropdown">
+			            <a href="javascript:void(0)">거래신청내역</a>
+			            <div class="dropdown-content">
+			                <a href="${contextRoot}/product/History-view?role=seller">판매자</a>
+			                <a href="${contextRoot}/product/History-view?role=buyer">구매자</a>
+			            </div>
+			        </li>
 		        </c:when>
 	        </c:choose>
          </ul>

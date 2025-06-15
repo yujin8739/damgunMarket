@@ -30,7 +30,7 @@
         $('#loading').show();
 
         $.ajax({
-            url: serverPath + "/product/HistoryMyList",
+            url: serverPath + "/product/HistoryList",
             data: {
                 offset: offset,
                 limit: limit,
@@ -62,7 +62,7 @@
 					    const userNo = $(this).data('userno');
 					
 					    $.ajax({
-					        url: serverPath + "/user/s-list",
+					        url: serverPath + "/user/e-list",
 					        data: {
 					            userNo,
 					            pdNum,
@@ -81,9 +81,38 @@
 					
 					            userInfoList.forEach((user, index) => {
 					                let actionButtons = "";
-
-					                if (status === "예약중") {
+					                if (status === "거래신청") {
+					                	console.log(user.userNo);
+					                  	console.log(product.pdNum);
 					                    actionButtons = `
+					                        <button style="
+					                            padding: 10px 20px;
+					                            border: none;
+					                            background-color: #7a4fff;
+					                            color: white;
+					                            border-radius: 6px;
+					                            font-size: 14px;
+					                            cursor: pointer;
+					                            transition: background-color 0.3s;
+					                        " class="enableBtn" data-enrollNo="\${user.userNo}" data-pdNum="\${product.pdNum}" >
+					                            거래승인
+					                        </button>
+					                    `;
+					                } else if (status === "예약중") {
+					                    actionButtons = `
+					                        <button style="
+					                            padding: 10px 20px;
+					                            margin-right: 10px;
+					                            border: none;
+					                            background-color: #28a745;
+					                            color: white;
+					                            border-radius: 6px;
+					                            font-size: 14px;
+					                            cursor: pointer;
+					                            transition: background-color 0.3s;
+					                        " class="completeBtn" data-enrollNo="\${user.userNo}" data-pdNum="\${product.pdNum}">
+					                            거래완료
+					                        </button>
 					                        <button style="
 					                            padding: 10px 20px;
 					                            border: none;
@@ -93,7 +122,7 @@
 					                            font-size: 14px;
 					                            cursor: pointer;
 					                            transition: background-color 0.3s;
-					                        " class="cancelBtn" data-enrollNo="\${product.userNo}" data-pdNum="\${product.pdNum}">
+					                        " class="cancelBtn" data-enrollNo="\${user.userNo}" data-pdNum="\${product.pdNum}">
 					                            거래취소
 					                        </button>
 					                    `;
@@ -109,7 +138,7 @@
 					                            cursor: not-allowed;
 					                            opacity: 0.7;
 					                        " disabled>
-					                            거래완료
+					                            판매완료
 					                        </button>
 					                    `;
 					                }
@@ -277,10 +306,20 @@
         });
     });
 
+    $(document).on('click', '.enableBtn', function () {
+        const enrollNo = $(this).data('enrollno');
+        const pdNum = $(this).data('pdnum');
+        updateHistoryStatus(pdNum, userNo, '예약중', enrollNo)
+    });
+    $(document).on('click', '.completeBtn', function () {
+        const enrollNo = $(this).data('enrollno');
+        const pdNum = $(this).data('pdnum');
+        updateHistoryStatus(pdNum, userNo, '판매완료', enrollNo)
+    });
     $(document).on('click', '.cancelBtn', function () {
         const enrollNo = $(this).data('enrollno');
         const pdNum = $(this).data('pdnum');
-        updateHistoryStatus(pdNum, enrollNo, '거래신청', userNo)
+        updateHistoryStatus(pdNum, userNo, '거래신청', enrollNo)
     });
 
     function updateHistoryStatus(pdNum, userNo, status, enrollNo = null) {

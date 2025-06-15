@@ -119,6 +119,13 @@ public class ProductDao {
 		return sqlSession.selectList("productMapper.selectHistoryList", param, rowBounds);
 	}
 
+	public List<Product> selectyMyHistoryList(SqlSessionTemplate sqlSession, int userNo, String status,RowBounds rowBounds) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userNo", userNo);
+		param.put("status", status);
+		return sqlSession.selectList("productMapper.selectMyHistoryList", param, rowBounds);
+	}
+	
 	public int selectHistoryUpdate(SqlSessionTemplate sqlSession, int pdNum, int userNo, String enrollNo, String status) {
 		Map<String, Object> param = new HashMap<>();
 		param.put("userNo", userNo);

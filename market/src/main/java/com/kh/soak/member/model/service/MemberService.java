@@ -28,5 +28,7 @@ public interface MemberService {
 	int selectFavorite(int userNo, int pdNum);
 
 	List<Member> selectEnrollMemberList(int userNo, int pdNum, String status);
+
+	List<Member> selectHistoryMember(int userNo);
 	
 }
