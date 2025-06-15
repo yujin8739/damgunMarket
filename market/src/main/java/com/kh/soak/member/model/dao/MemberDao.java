@@ -1,5 +1,6 @@
 package com.kh.soak.member.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -59,6 +60,16 @@ public class MemberDao {
 
 	public int selectFavorite(SqlSessionTemplate sqlSession, Map<String, Object> param) {
 		return sqlSession.selectOne("memberMapper.selectFavorite",param);
+	}
+
+	public List<Member> selectEnrollMemberList(SqlSessionTemplate sqlSession, Map<String, Object> param) {
+		
+		return sqlSession.selectList("memberMapper.selectEnrollMemberList",param);
+	}
+
+	public List<Member> selectHistoryMember(SqlSessionTemplate sqlSession, int userNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("memberMapper.selectHistoryMember",userNo);
 	}
 	
 }

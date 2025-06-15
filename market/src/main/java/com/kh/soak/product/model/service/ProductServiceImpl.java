@@ -31,15 +31,25 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> searchAllProduct(RowBounds rowBounds) {
-		return dao.selectAllProdectList(sqlSession,rowBounds);
+	public List<Product> searchAllProduct(RowBounds rowBounds, double latitude, double longitude) {
+		return dao.selectAllProductList(sqlSession,rowBounds, latitude, longitude);
 	}
 
 	@Override
-	public List<Product> searchProduct(RowBounds rowBounds, String keyword) {
-		return dao.selectProducts(sqlSession, rowBounds, keyword);
+	public List<Product> searchProduct(RowBounds rowBounds, String keyword, double latitude, double longitude) {
+		return dao.selectProducts(sqlSession, rowBounds, keyword, latitude, longitude);
 	}
 
+	@Override
+	public List<Product> searchCategory(RowBounds rowBounds, String category, double latitude, double longitude) {
+		return dao.searchCategory(sqlSession, rowBounds, category, latitude, longitude);
+	}
+
+	@Override
+	public List<Product> searchProduct(RowBounds rowBounds, String keyword, String category, double latitude, double longitude) {
+		return dao.selectProducts(sqlSession, rowBounds, keyword, category, latitude, longitude);
+	}
+	
 	@Override
 	public Product selectOneProduct(int pdNum, int userNo) {
 		return dao.selectOneProduct(sqlSession, pdNum,userNo);
@@ -92,7 +102,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String checkEnroll(int pdNum, int userNo) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -105,6 +114,20 @@ public class ProductServiceImpl implements ProductService {
 	public int tradeEnroll(int pdNum, int userNo, int enrollNo, String status) {
 		return dao.tradeEnroll(sqlSession, pdNum, userNo, enrollNo, status);
 	}
+	
+	@Override
+	public List<Product> selectHistoryList(int userNo, String status, RowBounds rowBounds){
+		return dao.selectHistoryList(sqlSession, userNo, status, rowBounds);
+	}
 
+	@Override
+	public int selectHistoryUpdate(int pdNum, int userNo, String enrollNo, String status) {
+		return dao.selectHistoryUpdate(sqlSession, pdNum, userNo, enrollNo, status);
+	}
+
+	@Override
+	public List<Product> selectMyHistoryList(int userNo, String status, RowBounds rowBounds) {
+		return dao.selectyMyHistoryList(sqlSession, userNo, status, rowBounds);
+	}
 
 }

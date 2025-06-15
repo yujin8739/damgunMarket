@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.soak.etc.model.service.EtcService;
+import com.kh.soak.etc.model.vo.Station;
 import com.kh.soak.member.model.vo.Member;
 import com.kh.soak.product.model.service.ProductService;
 import com.kh.soak.product.model.service.ProductServiceImpl;
@@ -56,13 +57,21 @@ public class ProductController {
     public List<Product> loadProducts(
     	    @RequestParam int offset,
     	    @RequestParam int limit,
-    	    @RequestParam(required = false) String keyword
+    	    @RequestParam(required = false) String keyword,
+    	    @RequestParam(required = false) String category,
+    	    @RequestParam double latitude,
+    	    @RequestParam double longitude
     	) {
         RowBounds rowBounds = new RowBounds(offset, limit);
-        if(keyword==null || keyword=="") {
-        	return service.searchAllProduct(rowBounds);
-        } 
-        return service.searchProduct(rowBounds,keyword);
+        if((keyword==null || keyword.equals("")) && (category==null || category.equals(""))) {
+        	return service.searchAllProduct(rowBounds, latitude, longitude);
+        } else if(keyword==null || keyword.equals("")) {
+        	return service.searchCategory(rowBounds,category, latitude, longitude);
+        } else if(category==null || category.equals("")) {
+        	return service.searchProduct(rowBounds,keyword, latitude, longitude);
+        } else { 
+        	return service.searchProduct(rowBounds,keyword,category, latitude, longitude); 
+        }
     }
 
     
@@ -180,7 +189,14 @@ public class ProductController {
             return "errorPage";
         }
     }
-
+	
+	@RequestMapping(value = "product/get-station", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Station> favoriteList(@RequestParam("pdNum") int pdNum,
+            						 @RequestParam("userNo") int userNo){
+		
+		return eService.selectPdStationList(pdNum,userNo);
+	}
 	
 	@RequestMapping(value = "product/favoriteList",produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -274,15 +290,34 @@ public class ProductController {
 						   	 ,HttpSession session) {
 		
 		if(enrollNo == null||enrollNo.equals("")){
+			//로그인 한 회원 없을때 조회
 			return service.checkPdEnroll(pdNum, userNo);
 		} else { 		
 			int numEnroll = Integer.parseInt(enrollNo);
 			if(status == null || status.equals("")) {	
+				/* 로그인한 회원 있을때는 상품에 연결된 거래 내역에서 예약중, 판매완료가 있으면 가져오고
+				   없으면 로그인한 아이디와 일치하는 거래 신청이 있나 확인후 있으면 거래 신청 가져옴 
+				   만약 모두 없으면 판매중 반환 */
 				return service.checkMyEnroll(pdNum, userNo, numEnroll);
 			} else if (status.equals("거래신청")) {
+				//거래 신청하는 용도로 사용
 				int cResult = service.tradeEnroll(pdNum, userNo, numEnroll, status);
 				if(cResult<0) {
 					return "신청실패";
+				} else {
+					return status;
+				}
+			} else if (status.equals("예약중")) {
+				int cResult = service.tradeEnroll(pdNum, userNo, numEnroll, status);
+				if(cResult<0) {
+					return "예약실패";
+				} else {
+					return status;
+				}
+			} else if (status.equals("판매완료")) {
+				int cResult = service.tradeEnroll(pdNum, userNo, numEnroll, status);
+				if(cResult<0) {
+					return "예약실패";
 				} else {
 					return status;
 				}
@@ -292,8 +327,41 @@ public class ProductController {
 		}
 	}
 	
+	@RequestMapping(value = "product/HistoryList",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Product> selectHistoryList(@RequestParam int offset
+   	     								  ,@RequestParam int limit
+   	     								  ,@RequestParam int userNo
+   	     								  ,@RequestParam String status) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return service.selectHistoryList(userNo, status, rowBounds);
+	}
 	
-
-
-   
+	@RequestMapping(value = "product/HistoryMyList",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Product> selectMyHistoryList(@RequestParam int offset
+   	     								  ,@RequestParam int limit
+   	     								  ,@RequestParam int userNo
+   	     								  ,@RequestParam String status) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return service.selectMyHistoryList(userNo, status, rowBounds);
+	}
+	
+	@RequestMapping(value = "product/History-update",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public int selectHistoryUpdate(@RequestParam int pdNum
+			 					  ,@RequestParam int userNo
+			 					  ,@RequestParam(required = false) String enrollNo
+			 					  ,@RequestParam String status) {
+		return service.selectHistoryUpdate(pdNum, userNo, enrollNo, status);
+	}
+	
+	@GetMapping("product/History-view")
+	public String showMyHistoryList(@RequestParam("role") String role) {
+		if(role.equals("buyer")) {
+			return "product/myHistoryView";
+		} else {
+			return "product/pdHistoryView";
+		}
+	}
 }

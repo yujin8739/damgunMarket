@@ -1,5 +1,7 @@
 package com.kh.soak.member.model.service;
 
+import java.util.List;
+
 import com.kh.soak.member.model.vo.Member;
 
 public interface MemberService {
@@ -24,5 +26,9 @@ public interface MemberService {
 	int deleteFavorite(int userNo, int pdNum);
 
 	int selectFavorite(int userNo, int pdNum);
+
+	List<Member> selectEnrollMemberList(int userNo, int pdNum, String status);
+
+	List<Member> selectHistoryMember(int userNo);
 	
 }

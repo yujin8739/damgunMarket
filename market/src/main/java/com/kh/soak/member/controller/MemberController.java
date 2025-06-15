@@ -1,5 +1,7 @@
 package com.kh.soak.member.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,4 +180,19 @@ public class MemberController {
 	public String showFavoriteList() {
 		return "member/favorView";
 	}
+	
+	@RequestMapping(value = "user/e-list",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Member> selectEnrollMemberList(@RequestParam int userNo 
+			                				 , @RequestParam int pdNum
+			                				 , @RequestParam String status) {
+	    return service.selectEnrollMemberList(userNo,pdNum,status);        
+	}
+	
+	@RequestMapping(value = "user/s-list",produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public List<Member> selectHistoryMember(@RequestParam int userNo) {
+	    return service.selectHistoryMember(userNo);        
+	}
+	
 }

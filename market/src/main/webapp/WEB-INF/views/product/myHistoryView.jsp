@@ -93,27 +93,47 @@
 				margin-top: 20px;
 			}
 		}
+		#statusFilter {
+		    display: flex;
+		    justify-content: center;
+		    gap: 10px;
+		    margin-bottom: 20px;
+		}
+		
+		#statusFilter button {
+		    padding: 10px 20px;
+		    border-radius: 25px;
+		    background-color: #eee;
+		    border: none;
+		    font-weight: bold;
+		    cursor: pointer;
+		    transition: background-color 0.3s;
+		}
+		
+		#statusFilter button.active,
+		#statusFilter button:hover {
+		    background-color: #8b45ff;
+		    color: white;
+		}
+		
 	</style>
 </head>
 
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp" %>
-	<div id=all-container >
+	<div id="all-container" >
 	    <form id="searchForm" onsubmit="return false;">
-	        <input type="text" id="searchKeyword" placeholder="상품명 검색">
-	        <input type="hidden" id="searchCategory">
-	        <input type="hidden" id="latitude" value="${loginUser.latitude}">
-			<input type="hidden" id="longitude" value="${loginUser.longitude}">
-	        <button onclick="startSearch()">검색</button>
-	        <c:choose>
-				<c:when test="${not empty loginUser or not empty loginAdmin}">
-					<button onclick="location.href='${pageContext.request.contextPath}/product/regist'">상품등록</button>
-	        		<button id="chat-move" onclick="location.href='${pageContext.request.contextPath}/chat/roomList'">채팅이동</button>
-				</c:when>
-			</c:choose>
+			<input type="hidden" id="latitude">
+			<input type="hidden" id="longitude">
+	    
+	        <div id="statusFilter">
+			    <button data-status="거래신청">거래신청</button>
+			    <button data-status="예약중">예약중</button>
+			    <button data-status="판매완료">구매완료</button>
+			</div>
 	    </form>
 	    <hr>
-		<jsp:include page="/WEB-INF/views/product/productList.jsp"/>
+		<jsp:include page="/WEB-INF/views/product/myHistoryList.jsp"/>
 	</div>
 	<%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>

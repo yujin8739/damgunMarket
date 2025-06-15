@@ -94,5 +94,34 @@
 		WHERE PD_NUM = #{pdNum}
 		AND USER_NO = #{userNo}
 	</select>
+	
+	<select id="selectEnrollMemberList" resultType="Member" resultMap="memberResultMap">
+		SELECT UI.USER_NO
+			,UI.USERNAME
+			,UI.EMAIL
+			,UI.STATUS
+			,UI.USERRANK
+			,UI.LATITUDE
+	  	    ,UI.LONGITUDE
+		FROM TRADE_ENROLL TE
+		JOIN USER_INFO UI
+		ON TE.ENROLL_NUM = UI.USER_NO
+		WHERE TE.PD_NUM = #{pdNum}
+		AND TE.USER_NO = #{userNo}
+		AND TE.STATUS = #{status}
+	</select>
+	
+	<select id="selectHistoryMember" resultType="Member" resultMap="memberResultMap">
+		SELECT USER_NO 
+			  ,USERNAME
+			  ,EMAIL
+			  ,STATUS
+			  ,USERRANK
+			  ,LATITUDE
+	  	      ,LONGITUDE
+		FROM USER_INFO 
+		WHERE USER_NO = #{userNo}
+		AND STATUS = 'Y'
+	</select>
 
 </mapper>
