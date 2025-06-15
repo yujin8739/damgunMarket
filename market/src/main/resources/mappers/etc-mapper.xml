@@ -48,5 +48,10 @@
 	    ]]>
 	</select>
 	
+	<delete id="deleteTradeStationByPdNumUserNo">
+		DELETE FROM TRADE_STATION
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
+	</delete>
+	
 
 </mapper> 

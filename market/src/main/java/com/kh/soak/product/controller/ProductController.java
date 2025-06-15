@@ -175,11 +175,38 @@ public class ProductController {
         int result = service.deleteProduct(pdNum, userNo);
 
         if (result > 0) {
-            return "redirect:/product/list"; // 삭제 후 상품 리스트 페이지 등으로 이동
+        	return "redirect:/"; // 삭제 후 상품 리스트 페이지 등으로 이동
         } else {
             return "errorPage";
         }
     }
+	
+	/*김진우 추가*/
+	@GetMapping("product/edit")
+    public String showEditPage(@RequestParam("pdNum") int pdNum, HttpSession session, Model model) {
+        Member loginUser = (Member) session.getAttribute("loginUser");
+
+        if (loginUser == null) {
+            return "redirect:/login";
+        }
+
+        Product product = service.editProduct(pdNum); // → 다음 단계에서 구현할 서비스 메서드
+
+        if (product == null || product.getUserNo() != loginUser.getUserNo()) {
+            return "error-403";
+        }
+
+        model.addAttribute("product", product);
+        model.addAttribute("bigCategoryList", eService.selectBigCateList());
+
+        return "product/pd-edit"; // 수정 JSP
+    }
+	
+	
+	
+	
+	
+	
 
 	
 	@RequestMapping(value = "product/favoriteList",produces = "application/json;charset=UTF-8")
@@ -199,51 +226,6 @@ public class ProductController {
 
 	    return scheme + "://" + serverName + ":" + serverPort + contextPath;
 	}
-	
-	//상품 정보를 DB에서 불러오고 수정 폼으로 이동
-		@GetMapping("product/edit")
-		public String showEditPage(@RequestParam("pdNum") int pdNum,
-								   @RequestParam("userNo") int userNo,
-								   Model model,
-								   HttpSession session) {
-			Member loginUser = (Member) session.getAttribute("loginUser");
-			if (loginUser == null || loginUser.getUserNo() != userNo) {
-				return "error-403";
-			}
-
-			Product product = service.selectOneProduct(pdNum, userNo);
-			if (product == null) return "errorPage";
-
-			List<String> bigCategoryList = eService.selectBigCateList();
-			model.addAttribute("product", product);
-			model.addAttribute("bigCategoryList", bigCategoryList);
-
-			return "product/pd-edit"; // 수정 폼 JSP
-		}
-		
-		
-		//사용자가 폼에 작성한 내용을 받아서 DB에 업데이트하고 상세보기 페이지로 리다이렉트
-		@PostMapping("product/edit")
-		public String submitEditProduct(@ModelAttribute Product product,
-										HttpSession session,
-										RedirectAttributes redirectAttributes) {
-			Member loginUser = (Member) session.getAttribute("loginUser");
-			if (loginUser == null || loginUser.getUserNo() != product.getUserNo()) {
-				return "error-403";
-			}
-
-			int result = service.updateProductByPdNumUserNo(product);
-			if (result > 0) {
-				redirectAttributes.addFlashAttribute("msg", "수정 성공");
-				return "redirect:/product/view?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
-			} else {
-				redirectAttributes.addFlashAttribute("msg", "수정 실패");
-				return "redirect:/product/edit?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
-			}
-		}
-
-	
-	
 	
 	
 

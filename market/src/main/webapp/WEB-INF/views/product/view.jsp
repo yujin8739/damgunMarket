@@ -171,15 +171,25 @@
         <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p>
     </div>
     
+    <!--  
+    	상품 삭제, 수정버튼 추가 김진우
+    -->
     <c:if test="${sessionScope.loginUser.userNo == product.userNo}">
         <div style="margin-top: 20px; text-align: right;">
-            <form action="${pageContext.request.contextPath}/product/delete" method="post"
-                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                <input type="hidden" name="pdNum" value="${product.pdNum}" />
-                <input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo}" />
-                <button type="submit" style="background-color: #ff5c5c; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
-                    삭제
-                </button>
+        
+        	<a href="${pageContext.request.contextPath}/product/edit?pdNum=${product.pdNum}" 
+           style="background-color: #4CAF50; color: white; border: none; padding: 10px 16px; border-radius: 6px; 
+                  text-decoration: none; margin-right: 10px; display: inline-block; font-size: 14px; line-height: 1;">
+            수정
+        </a>
+
+        <form action="${pageContext.request.contextPath}/product/delete" method="post"
+              onsubmit="return confirm('정말 삭제하시겠습니까?');" style="display: inline-block;">
+            <input type="hidden" name="pdNum" value="${product.pdNum}" />
+            <input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo}" />
+            <button type="submit" style="background-color: #ff5c5c; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+                삭제
+            </button>
             </form>
         </div>
     </c:if>
