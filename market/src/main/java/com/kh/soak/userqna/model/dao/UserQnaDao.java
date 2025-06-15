@@ -30,7 +30,7 @@ public class UserQnaDao {
         return sqlSession.update("userQnaMapper.updateUserQna", userQna);
     }
     
-    // 문의사항 삭제
+    // 문의사항 삭제 - 파라미터를 int로 받음
     public int deleteUserQna(SqlSessionTemplate sqlSession, int userQnaNum) {
         return sqlSession.delete("userQnaMapper.deleteUserQna", userQnaNum);
     }
@@ -40,7 +40,7 @@ public class UserQnaDao {
         return sqlSession.selectList("userQnaMapper.selectUserQnaByUser", userNo);
     }
     
-    // 신고 문의사항 목록 조회
+    // 신고 문의사항 목록 조회 - VO에 exuserNum이 없으므로 빈 리스트 반환
     public List<UserQnaInfo> selectReportQna(SqlSessionTemplate sqlSession, int exuserNum) {
         return sqlSession.selectList("userQnaMapper.selectReportQna", exuserNum);
     }
@@ -49,6 +49,8 @@ public class UserQnaDao {
     public List<UserQnaInfo> searchUserQna(SqlSessionTemplate sqlSession, String keyword) {
         return sqlSession.selectList("userQnaMapper.searchUserQna", keyword);
     }
+    
+    // 사용자의 최근 문의번호 조회
     public Integer selectLatestUserQnaNum(SqlSessionTemplate sqlSession, int userNo) {
         return sqlSession.selectOne("userQnaMapper.selectLatestUserQnaNum", userNo);
     }
