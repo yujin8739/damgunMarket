@@ -34,20 +34,16 @@
     
     <!-- 특정 문의사항의 답변 조회 -->
     <select id="selectAnswer" parameterType="_int" resultMap="answerResultSet">
-        SELECT 
-            u.USERQNA_NUM,
-            u.USER_NO,
-            u.USERQNA_TITLE,
-            u.USERQNA,
-            u.USERQNA_IMG,
-            a.ANSWER_TITLE,
-            a.ANSWER_QNA,
-            a.ADMIN_NAME
-        FROM USERQNA_INFO u
-        LEFT JOIN ANSWER_INFO a ON u.USERQNA_NUM = a.USERQNA_NUM
-        WHERE u.USERQNA_NUM = #{userQnaNum}
-    </select>
-    
+	    SELECT 
+	        USERQNA_NUM,
+	        USER_NO,
+	        ANSWER_TITLE,
+	        ANSWER_QNA,
+	        ADMIN_NAME
+	    FROM ANSWER_INFO
+	    WHERE USERQNA_NUM = #{userQnaNum}
+	</select>
+	    
     <!-- 답변 등록 -->
     <insert id="insertAnswer" parameterType="AnswerInfo">
         INSERT INTO ANSWER_INFO (USERQNA_NUM, USER_NO, ANSWER_TITLE, ANSWER_QNA, ADMIN_NAME)
@@ -84,22 +80,22 @@
         WHERE u.USER_NO = #{userNo} 
         ORDER BY u.USERQNA_NUM DESC
     </select>
-    
+	<!-- QNA 번호로 답변 조회 -->
+<select id="selectAnswerByQnaNum" parameterType="_int" resultMap="answerResultSet">
+    SELECT 
+        USERQNA_NUM,
+        USER_NO,
+        ANSWER_TITLE,
+        ANSWER_QNA,
+        ADMIN_NAME
+    FROM ANSWER_INFO
+    WHERE USERQNA_NUM = #{userQnaNum}
+</select>
 
-    <select id="selectAnswersByProduct" parameterType="_int" resultMap="answerResultSet">
-        SELECT 
-            u.USERQNA_NUM,
-            u.USER_NO,
-            u.USERQNA_TITLE,
-            u.USERQNA,
-            u.USERQNA_IMG,
-            a.ANSWER_TITLE,
-            a.ANSWER_QNA,
-            a.ADMIN_NAME
-        FROM USERQNA_INFO u
-        LEFT JOIN ANSWER_INFO a ON u.USERQNA_NUM = a.USERQNA_NUM
-        WHERE u.PD_NUM = #{pdNum} 
-        ORDER BY u.USERQNA_NUM DESC
-    </select>
     
+    <select id="hasAnswer" parameterType="_int" resultType="_int">
+	    SELECT COUNT(*) FROM ANSWER_INFO WHERE USERQNA_NUM = #{userQnaNum}
+	</select>
+	
+	
 </mapper>

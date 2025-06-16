@@ -40,8 +40,14 @@ public class AnswerDao {
         return sqlSession.selectList("answerMapper.selectAnswersByUser", userNo);
     }
     
-    // 상품별 답변 목록 조회 (pdNum 사용)
-    public List<AnswerInfo> selectAnswersByProduct(SqlSessionTemplate sqlSession, int pdNum) {
-        return sqlSession.selectList("answerMapper.selectAnswersByProduct", pdNum);
+    // 답변 존재 여부 확인
+    public boolean hasAnswer(SqlSessionTemplate sqlSession, int userQnaNum) {
+        Integer count = sqlSession.selectOne("answerMapper.hasAnswer", userQnaNum);
+        return count != null && count > 0;
+    }
+    
+    // QNA 번호로 답변 조회
+    public AnswerInfo selectAnswerByQnaNum(SqlSessionTemplate sqlSession, int userQnaNum) {
+        return sqlSession.selectOne("answerMapper.selectAnswerByQnaNum", userQnaNum);
     }
 }

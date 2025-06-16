@@ -159,7 +159,6 @@
                   <!-- 관리자 전용 메뉴 -->
                   <c:if test="${not empty loginAdmin}">
                      <li><a href="${contextRoot}/admin/main.ad" class="admin-menu">관리자 메인</a></li>
-                     <li><a href="${contextRoot}/admin/insert.ad" class="admin-menu">관리자 등록</a></li>
                   </c:if>
                </ul>
             </div>

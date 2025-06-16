@@ -74,27 +74,7 @@ public class AdminController {
         return "admin/adminMain";
     }
     
-    // 관리자 등록 처리
-    @PostMapping("insert.ad")
-    public String insertAdmin(Admin admin, HttpSession session, Model model) {
-        
-        System.out.println("관리자 등록 시도: " + admin);
-        
-        // 비밀번호 암호화
-        String encPwd = bcrypt.encode(admin.getAdminPw());
-        admin.setAdminPw(encPwd);
-        
-        int result = service.insertAdmin(admin);
-        
-        if(result > 0) {
-            session.setAttribute("alertMsg", "관리자 등록이 완료되었습니다.");
-            return "redirect:/admin/main.ad";
-        } else {
-            model.addAttribute("errorMsg", "관리자 등록에 실패하였습니다.");
-            return "common/errorPage";
-        }
-    }
-    
+  
     // 관리자 정보 수정
     @PostMapping("update.ad")
     public String updateAdmin(Admin admin, HttpSession session, Model model) {

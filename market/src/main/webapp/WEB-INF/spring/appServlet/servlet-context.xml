@@ -36,7 +36,6 @@
         <mapping path="/*.ad" /> <!-- admin 패키지의 .ad 요청 전체 -->
         <exclude-mapping path="/loginForm.ad" /> <!-- 로그인 폼은 제외 -->
         <exclude-mapping path="/login.ad" /> <!-- 로그인 처리는 제외 -->
-        <exclude-mapping path="/insert.ad" /> <!-- 관리자 등록은 제외 -->
         <exclude-mapping path="/idCheck.ad" /> <!-- 아이디 중복체크는 제외 -->
         <exclude-mapping path="/logout.ad" /> <!-- 로그아웃은 제외 -->
         <!-- Admin 전용 인터셉터 -->

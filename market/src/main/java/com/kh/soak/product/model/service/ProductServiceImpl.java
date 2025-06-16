@@ -69,6 +69,11 @@ public class ProductServiceImpl implements ProductService {
 	public int insertPdFiles(PdFile pdFiles) {
 		return dao.insertPdFiles(sqlSession,pdFiles);
 	}
+	
+	@Override
+	public int deletePdFiles(int userNo, int pdNum) {
+		return dao.deletePdFiles(sqlSession, pdNum, userNo);
+	}
 
 	@Override
 	public int insertPdStation(int userNo, int pdNum, int stationNo) {
@@ -97,9 +102,6 @@ public class ProductServiceImpl implements ProductService {
 	    return dao.editProduct(sqlSession, pdNum);
 	}
 	
-	
-	
-
 	@Override
 	public List<Object> selectMyPdList(RowBounds rowBounds, int userNo) {
 		return dao.selectMyPdList(sqlSession, rowBounds, userNo);
