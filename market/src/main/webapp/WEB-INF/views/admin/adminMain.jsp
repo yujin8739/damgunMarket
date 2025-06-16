@@ -25,6 +25,7 @@
     </style>
 </head>
 <body>
+	<%@ include file="/WEB-INF/views/common/header.jsp" %>
     <c:set var="contextRoot" value="${pageContext.request.contextPath}" />
     
     <div class="nav">
@@ -34,11 +35,13 @@
         <a href="../board/list.bo">공지사항 관리</a>
         <a href="../answer/list.an">답변 관리</a>
         <a href="../userqna/list.uq">문의사항 관리</a>
+        <a href="../admin/chargePoint">포인트 지급</a>
         <a href="logout.ad">로그아웃</a>
     </div>
     <div class="content">
         <h2>관리자 메인 페이지</h2>
         <p>안녕하세요, ${sessionScope.loginAdmin.adminName}님!</p>
     </div>
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>
