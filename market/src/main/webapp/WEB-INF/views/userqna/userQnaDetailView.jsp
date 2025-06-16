@@ -8,36 +8,58 @@
     <meta charset="UTF-8">
     <title>문의사항 상세보기</title>
     <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(180, 139, 255, 0.08);
+            border: 2px solid #f0ebff;
         }
         
         .detail-header {
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 20px;
+            border-bottom: 2px solid #a88bff;
+            padding: 25px;
             margin-bottom: 30px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            border-radius: 15px;
+            border: 2px solid #e8e0ff;
         }
         
         .detail-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #a88bff;
+            text-shadow: 0 2px 4px rgba(168, 139, 255, 0.15);
         }
         
         .detail-info {
-            color: #666;
+            color: #8a7bcc;
             font-size: 14px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 1px solid #e8e0ff;
         }
         
         .detail-content {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
             min-height: 200px;
-            line-height: 1.6;
+            line-height: 1.8;
+            border: 2px solid #f0ebff;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.05);
         }
         
         .detail-image {
@@ -48,67 +70,121 @@
         .detail-image img {
             max-width: 100%;
             height: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid #e8e0ff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(180, 139, 255, 0.1);
         }
         
         .btn-group {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
+            border-radius: 15px;
+            border: 2px solid #e8e0ff;
         }
         
         .btn {
-            padding: 10px 20px;
-            margin: 0 5px;
+            padding: 15px 30px;
+            margin: 0 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         
         .btn-primary {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #8b45ff 0%, #b45aff 100%);
             color: white;
+            border: 2px solid #7b68ee;
+            box-shadow: 0 4px 15px rgba(139, 69, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7b68ee 0%, #9370db 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 69, 255, 0.4);
         }
         
         .btn-warning {
-            background-color: #ffc107;
-            color: #212529;
+            background: linear-gradient(135deg, #9370db 0%, #8b5cf6 100%);
+            color: white;
+            border: 2px solid #8b5cf6;
+            box-shadow: 0 4px 15px rgba(147, 112, 219, 0.3);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(147, 112, 219, 0.4);
         }
         
         .btn-danger {
-            background-color: #dc3545;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
             color: white;
+            border: 2px solid #dc3545;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
         }
         
         .btn-secondary {
-            background-color: #6c757d;
+            background: linear-gradient(135deg, #b4a0ff 0%, #c8b8ff 100%);
             color: white;
+            border: 2px solid #a88bff;
+            box-shadow: 0 4px 15px rgba(180, 160, 255, 0.2);
         }
         
-        .btn:hover {
-            opacity: 0.8;
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #a88bff 0%, #b49fff 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(180, 160, 255, 0.3);
         }
         
         .answer-section {
             margin-top: 40px;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
+            border-top: 2px solid #e8e0ff;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            border: 2px solid #f0ebff;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.05);
         }
         
         .answer-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #007bff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #a88bff;
+            text-shadow: 0 1px 2px rgba(168, 139, 255, 0.1);
         }
         
         .answer-content {
-            background-color: #e3f2fd;
-            padding: 20px;
-            border-radius: 5px;
-            border-left: 4px solid #007bff;
+            background: linear-gradient(135deg, #f0ebff 0%, #e8e0ff 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #a88bff;
+            border: 2px solid #e8e0ff;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.05);
+        }
+        
+        .answer-header {
+            color: #8a7bcc;
+            margin-bottom: 15px;
+        }
+        
+        .answer-text {
+            color: #333;
+            line-height: 1.6;
         }
     </style>
 </head>
