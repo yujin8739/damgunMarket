@@ -236,10 +236,17 @@ h2 {
 		<div id="newMessageNotification" class="new-message-notification"
 			onclick="scrollToBottom()">새로운 메시지가 있습니다. 클릭하여 이동</div>
 
-		<input type="text" id="messageInput" class="message-input"
-			placeholder="메시지를 입력하세요...">
-		<button onclick="sendMessage()" class="send-button">전송</button>
+		<input type="file" id="imageInput" accept="image/*"
+			style="display: none;" onchange="handleImageUpload(event)">
 
+		<div style="display: flex; align-items: center; gap: 5px;">
+			<button onclick="document.getElementById('imageInput').click()"
+				class="send-button" style="width: 50px; background-color: #5a4fcf;">📷</button>
+
+			<input type="text" id="messageInput" class="message-input"
+				style="width: calc(100% - 145px);" placeholder="메시지를 입력하세요...">
+			<button onclick="sendMessage()" class="send-button">전송</button>
+		</div>
 		<p>
 			<a href="${pageContext.request.contextPath}/chat/roomList"
 				class="back-link">채팅방 목록으로 돌아가기</a>
@@ -661,6 +668,77 @@ h2 {
                 hideNewMessageNotification();
             }
         }
+     // [필수 확인] 이 함수가 <script> 태그 안에 있는지 확인해주세요.
+     // 이미지 파일을 선택했을 때 호출되는 함수입니다.
+     function handleImageUpload(event) {
+         const file = event.target.files[0];
+         if (!file) {
+             return;
+         }
+
+         const formData = new FormData();
+         formData.append('image', file);
+
+         updateConnectionStatus(true, '이미지 업로드 중...');
+
+         fetch('${pageContext.request.contextPath}/chat/uploadImage', {
+             method: 'POST',
+             body: formData
+         })
+         .then(response => response.json())
+         .then(data => {
+             if (data.status === 'success') {
+                 console.log("이미지 업로드 성공:", data.imageUrl);
+                 // 업로드 성공 시, 이미지 URL을 웹소켓으로 전송합니다.
+                 sendImageMessage(data.imageUrl);
+                 updateConnectionStatus(true, '채팅 서버에 연결됨');
+             } else {
+                 alert('이미지 업로드 실패: ' + data.message);
+                 updateConnectionStatus(true, '채팅 서버에 연결됨');
+             }
+         })
+         .catch(error => {
+             console.error('이미지 업로드 fetch 오류:', error);
+             alert('이미지 업로드 중 오류가 발생했습니다.');
+             updateConnectionStatus(true, '채팅 서버에 연결됨');
+         });
+
+         event.target.value = null;
+     }
+
+     // [필수 확인] 이 함수도 함께 있어야 합니다.
+     // 이미지 URL을 포함한 메시지를 웹소켓으로 전송하는 함수입니다.
+     function sendImageMessage(imageUrl) {
+         if (!websocket || websocket.readyState !== WebSocket.OPEN) {
+             alert("채팅 서버에 연결되지 않았습니다.");
+             return;
+         }
+
+         try {
+             const messageData = {
+                 roomNo: roomNo,
+                 userId: currentUserId,
+                 message: "(사진)",
+                 imageUrl: imageUrl,
+                 type: "chat",
+                 sendTime: new Date().toISOString()
+             };
+             
+             console.log("이미지 메시지 전송:", messageData);
+             
+             const messageId = generateMessageId(messageData);
+             addToSentMessages(messageId);
+             
+             websocket.send(JSON.stringify(messageData));
+
+             displayMessageOnScreen(messageData.userId, messageData.message, messageData.imageUrl, messageData.sendTime, messageId);
+
+         } catch (e) {
+             console.error("이미지 메시지 전송 오류:", e);
+             alert("이미지 메시지 전송에 실패했습니다.");
+         }
+     }
+        
     </script>
 
 	<%-- Footer Include --%>
