@@ -34,4 +34,6 @@ public interface ChatService {
     // 새롭게 추가된 메서드들: Controller에서 직접 DAO를 호출하는 대신 Service를 통해 호출
     String selectOtherParticipantId(Map<String, Object> params);
     String selectUserNameByUserId(String userId);
+    String getUserIdByUserNo(int userNo);
+
 }

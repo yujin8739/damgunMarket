@@ -129,4 +129,8 @@ public class ChatServiceImpl implements ChatService {
     public String selectUserNameByUserId(String userId) {
         return chatDAO.selectUserNameByUserId(userId);
     }
+    @Override
+    public String getUserIdByUserNo(int userNo) {
+        return chatDAO.selectUserIdByUserNo(userNo);
+    }
 }
