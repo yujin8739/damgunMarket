@@ -129,16 +129,27 @@
 			</div>
 	    </div>
 	    
-	    <c:if test="${sessionScope.loginUser.userNo == product.userNo}">
+	    <c:if test="${sessionScope.loginUser.userNo == product.userNo && enrollStatus != '판매완료'}">
 	        <div style="margin-top: 20px; text-align: right;">
-	            <form action="${pageContext.request.contextPath}/product/delete" method="post"
-	                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
-	                <input type="hidden" name="pdNum" value="${product.pdNum}" />
-	                <input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo}" />
-	                <button type="submit" style="background-color: #ff5c5c; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
-	                    삭제
-	                </button>
-	            </form>
+				<div id="editBtnBox"; style="display: flex; gap: 10px; text-align: right;justify-content: flex-end;">
+				    <form action="${pageContext.request.contextPath}/product/delete" method="post"
+				          onsubmit="return confirm('정말 삭제하시겠습니까?');" style="margin: 0;">
+				        <input type="hidden" name="pdNum" value="${product.pdNum}" />
+				        <input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo}" />
+				        <button id="deleteBtn"  type="submit" style="background-color: #ff5c5c; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+				            삭제
+				        </button>
+				    </form>
+				    <form action="${pageContext.request.contextPath}/product/pdedit" method="get"
+				          onsubmit="return confirm('정말 수정하시겠습니까?');" style="margin: 0;">
+				        <input type="hidden" name="pdNum" value="${product.pdNum}" />
+				        <input type="hidden" name="userNo" value="${product.userNo}" />
+				        <button id="editBtn" type="submit" style="background-color: green; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+				            수정
+				        </button>
+				    </form>
+				</div>
+
 	        </div>
 	    </c:if>
 	    
@@ -149,7 +160,7 @@
 	            <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" />
 	            <input type="hidden" name="userNo" value="${product.userNo}" />         <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" /> <button id="chatButton" type="button" 
                 onclick="startChatWithSeller(${product.userNo}, ${sessionScope.loginUser.userNo})"  style="cursor: pointer; background-color: black; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
-           		채팅하기
+           			채팅하기
         		</button>
 	            <button id="tradeButton" type="button"  onclick="doEnrollProcess(${product.pdNum}, ${product.userNo},${sessionScope.loginUser.userNo},'거래신청')"  style="display: none; cursor: pointer; background-color: green; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
 					거래신청
@@ -268,6 +279,11 @@
 							$('#enrollEndButton').hide()
 						}
 					}
+	    		    
+	    		    if (status === '판매완료') {
+	    		    	$('#editBtn').hide();
+	    		    	$('#deleteBtn').hide()
+	    		    }
 				},
 				error: function () {
 					alert("거래 시도에 실패했습니다.");
@@ -290,6 +306,7 @@
 		    	doEnrollProcess(pdNum, sellerNo, null, null);
 			}
 		    checkStation();
+		    
 	        // 기존 이미지 로딩 스크립트
 	        const imageContainer = document.getElementById("imageContainer");
 	        const jsonData = document.getElementById("json-data").dataset.json;

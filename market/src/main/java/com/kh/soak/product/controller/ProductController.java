@@ -192,12 +192,12 @@ public class ProductController {
 	
 
 	/*김진우 추가*/
-	@GetMapping("product/edit")
-    public String showEditPage(@RequestParam("pdNum") int pdNum, HttpSession session, Model model) {
+	@GetMapping("product/pdedit")
+    public String showEditPage(@RequestParam("userNo") int userNo,@RequestParam("pdNum") int pdNum, HttpSession session, Model model) {
         Member loginUser = (Member) session.getAttribute("loginUser");
 
         if (loginUser == null) {
-            return "redirect:/login";
+            return "redirect:/";
         }
 
         Product product = service.editProduct(pdNum); // → 다음 단계에서 구현할 서비스 메서드
@@ -206,6 +206,17 @@ public class ProductController {
             return "error-403";
         }
 
+	    List<String> fileList = service.selectFiles(pdNum, userNo);
+	    ObjectMapper mapper = new ObjectMapper();
+	    String fileListJson = null;
+		try {
+			fileListJson = mapper.writeValueAsString(fileList);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // JSON 문자열로 변환
+
+	    model.addAttribute("fileListJson", fileListJson); // 문자열 그대로 전달
         model.addAttribute("product", product);
         model.addAttribute("bigCategoryList", eService.selectBigCateList());
 
@@ -238,25 +249,85 @@ public class ProductController {
 	    return scheme + "://" + serverName + ":" + serverPort + contextPath;
 	}
 		
-	//사용자가 폼에 작성한 내용을 받아서 DB에 업데이트하고 상세보기 페이지로 리다이렉트
 	@PostMapping("product/edit")
 	public String submitEditProduct(@ModelAttribute Product product,
-									HttpSession session,
-									RedirectAttributes redirectAttributes) {
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		if (loginUser == null || loginUser.getUserNo() != product.getUserNo()) {
-			return "error-403";
-		}
+	                                @RequestParam("uploadFiles") MultipartFile[] uploadFiles,
+	                                @RequestParam(value = "existingFiles", required = false) List<String> existingFiles,
+	                                HttpSession session,
+	                                RedirectAttributes redirectAttributes,
+	                                HttpServletRequest request) throws Exception {
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser == null || loginUser.getUserNo() != product.getUserNo()) {
+	        return "error-403";
+	    }
 
-		int result = service.updateProductByPdNumUserNo(product);
-		if (result > 0) {
-			redirectAttributes.addFlashAttribute("msg", "수정 성공");
-			return "redirect:/product/view?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
-		} else {
-			redirectAttributes.addFlashAttribute("msg", "수정 실패");
-			return "redirect:/product/edit?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
-		}
+	    int result = service.updateProductByPdNumUserNo(product);
+	    if (result > 0) {
+	        int userNo = product.getUserNo();
+	        int pdNum = product.getPdNum();
+
+	        // 기존 파일 모두 삭제
+	        int fdResult = service.deletePdFiles(userNo, pdNum);
+	        if (fdResult > 0) {
+	            // 기존 existingFiles 다시 저장
+	            if (existingFiles != null) {
+	                for (int i = 0; i < existingFiles.size() && i < 5; i++) {
+	                    String fileUrl = existingFiles.get(i);
+	                    PdFile pdFile = new PdFile();
+	                    pdFile.setUserNo(userNo);
+	                    pdFile.setPdNum(pdNum);
+	                    pdFile.setFileNo(i);
+	                    pdFile.setPdUrl(fileUrl);
+	                    pdFile.setFileType("IMG");
+	                    pdFile.setIsThumbnail(i == 0 ? "Y" : "N");
+	                    pdFile.setIsSub("N");
+
+	                    int fResult = service.insertPdFiles(pdFile);
+	                    if (fResult <= 0) return "errorPage";
+	                }
+	            }
+
+	            // 업로드 파일 저장
+	            String savePath = "C:\\damgunUpload\\files\\product\\";
+	            File dir = new File(savePath);
+	            if (!dir.exists()) dir.mkdirs();
+
+	            int startIndex = (existingFiles != null) ? existingFiles.size() : 0;
+
+	            for (int i = 0; i < uploadFiles.length && (startIndex + i) < 5; i++) {
+	                MultipartFile uploadFile = uploadFiles[i];
+	                if (!uploadFile.isEmpty()) {
+	                    String originalFilename = uploadFile.getOriginalFilename();
+	                    String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+	                    String renamedFilename = UUID.randomUUID().toString() + extension;
+
+	                    // 파일 저장
+	                    File dest = new File(savePath + renamedFilename);
+	                    uploadFile.transferTo(dest);
+
+	                    PdFile pdFile = new PdFile();
+	                    pdFile.setUserNo(userNo);
+	                    pdFile.setPdNum(pdNum);
+	                    pdFile.setFileNo(startIndex + i); // 기존 파일 뒤에 이어 붙이기
+	                    pdFile.setPdUrl(getServerUrl(request) + "/file/view?types=product&fileName=" + renamedFilename);
+	                    pdFile.setFileType("IMG");
+	                    pdFile.setIsThumbnail((startIndex + i == 0) ? "Y" : "N");
+	                    pdFile.setIsSub("N");
+
+	                    int fResult = service.insertPdFiles(pdFile);
+	                    if (fResult <= 0) return "errorPage";
+	                }
+	            }
+	        }
+
+	        redirectAttributes.addFlashAttribute("msg", "수정 성공");
+	        return "redirect:/product/view?pdNum=" + pdNum + "&userNo=" + userNo;
+	    } else {
+	        redirectAttributes.addFlashAttribute("msg", "수정 실패");
+	        return "redirect:/product/edit?pdNum=" + product.getPdNum() + "&userNo=" + product.getUserNo();
+	    }
 	}
+
 		
 	@RequestMapping(value = "product/myPdList",produces = "application/json;charset=UTF-8")
 	@ResponseBody
