@@ -464,8 +464,7 @@
 		        ) THEN '거래신청'
 		        ELSE '판매중'
 		    END AS STATUS
-		FROM DUAL
-		
+		FROM DUAL		
 	</select>
 	
 	<insert id="tradeEnroll">
