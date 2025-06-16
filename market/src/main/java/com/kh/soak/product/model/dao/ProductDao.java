@@ -82,12 +82,22 @@ public class ProductDao {
 
 	
 	public int deleteProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
-		
-	    //(deleteProductFilesByPdNumUserNo, deleteProductByPdNumUserNo)
-	    int fileDeleteCount = sqlSession.delete("productMapper.deleteProductFilesByPdNumUserNo", Map.of("pdNum", pdNum, "userNo", userNo));
-	    int productDeleteCount = sqlSession.delete("productMapper.deleteProductByPdNumUserNo", Map.of("pdNum", pdNum, "userNo", userNo));
-	    
-	    return productDeleteCount > 0 ? 1 : 0;
+		// 기존 상품 삭제와 파일 삭제
+		int fileDeleteCount = sqlSession.delete("productMapper.deleteProductFilesByPdNumUserNo",
+				Map.of("pdNum", pdNum, "userNo", userNo));
+		int productDeleteCount = sqlSession.delete("productMapper.deleteProductByPdNumUserNo",
+				Map.of("pdNum", pdNum, "userNo", userNo));
+
+		return productDeleteCount > 0 ? 1 : 0;
+	}
+
+	public int deleteTradeStation(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		return sqlSession.delete("etcMapper.deleteTradeStationByPdNumUserNo",
+				Map.of("pdNum", pdNum, "userNo", userNo));
+	}
+	
+	public Product editProduct(SqlSessionTemplate sqlSession, int pdNum) {
+	    return sqlSession.selectOne("productMapper.editProduct", pdNum);
 	}
 	
 

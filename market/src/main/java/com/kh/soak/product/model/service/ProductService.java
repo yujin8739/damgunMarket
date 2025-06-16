@@ -29,6 +29,8 @@ public interface ProductService {
 	int updateProductByPdNumUserNo(Product product);
 
 	List<Object> favoriteList(int userNo, RowBounds rowBounds);
+	Product editProduct(int pdNum);
+
 	List<Object> selectMyPdList(RowBounds rowBounds, int List);
 	
 	String checkPdEnroll(int pdNum, int userNo);
