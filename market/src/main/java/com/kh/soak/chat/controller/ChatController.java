@@ -1,28 +1,36 @@
-package com.kh.soak.chat.controller;
+package com.kh.soak.chat.controller; // 본인의 패키지 경로
 
+//--- 아래 import 구문들을 추가하거나 확인해주세요 ---
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap; // uploadImage 메소드에서 사용
+import java.util.Map;     // uploadImage 메소드에서 사용
+import javax.servlet.http.HttpServletRequest; // 추가
+import org.springframework.web.multipart.MultipartFile; // 추가
+
+//--- 기존에 있던 다른 import 구문들 ---
 import com.kh.soak.chat.model.service.ChatService;
 import com.kh.soak.chat.model.vo.ChatParticipantVO;
 import com.kh.soak.chat.model.vo.ChatRoomVO;
 import com.kh.soak.chat.model.vo.MessageVO;
+// ... (기타 필요한 VO 및 Service 클래스 import)
 import com.kh.soak.member.model.vo.Member;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger; // 추가
-import org.slf4j.LoggerFactory; // 추가
-
 @Controller
 @RequestMapping("/chat")
 public class ChatController {
-
 
 	@Autowired
 	private ChatService chatService;
@@ -109,8 +117,68 @@ public class ChatController {
 		mv.addObject("messages", messages);
 		mv.addObject("currentUserId", userId);
 		mv.setViewName("chat/chatDetail");
-		
+
 //커밋하고 풀 해보자 
 		return mv;
 	}
+	// ChatController.java 안에 이 메소드를 추가하세요.
+
+	@PostMapping("/uploadImage")
+	@ResponseBody
+	public Map<String, Object> uploadImage(@RequestParam("image") MultipartFile image, HttpServletRequest request) {
+		Map<String, Object> response = new HashMap<>();
+
+		// 파일이 비어있는지 확인
+		if (image == null || image.isEmpty()) {
+			response.put("status", "fail");
+			response.put("message", "이미지 파일이 전송되지 않았습니다.");
+			return response;
+		}
+
+		try {
+			// saveFile 메소드를 호출하여 파일을 저장하고, 저장된 파일명을 받습니다.
+			String savedFileName = saveFile(image, request);
+
+			// 클라이언트에서 접근할 수 있는 URL 경로를 생성합니다.
+			// request.getContextPath()는 "/soak" 같은 컨텍스트 경로를 반환합니다.
+			String imageUrl = request.getContextPath() + "/resources/uploadFiles/" + savedFileName;
+
+			response.put("status", "success");
+			response.put("imageUrl", imageUrl);
+			response.put("message", "이미지 업로드 성공");
+
+		} catch (IOException e) {
+			response.put("status", "fail");
+			response.put("message", "이미지 업로드 중 오류 발생: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return response;
+	}
+
+	// 기존에 다른 곳에 있던 saveFile 메소드를 ChatController 안으로 가져오거나,
+	// 혹은 공통 유틸리티 클래스에 있다면 그대로 사용합니다.
+	// 여기서는 Controller 내에 private 메소드로 두는 것을 가정합니다.
+	private String saveFile(MultipartFile upfile, HttpServletRequest request) throws IOException {
+		String savePath = request.getSession().getServletContext().getRealPath("/resources/uploadFiles/");
+
+		File uploadDir = new File(savePath);
+		if (!uploadDir.exists()) {
+			uploadDir.mkdirs();
+		}
+
+		String originalFileName = upfile.getOriginalFilename();
+		String ext = "";
+		if (originalFileName != null && originalFileName.contains(".")) {
+			ext = originalFileName.substring(originalFileName.lastIndexOf("."));
+		}
+
+		String savedFileName = System.currentTimeMillis() + ext;
+
+		File saveFile = new File(savePath, savedFileName); // 경로와 파일명을 분리하여 File 객체 생성
+		upfile.transferTo(saveFile);
+
+		return savedFileName;
+	}
+
 }
