@@ -92,14 +92,14 @@
 	#header {
 		width: 100%;
 		background-color: #a798f7;
-		padding-top: 60px;
+		padding-top: 8px;
 		box-sizing: border-box;
 		color: white;
 	}
 	
 	#header_1 {
 		position: relative;
-		height: 100px;
+		height: 75px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -591,17 +591,19 @@
    <div id="header">
       <div id="header_1">
       	  <div id="header_1_center">
-            <div class="title-icon">
-               <div class="jar-icon">
-                  <div class="jar-lid">
-                     <div class="jar-handle"></div>
-                  </div>
-                  <div class="jar-body">
-                     <div class="jar-inner"></div>
-                  </div>
-               </div>
-            </div>
-            <h1 class="floating">담금마켓</h1>
+      	  	<a href="${contextRoot}" style="text-decoration: none; color: white; display: flex; align-items: center; gap: 2px; align-items: flex-end;">
+	            <div class="title-icon">
+	               <div class="jar-icon">
+	                  <div class="jar-lid">
+	                     <div class="jar-handle"></div>
+	                  </div>
+	                  <div class="jar-body">
+	                     <div class="jar-inner"></div>
+	                  </div>
+	               </div>
+	            </div>	            
+      			<h1 class="floating">담금마켓</h1>
+   		 	</a>
          </div>		   	
          <div id="header_1_right">
 				<c:choose>
