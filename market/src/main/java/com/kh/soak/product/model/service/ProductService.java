@@ -40,4 +40,5 @@ public interface ProductService {
 	List<Product> selectHistoryList(int userNo, String status, RowBounds rowBounds);
 	List<Product> selectMyHistoryList(int userNo, String status, RowBounds rowBounds);
 	int selectHistoryUpdate(int pdNum, int userNo, String enrollNo, String status);
+	int deletePdFiles(int userNo, int pdNum);
 }

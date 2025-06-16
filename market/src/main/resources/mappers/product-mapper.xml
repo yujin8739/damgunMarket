@@ -40,12 +40,9 @@
 	        PD_TITLE = #{pdTitle},
 	        PD_BOARD = #{pdBoard},
 	        PD_PRICE = #{pdPrice},
-	        LATITUDE = #{latitude},
-	        LONGITUDE = #{longitude},
 	        BIG_CATE = #{bigCate},
 	        MID_CATE = #{midCate},
-	        SMALL_CATE = #{smallCate},
-	        UPDATE_TIME = SYSDATE
+	        SMALL_CATE = #{smallCate}
 	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</update>
 	
