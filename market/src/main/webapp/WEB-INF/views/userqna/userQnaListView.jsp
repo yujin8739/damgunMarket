@@ -169,51 +169,28 @@
             border: 1px solid #ffb300;
         }
         
-        /* 반응형 디자인 */
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 20px 15px;
-                border-radius: 15px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .search-form {
-                text-align: center;
-                padding: 15px;
-            }
-            
-            .search-input {
-                width: 90%;
-                max-width: 300px;
-            }
-            
-            .table {
-                font-size: 14px;
-            }
-            
-            .table th, .table td {
-                padding: 12px 8px;
-            }
-        }
+        .btn-group {
+		    display: flex;
+		    gap: 15px;
+		    align-items: center;
+		}
+		
+		.btn-home {
+		    background: linear-gradient(135deg, #7b68ee 0%, #9370db 100%);
+		    border-color: #5a52ff;
+		}
+        
     </style>
 </head>
-<body>
+<body>	
     <div class="container">
         <div class="header">
             <h1>문의사항</h1>
             <c:if test="${not empty loginUser}">
-                <a href="${contextPath}/userqna/enrollForm.uq" class="btn">문의하기</a>
+                <div class="btn-group">
+                    <a href="${contextPath}" class="btn btn-home">HOME</a>
+                    <a href="${contextPath}/userqna/enrollForm.uq" class="btn">문의하기</a>
+                </div>
             </c:if>
         </div>
         
