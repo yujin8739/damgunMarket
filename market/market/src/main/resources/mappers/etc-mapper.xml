@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace는 비어있을 수 없음 필수입력 요소 (해당 mapper를 부르는 별칭) -->
+<mapper namespace="etcMapper">
+	<resultMap type="Station" id="stationResultMap">
+		<result property="stationNum" column="STATION_NUM" />
+		<result property="stationName" column="STATION_NAME" />
+		<result property="lineName" column="LINE_NAME" />
+		<result property="latitude" column="LATITUDE" />
+		<result property="longitde" column="LONGITDE" />
+		<result property="address" column="ADDRESS" />
+	</resultMap>
+
+	<select id="bigCateList" resultType="string">
+		SELECT BIG_CATE FROM CATEGORY GROUP BY BIG_CATE
+	</select>
+	
+	<select id="midCateList" resultType="string">
+		SELECT MID_CATE FROM CATEGORY WHERE BIG_CATE='${bigCate}' GROUP BY MID_CATE
+	</select>
+	
+	<select id="smallCateList" resultType="string">
+		SELECT SMALL_CATE FROM CATEGORY WHERE BIG_CATE = #{bigCate} AND MID_CATE = #{midCate} GROUP BY SMALL_CATE
+	</select>
+	
+	<select id="selectNearStations" parameterType="map" resultMap="stationResultMap" resultType="Station">
+	    <![CDATA[
+	    SELECT * FROM (
+	        SELECT 
+	            STATION_NUM,
+	            STATION_NAME,
+	            LINE_NAME,
+	            LATITUDE,
+	            LONGITDE,
+	            ADDRESS,
+	            (6371 * ACOS(
+	                COS(#{lat} * 3.14159265359 / 180) * COS(LATITUDE * 3.14159265359 / 180) * 
+	                COS((LONGITDE * 3.14159265359 / 180) - (#{lng} * 3.14159265359 / 180)) +
+	                SIN(#{lat} * 3.14159265359 / 180) * SIN(LATITUDE * 3.14159265359 / 180)
+	            )) AS distance
+	        FROM STATION
+	        ORDER BY distance
+	    )
+	    WHERE ROWNUM <= 5
+	    ]]>
+	</select>
+	
+	<delete id="deleteTradeStationByPdNumUserNo">
+		DELETE FROM TRADE_STATION
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
+	</delete>
+
+	<select id="selectPdStationList" resultMap="stationResultMap" resultType="Station">
+	    SELECT 
+	        S.STATION_NUM,
+	        S.STATION_NAME,
+	        S.LINE_NAME,
+	        S.LATITUDE,
+	        S.LONGITDE,
+	        S.ADDRESS
+	    FROM STATION S
+	    WHERE S.STATION_NUM IN (
+	        SELECT TS.STATION_NUM
+	        FROM TRADE_STATION TS
+	        WHERE TS.USER_NO = #{userNo}
+	          AND TS.PD_NUM = #{pdNum}
+	    )
+	</select>
+	
+</mapper> 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+    
+    <resultMap id="boardResultSet" type="Board">
+        <result column="NOTICE_NUM" property="noticeNum"/>
+        <result column="NOTICE_TITLE" property="noticeTitle"/>
+        <result column="NOTICE" property="notice"/>  
+        <result column="NOTICE_IMG" property="noticeImg"/>
+        <result column="CREATEDATE" property="createdate"/>
+        <result column="MODIFYDATE" property="modifydate"/>
+    </resultMap>
+    
+    <select id="selectBoardList" resultMap="boardResultSet">
+        SELECT * FROM BOARD ORDER BY NOTICE_NUM DESC
+    </select>
+    
+    <select id="selectBoard" parameterType="_int" resultMap="boardResultSet">
+        SELECT * FROM BOARD WHERE NOTICE_NUM = #{noticeNum}
+    </select>
+    
+    <insert id="insertBoard" parameterType="Board">
+        INSERT INTO BOARD (NOTICE_NUM, NOTICE_TITLE, NOTICE, NOTICE_IMG)
+        VALUES (BOARD_NOTICE_NUM_SEQ.NEXTVAL, #{noticeTitle}, #{notice}, #{noticeImg})
+    </insert>
+    
+    <update id="updateBoard" parameterType="Board">
+    UPDATE BOARD SET 
+        NOTICE_TITLE = #{noticeTitle},
+        NOTICE = #{notice},
+        NOTICE_IMG = #{noticeImg},
+        MODIFYDATE = SYSDATE
+    WHERE NOTICE_NUM = #{noticeNum}
+</update>
+    
+    <delete id="deleteBoard" parameterType="_int">
+        DELETE FROM BOARD WHERE NOTICE_NUM = #{noticeNum}
+    </delete>
+    
+    <select id="searchBoard" parameterType="string" resultMap="boardResultSet">
+        SELECT * FROM BOARD 
+        WHERE NOTICE_TITLE LIKE '%'||#{keyword}||'%' 
+           OR NOTICE LIKE '%'||#{keyword}||'%'
+        ORDER BY NOTICE_NUM DESC
+    </select>
+    
+</mapper>

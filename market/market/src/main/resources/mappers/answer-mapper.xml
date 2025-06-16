@@ -1,0 +1,101 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="answerMapper">
+
+    <!-- AnswerInfo VO의 필드만 사용하는 ResultMap -->
+    <resultMap id="answerResultSet" type="AnswerInfo">
+        <result column="USERQNA_NUM" property="userQnaNum"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="ANSWER_TITLE" property="answerTitle"/>
+        <result column="ANSWER_QNA" property="answerQna"/>
+        <result column="ADMIN_NAME" property="adminName"/>
+        <!-- JOIN 시 사용할 문의사항 정보 -->
+        <result column="USERQNA_TITLE" property="userQnaTitle"/>
+        <result column="USERQNA" property="userQna"/>
+        <result column="USERQNA_IMG" property="userQnaImg"/>
+    </resultMap>
+    
+    <!-- 모든 문의사항을 답변 여부와 함께 조회 -->
+    <select id="selectAnswerList" resultMap="answerResultSet">
+        SELECT
+            u.USERQNA_NUM,
+            u.USER_NO,
+            u.USERQNA_TITLE,
+            u.USERQNA,
+            u.USERQNA_IMG,
+            a.ANSWER_TITLE,
+            a.ANSWER_QNA,
+            a.ADMIN_NAME
+        FROM USERQNA_INFO u
+        LEFT JOIN ANSWER_INFO a ON u.USERQNA_NUM = a.USERQNA_NUM
+        ORDER BY u.USERQNA_NUM DESC
+    </select>
+    
+    <!-- 특정 문의사항의 답변 조회 -->
+    <select id="selectAnswer" parameterType="_int" resultMap="answerResultSet">
+	    SELECT 
+	        USERQNA_NUM,
+	        USER_NO,
+	        ANSWER_TITLE,
+	        ANSWER_QNA,
+	        ADMIN_NAME
+	    FROM ANSWER_INFO
+	    WHERE USERQNA_NUM = #{userQnaNum}
+	</select>
+	    
+    <!-- 답변 등록 -->
+    <insert id="insertAnswer" parameterType="AnswerInfo">
+        INSERT INTO ANSWER_INFO (USERQNA_NUM, USER_NO, ANSWER_TITLE, ANSWER_QNA, ADMIN_NAME)
+        VALUES (#{userQnaNum}, #{userNo}, #{answerTitle}, #{answerQna}, #{adminName})
+    </insert>
+    
+    <!-- 답변 수정 -->
+    <update id="updateAnswer" parameterType="AnswerInfo">
+        UPDATE ANSWER_INFO SET 
+            ANSWER_TITLE = #{answerTitle},
+            ANSWER_QNA = #{answerQna},
+            ADMIN_NAME = #{adminName}
+        WHERE USERQNA_NUM = #{userQnaNum}
+    </update>
+    
+    <!-- 답변 삭제 -->
+    <delete id="deleteAnswer" parameterType="_int">
+        DELETE FROM ANSWER_INFO WHERE USERQNA_NUM = #{userQnaNum}
+    </delete>
+    
+    <!-- 유저별 답변 목록 조회 -->
+    <select id="selectAnswersByUser" parameterType="_int" resultMap="answerResultSet">
+        SELECT 
+            u.USERQNA_NUM,
+            u.USER_NO,
+            u.USERQNA_TITLE,
+            u.USERQNA,
+            u.USERQNA_IMG,
+            a.ANSWER_TITLE,
+            a.ANSWER_QNA,
+            a.ADMIN_NAME
+        FROM USERQNA_INFO u
+        LEFT JOIN ANSWER_INFO a ON u.USERQNA_NUM = a.USERQNA_NUM
+        WHERE u.USER_NO = #{userNo} 
+        ORDER BY u.USERQNA_NUM DESC
+    </select>
+	<!-- QNA 번호로 답변 조회 -->
+<select id="selectAnswerByQnaNum" parameterType="_int" resultMap="answerResultSet">
+    SELECT 
+        USERQNA_NUM,
+        USER_NO,
+        ANSWER_TITLE,
+        ANSWER_QNA,
+        ADMIN_NAME
+    FROM ANSWER_INFO
+    WHERE USERQNA_NUM = #{userQnaNum}
+</select>
+
+    
+    <select id="hasAnswer" parameterType="_int" resultType="_int">
+	    SELECT COUNT(*) FROM ANSWER_INFO WHERE USERQNA_NUM = #{userQnaNum}
+	</select>
+	
+	
+</mapper>
