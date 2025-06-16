@@ -168,7 +168,7 @@
                         </div>
                         <br>
                             <label for="passWord" class="mr-sm-2">Password : </label>
-                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deleteUserPwd" name="userPwd"> <br>
+                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deletePassWord" name="passWord"> <br>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer" align="center">

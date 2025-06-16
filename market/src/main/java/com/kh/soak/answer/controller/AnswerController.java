@@ -37,6 +37,12 @@ public class AnswerController {
         // UserQna에서 모든 문의사항을 가져옴
         List<UserQnaInfo> userQnaList = userQnaService.selectUserQnaList();
         
+        // 각 문의사항에 대해 실제 답변이 있는지 확인하여 상태 업데이트
+        for(UserQnaInfo qna : userQnaList) {
+            AnswerInfo answer = answerService.selectAnswerByQnaNum(qna.getUserQnaNum());
+            qna.setStatus(answer != null);
+        }
+        
         model.addAttribute("list", userQnaList);
         return "answer/answerListView";
     }
@@ -50,6 +56,11 @@ public class AnswerController {
         
         // 답변 정보 조회 (있을 수도 없을 수도 있음)
         AnswerInfo answer = answerService.selectAnswer(userQnaNum);
+        
+        // 실제 답변 존재 여부로 상태 업데이트
+        if(userQna != null) {
+            userQna.setStatus(answer != null);
+        }
         
         model.addAttribute("userQna", userQna);
         model.addAttribute("answer", answer);
@@ -68,7 +79,6 @@ public class AnswerController {
         return "answer/answerEnrollForm";
     }
     
-
     @PostMapping("insert.an")
     public String insertAnswer(AnswerInfo answer, HttpSession session, Model model) {
         
@@ -77,6 +87,9 @@ public class AnswerController {
         int result = answerService.insertAnswer(answer);
         
         if(result > 0) {
+            // 답변이 성공적으로 등록되면 해당 문의사항의 status를 true로 업데이트
+            updateUserQnaStatus(answer.getUserQnaNum(), true);
+            
             session.setAttribute("alertMsg", "답변이 성공적으로 등록되었습니다.");
             return "redirect:/answer/list.an";
         } else {
@@ -102,6 +115,9 @@ public class AnswerController {
         int result = answerService.updateAnswer(answer);
         
         if(result > 0) {
+            // 답변이 수정되어도 여전히 답변이 존재하므로 status는 true 유지
+            updateUserQnaStatus(answer.getUserQnaNum(), true);
+            
             session.setAttribute("alertMsg", "답변이 성공적으로 수정되었습니다.");
             return "redirect:/answer/detail.an?qno=" + answer.getUserQnaNum();
         } else {
@@ -116,6 +132,9 @@ public class AnswerController {
         int result = answerService.deleteAnswer(userQnaNum);
         
         if(result > 0) {
+            // 답변이 삭제되면 해당 문의사항의 status를 false로 업데이트
+            updateUserQnaStatus(userQnaNum, false);
+            
             session.setAttribute("alertMsg", "답변이 성공적으로 삭제되었습니다.");
             return "redirect:/answer/list.an";
         } else {
@@ -139,5 +158,24 @@ public class AnswerController {
         Map<String, Boolean> result = new HashMap<>();
         result.put("hasAnswer", answerService.hasAnswer(userQnaNum));
         return result;
+    }
+    
+    /**
+     * 문의사항의 답변 상태를 업데이트하는 메소드
+     * @param userQnaNum 문의사항 번호
+     * @param status 답변 상태 (true: 답변완료, false: 답변대기)
+     */
+    private void updateUserQnaStatus(int userQnaNum, boolean status) {
+        try {
+            UserQnaInfo userQna = userQnaService.selectUserQna(userQnaNum);
+            if(userQna != null) {
+                userQna.setStatus(status);
+                userQnaService.updateUserQna(userQna);
+                System.out.println("문의사항 " + userQnaNum + "의 상태를 " + (status ? "답변완료" : "답변대기") + "로 업데이트했습니다.");
+            }
+        } catch (Exception e) {
+            System.out.println("문의사항 상태 업데이트 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

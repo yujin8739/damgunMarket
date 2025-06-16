@@ -20,12 +20,7 @@ public class AdminServiceImpl implements AdminService {
     public Admin loginAdmin(Admin admin) {
         return dao.loginAdmin(sqlSession, admin);
     }
-    
-    @Override
-    public int insertAdmin(Admin admin) {
-        return dao.insertAdmin(sqlSession, admin);
-    }
-    
+
     @Override
     public int updateAdmin(Admin admin) {
         return dao.updateAdmin(sqlSession, admin);
