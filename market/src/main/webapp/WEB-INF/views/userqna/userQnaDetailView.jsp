@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -116,7 +117,18 @@
         <div class="detail-header">
             <div class="detail-title">${userQna.userQnaTitle}</div>
             <div class="detail-info">
-                작성자: 회원${userQna.userNo} | 작성일: 2024-01-01 | 문의번호: ${userQna.userQnaNum}
+                작성일: 
+                <c:choose>
+                    <c:when test="${not empty userQna.createdate}">
+                        <fmt:formatDate value="${userQna.createdate}" pattern="yyyy-MM-dd HH:mm"/>
+                    </c:when>
+                    <c:otherwise>
+                        등록일 없음
+                    </c:otherwise>
+                </c:choose>
+                <br>
+                작성자: <span>${loginUser.userName}님</span><br>
+                문의번호: ${userQna.userQnaNum}
             </div>
         </div>
         
@@ -130,11 +142,27 @@
             </div>
         </c:if>
         
-        <!-- 관리자 답변 영역 (나중에 구현) -->
+        <!-- 관리자 답변 영역 -->
         <div class="answer-section">
             <div class="answer-title">📝 관리자 답변</div>
             <div class="answer-content">
-                아직 답변이 등록되지 않았습니다.
+                <c:choose>
+                    <c:when test="${not empty answer and not empty answer.answerQna}">
+                        <!-- 답변이 있는 경우 -->
+                        <div class="answer-header">
+                            <strong>제목:</strong> ${answer.answerTitle}<br>
+                            <strong>답변자:</strong> ${answer.adminName}<br>
+                            <hr style="margin: 15px 0; border: 1px solid #ddd;">
+                        </div>
+                        <div class="answer-text">
+                            ${answer.answerQna}
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- 답변이 없는 경우 -->
+                        아직 답변이 등록되지 않았습니다.
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
         
