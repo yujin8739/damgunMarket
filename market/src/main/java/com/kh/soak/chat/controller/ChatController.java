@@ -3,21 +3,14 @@ package com.kh.soak.chat.controller; // 본인의 패키지 경로
 //--- 아래 import 구문들을 추가하거나 확인해주세요 ---
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap; // uploadImage 메소드에서 사용
-import java.util.Map;     // uploadImage 메소드에서 사용
-import javax.servlet.http.HttpServletRequest; // 추가
-import org.springframework.web.multipart.MultipartFile; // 추가
-
-//--- 기존에 있던 다른 import 구문들 ---
-import com.kh.soak.chat.model.service.ChatService;
-import com.kh.soak.chat.model.vo.ChatParticipantVO;
-import com.kh.soak.chat.model.vo.ChatRoomVO;
-import com.kh.soak.chat.model.vo.MessageVO;
-// ... (기타 필요한 VO 및 Service 클래스 import)
-import com.kh.soak.member.model.vo.Member;
 import java.util.Date;
+import java.util.HashMap; // uploadImage 메소드에서 사용
 import java.util.List;
+import java.util.Map; // uploadImage 메소드에서 사용
+
+import javax.servlet.http.HttpServletRequest; // 추가
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +20,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile; // 추가
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+//--- 기존에 있던 다른 import 구문들 ---
+import com.kh.soak.chat.model.service.ChatService;
+import com.kh.soak.chat.model.vo.ChatParticipantVO;
+import com.kh.soak.chat.model.vo.ChatRoomVO;
+import com.kh.soak.chat.model.vo.MessageVO;
+// ... (기타 필요한 VO 및 Service 클래스 import)
+import com.kh.soak.member.model.vo.Member;
+
 @Controller
 @RequestMapping("/chat")
 public class ChatController {
@@ -181,4 +185,84 @@ public class ChatController {
 		return savedFileName;
 	}
 
+	@GetMapping("/startChat")
+	public String startChat(@RequestParam("productSellerNo") int productSellerNo,
+			@RequestParam("loginUserNo") int loginUserNo, RedirectAttributes redirectAttributes) {
+		System.out.println(
+				"DEBUG: startChat called with productSellerNo: " + productSellerNo + ", loginUserNo: " + loginUserNo); // DEBUG
+																														// LOG
+
+		String productSellerId = chatService.getUserIdByUserNo(productSellerNo);
+		String loginUserId = chatService.getUserIdByUserNo(loginUserNo);
+
+		if (productSellerId == null || loginUserId == null) {
+			System.err.println("ERROR: User ID not found for given user numbers. SellerNo: " + productSellerNo
+					+ ", LoginUserNo: " + loginUserNo); // ERROR LOG
+			redirectAttributes.addFlashAttribute("errorMessage", "사용자 정보를 찾을 수 없습니다.");
+			return "redirect:/errorPage";
+		}
+		System.out.println("INFO: Resolved User IDs: SellerId=" + productSellerId + ", LoginUserId=" + loginUserId); // INFO
+																														// LOG
+
+		ChatRoomVO chatRoom = chatService.getOrCreateChatRoom(productSellerId, loginUserId);
+
+		if (chatRoom != null) {
+			redirectAttributes.addAttribute("roomNo", chatRoom.getRoomNo());
+			System.out.println("INFO: Redirecting to chat detail for RoomNo: " + chatRoom.getRoomNo()); // INFO LOG
+			return "redirect:/chat/detail";
+		} else {
+			System.err.println("ERROR: Failed to create/retrieve chat room for sellerId: " + productSellerId
+					+ ", loginUserId: " + loginUserId); // ERROR LOG
+			redirectAttributes.addFlashAttribute("errorMessage", "채팅방을 시작할 수 없습니다.");
+			return "redirect:/errorPage";
+		}
+	}
+	
+//	-----------------------------------------------------------------------
+	@GetMapping("/detail")
+	public ModelAndView detail(@RequestParam("roomNo") int roomNo, HttpSession session) { // PathVariable 대신 RequestParam 사용
+		ModelAndView mv = new ModelAndView();
+		System.out.println("DEBUG: chatDetail (formerly enterChatRoom) called for roomNo: " + roomNo);
+		Member loginUser = (Member) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
+			System.out.println("INFO: User not logged in, redirecting to root.");
+			mv.setViewName("redirect:/");
+			return mv;
+		}
+
+		String userId = loginUser.getUserId();
+
+		ChatRoomVO chatRoom = chatService.getChatRoomByRoomNo(roomNo);
+		if (chatRoom == null) {
+			System.err.println("ERROR: Chat room not found for roomNo: " + roomNo);
+			mv.setViewName("common/errorPage");
+			mv.addObject("msg", "존재하지 않는 채팅방입니다.");
+			return mv;
+		}
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("roomNo", roomNo);
+		params.put("currentUserId", userId);
+
+		String otherUserId = chatService.selectOtherParticipantId(params);
+		if (otherUserId != null) {
+			chatRoom.setOtherUserId(otherUserId);
+			chatRoom.setOtherUserName(chatService.selectUserNameByUserId(otherUserId));
+		}
+		System.out.println("INFO: Chat details loaded for room " + roomNo + ". Other user: " + (chatRoom.getOtherUserName() != null ? chatRoom.getOtherUserName() : chatRoom.getOtherUserId()));
+
+		ChatParticipantVO participant = new ChatParticipantVO(roomNo, userId, new Date());
+		chatService.updateLastVisit(participant);
+		System.out.println("INFO: Last visit updated for user " + userId + " in room " + roomNo);
+
+		List<MessageVO> messages = chatService.getMessagesByRoomNo(roomNo);
+
+		mv.addObject("chatRoom", chatRoom);
+		mv.addObject("messages", messages);
+		mv.addObject("currentUserId", userId);
+		mv.setViewName("chat/chatDetail"); // JSP 경로
+
+		return mv;
+	}
 }
