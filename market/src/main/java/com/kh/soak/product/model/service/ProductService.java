@@ -40,6 +40,6 @@ public interface ProductService {
 	List<Product> selectHistoryList(int userNo, String status, RowBounds rowBounds);
 	List<Product> selectMyHistoryList(int userNo, String status, RowBounds rowBounds);
 	int selectHistoryUpdate(int pdNum, int userNo, String enrollNo, String status);
-    int increaseProductRank(int pdNum, int points); // Takes product number and points to add
-
+    int deletePdFiles(int userNo, int pdNum);
+	int increaseProductRank(int pdNum, int points);
 }

@@ -24,10 +24,9 @@ public interface AnswerService {
     // 유저별 답변 목록 조회
     List<AnswerInfo> selectAnswersByUser(int userNo);
     
-    // 상품별 답변 목록 조회 (pdNum 사용)
-    List<AnswerInfo> selectAnswersByProduct(int pdNum);
-    
     // 답변 존재 여부 확인
     boolean hasAnswer(int userQnaNum);
     
+    // QNA 번호로 답변 조회
+    AnswerInfo selectAnswerByQnaNum(int userQnaNum);
 }

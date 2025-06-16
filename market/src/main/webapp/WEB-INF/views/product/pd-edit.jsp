@@ -38,6 +38,19 @@
             background-color: #0056b3;
             border-color: #0056b3;
         }
+        .image-preview {
+        position: relative;
+        display: inline-block;
+	    }
+	    .image-preview .delete-btn {
+	        position: absolute;
+	        top: 5px;
+	        right: 5px;
+	        font-size: 16px;
+	        line-height: 1;
+	        padding: 4px 8px;
+	        border-radius: 50%;
+	    }
     </style>
 </head>
 <body>
@@ -47,7 +60,7 @@
     <div class="form-container">
         <h2 class="form-title">상품 수정</h2>
 
-        <form action="${pageContext.request.contextPath}/product/update" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/product/edit" method="post" enctype="multipart/form-data">
             <!-- 숨겨진 상품 번호 -->
             <input type="hidden" name="pdNum" value="${product.pdNum}" />
 
@@ -94,22 +107,16 @@
                 <textarea class="form-control" id="pdBoard" name="pdBoard" rows="6"
                           required maxlength="2000">${product.pdBoard}</textarea>
             </div>
-
-            <!-- 기존 이미지 미리보기 (선택적) -->
-            <c:if test="${not empty product.pd_url}">
-                <div class="form-group">
-                    <label class="form-label">기존 대표 이미지</label><br>
-                    <img src="${product.pd_url}"
-                         alt="기존 이미지" width="150" style="border:1px solid #ccc; border-radius:8px;" />
-                </div>
-            </c:if>
-
-            <!-- 새 이미지 업로드 -->
-            <div class="form-group">
-                <label class="form-label">상품 이미지 수정</label>
-                <input type="file" class="form-control" name="uploadFile" accept="image/*" />
-                <small class="text-muted">수정할 경우 새 이미지를 선택해주세요.</small>
-            </div>
+            
+           <div class="form-group">
+                    <label class="form-label">상품 이미지 <span class="required">*</span></label>
+                    <div class="file-upload-area">
+                        <p class="mb-2">이미지를 선택해주세요 (최대 5장)</p>
+                       <input type="file" class="form-control" id="uploadFile" name="uploadFiles" multiple accept="image/*" required>
+                        <small class="text-muted">첫 번째 이미지가 대표 이미지로 설정됩니다.</small>
+                    </div>
+                    <div class="file-preview" id="filePreview"></div>
+           </div>
 
             <!-- 수정 버튼 -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
@@ -125,7 +132,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const serverPath = '${pageContext.request.contextPath}';
-
+    const fileList = JSON.parse('${fileListJson}');
+    
     $(document).ready(function () {
         $('#bigCate').change(function () {
             const bigCate = $(this).val();
@@ -157,6 +165,53 @@
                     });
                 }
             });
+        });
+     // 기존 파일 미리보기 추가
+        fileList.forEach(function (fileName, index) {
+            const previewHtml = `
+                <div class="image-preview position-relative d-inline-block me-2 mb-2">
+                    <img src="\${fileName}" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                    <button type="button" class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 delete-btn"
+                        data-file="\${fileName}" style="transform: translate(50%, -50%);">
+                        &times;
+                    </button>
+                    <input type="hidden" name="existingFiles" value="\${fileName}">
+                </div>`;
+            $('#filePreview').append(previewHtml);
+        });
+     	
+        $('#uploadFile').on('change', function (event) {
+            const files = event.target.files;
+            const previewContainer = $('#filePreview');
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // 이미지 파일만 처리
+                if (!file.type.startsWith('image/')) continue;
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const previewHtml = `
+                        <div class="image-preview position-relative d-inline-block me-2 mb-2">
+                            <img src="\${e.target.result}" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+                            <button type="button" class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 delete-btn"
+                                style="transform: translate(50%, -50%);">
+                                &times;
+                            </button>
+                        </div>`;
+                    previewContainer.append(previewHtml);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // 기존 이미지 삭제
+        $(document).on('click', '.delete-btn', function () {
+            const $preview = $(this).closest('.image-preview');
+            $preview.remove();
         });
     });
 </script>

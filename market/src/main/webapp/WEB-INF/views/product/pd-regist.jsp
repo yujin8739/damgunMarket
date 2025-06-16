@@ -134,7 +134,7 @@
 		    gap: 10px;
 		}
 		.station-list input[type="checkbox"] {
-		    display: none;
+		    
 		}
 		.station-item {
 		    display: inline-block;
@@ -228,7 +228,7 @@
                     
                     <!-- 소분류 -->
                     <div class="category-select">
-                        <select class="form-select" id="smallCtae" name="smallCtae" required disabled>
+                        <select class="form-select" id="smallCate" name="smallCate" required disabled>
                             <option value="">소분류를 선택해주세요</option>
                         </select>
                     </div>
@@ -353,7 +353,7 @@
             $('#bigCate').change(function() {
                 const bigCate = $(this).val();
                 const midCateSelect = $('#midCate');
-                const smallCateSelect = $('#smallCtae');
+                const smallCateSelect = $('#smallCate');
                 
                 // 하위 카테고리 초기화
                 midCateSelect.empty().append('<option value="">중분류를 선택해주세요</option>');
@@ -384,7 +384,7 @@
             $('#midCate').change(function() {
                 const bigCate = $('#bigCate').val();
                 const midCate = $(this).val();
-                const smallCateSelect = $('#smallCtae');
+                const smallCateSelect = $('#smallCate');
                 
                 smallCateSelect.empty().append('<option value="">소분류를 선택해주세요</option>');
                 
@@ -468,7 +468,7 @@
                     return false;
                 }
                 
-                if (!$('#bigCate').val() || !$('#midCate').val() || !$('#smallCtae').val()) {
+                if (!$('#bigCate').val() || !$('#midCate').val() || !$('#smallCate').val()) {
                     alert('카테고리를 모두 선택해주세요.');
                     e.preventDefault();
                     return false;

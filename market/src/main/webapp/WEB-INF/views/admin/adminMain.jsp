@@ -31,7 +31,6 @@
         <h3>관리자 시스템</h3>
         <!-- 🔥 HOME 링크 추가 -->
         <a href="${contextRoot}/" class="home-btn">🏠 HOME</a>
-        <a href="insert.ad">관리자 등록</a>
         <a href="../board/list.bo">공지사항 관리</a>
         <a href="../answer/list.an">답변 관리</a>
         <a href="../userqna/list.uq">문의사항 관리</a>

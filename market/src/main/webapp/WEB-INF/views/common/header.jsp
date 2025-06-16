@@ -86,6 +86,20 @@
 		border-radius: 4px;
 		font-size: 14px;
 		box-sizing: border-box;
+		transition: all 0.3s ease;
+	}
+	
+	#categorySearch:focus {
+		border-color: #7b68ee;
+		box-shadow: 0 0 8px rgba(123, 104, 238, 0.3);
+		outline: none;
+		background-color: #f8f7ff;
+	}
+	
+	#categorySearch.active-search {
+		border-color: #5a4fcf;
+		background-color: #f0efff;
+		box-shadow: 0 0 12px rgba(90, 79, 207, 0.4);
 	}
 	
 	/* header */
@@ -114,7 +128,7 @@
 		text-align: center;
 		display: flex;
 		align-items: center;
-		gap: 2px; /* 8px에서 5px로 줄여서 더 가깝게 */
+		gap: 2px;
 		align-items: flex-end;
 	}
 	
@@ -137,7 +151,7 @@
 	.jar-lid {
 		width: 30px;
 		height: 8px;
-		background: white; /* 보라색에서 흰색으로 변경 */
+		background: white;
 		border-radius: 15px 15px 4px 4px;
 		position: relative;
 		margin: 0 auto;
@@ -159,7 +173,7 @@
 	.jar-body {
 		width: 28px;
 		height: 32px;
-		background: white; /* 보라색에서 흰색으로 변경 */
+		background: white;
 		border-radius: 3px 3px 10px 10px;
 		position: relative;
 		margin: 2px auto 0;
@@ -169,7 +183,7 @@
 	.jar-inner {
 		width: 20px;
 		height: 24px;
-		background: #a798f7; /* 내부는 헤더 배경색 유지 */
+		background: #a798f7;
 		border-radius: 2px 2px 8px 8px;
 		position: absolute;
 		top: 4px;
@@ -238,10 +252,8 @@
 	}
 	
 	/* 광고 영역 */
-	
-	/* 기존 .hero 스타일을 이걸로 교체 */
 	.hero {
-		padding: 40px 20px;
+		padding: 15px 20px;
 		min-height: 300px;
 		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 		color: white;
@@ -395,42 +407,6 @@
 		font-size: 0.9rem;
 		opacity: 0.8;
 		margin: 0;
-	}
-	
-	@media (max-width: 768px) {
-		.banner-content {
-			flex-direction: column;
-			text-align: center;
-			gap: 30px;
-		}
-		.banner-text h1 {
-			font-size: 2.2rem;
-		}
-		.banner-stats {
-			margin-left: 0;
-			justify-content: center;
-		}
-		.banner-buttons {
-			justify-content: center;
-		}
-		.btn-primary, .btn-secondary {
-			min-width: 120px;
-			padding: 12px 25px;
-		}
-	}
-	
-	@media (max-width: 480px) {
-		.banner-stats {
-			flex-direction: column;
-			gap: 15px;
-		}
-		.stat-item {
-			padding: 15px;
-		}
-		.banner-buttons {
-			flex-direction: column;
-			align-items: center;
-		}
 	}
 	
 	/* 로그인 모달 스타일 */
@@ -609,7 +585,7 @@
 				<c:choose>
 					<c:when test="${empty loginUser and empty loginAdmin}">
 						<a href="${contextRoot}/insert.me">회원가입</a> 
-						<a href="#"id="loginLink">로그인</a>
+						<a href="#" id="loginLink">로그인</a>
 						<a href="#" id="adminLoginLink">관리자로그인</a>
 					</c:when>
 					<c:otherwise>
@@ -721,40 +697,94 @@
 
    <br clear="both" />
 
-   <!-- 사이드바 자동 닫힘 스크립트 -->
+   <!-- 수정: 사이드바 스마트 자동 닫힘 스크립트 -->
    <script>
       let sidebarTimer;
+      let inputTimer;
 
+ 
       function toggleSidebar() {
-    	    const sidebar = document.getElementById('sidebar');
-    	    const hamburger = document.getElementById('hamburger');
-    	    
-    	    sidebar.classList.toggle('open');
+          const sidebar = document.getElementById('sidebar');
+          const hamburger = document.getElementById('hamburger');
+          const searchInput = document.getElementById('categorySearch'); 
+          
+          sidebar.classList.toggle('open');
 
-    	    if (sidebar.classList.contains('open')) {
-    	        // 사이드바 열릴 때: 햄버거 천천히 사라짐
-    	        hamburger.classList.add('hide');
-    	        clearTimeout(sidebarTimer);
-    	        sidebarTimer = setTimeout(() => {
-    	            sidebar.classList.remove('open');
-    	            hamburger.classList.remove('hide');
-    	        }, 5000);
-    	    } else {
-    	        // 사이드바 닫힐 때: 햄버거 즉시 나타남
-    	        hamburger.classList.remove('hide');
-    	    }
-    	}
+          if (sidebar.classList.contains('open')) {
+              hamburger.classList.add('hide');
+              clearTimeout(sidebarTimer);
+              clearTimeout(inputTimer); // 
+              
+
+              function startSmartCloseTimer() {
+                  sidebarTimer = setTimeout(() => {
+                      if (document.activeElement !== searchInput && !searchInput.value.trim()) {
+                          sidebar.classList.remove('open');
+                          hamburger.classList.remove('hide');
+                          cleanupSearchEvents();
+                      } else {
+                          startSmartCloseTimer();
+                      }
+                  }, 5000); 
+              }
+              
+
+              function setupSearchEvents() {
+                  searchInput.addEventListener('focus', function() {
+                      clearTimeout(sidebarTimer);
+                      clearTimeout(inputTimer);
+                      this.classList.add('active-search');
+                  });
+                  
+                  searchInput.addEventListener('blur', function() {
+                      this.classList.remove('active-search');
+                      if (!this.value.trim()) {
+                          startSmartCloseTimer();
+                      }
+                  });
+                  
+                  searchInput.addEventListener('input', function() {
+                      clearTimeout(sidebarTimer);
+                      clearTimeout(inputTimer);
+                      
+                      inputTimer = setTimeout(() => {
+                          if (document.activeElement !== searchInput) {
+                              startSmartCloseTimer();
+                          }
+                      }, 3000);
+                  });
+                  
+                  searchInput.addEventListener('keypress', function(e) {
+                      if (e.key === 'Enter') {
+                              sidebar.classList.remove('open');
+                              hamburger.classList.remove('hide');
+                              cleanupSearchEvents();                        
+                      }
+                  });
+              }
+              
+              function cleanupSearchEvents() {
+                  searchInput.classList.remove('active-search');
+              }
+              
+              setupSearchEvents();
+              startSmartCloseTimer();
+              
+          } else {
+              hamburger.classList.remove('hide');
+              clearTimeout(sidebarTimer);
+              clearTimeout(inputTimer);
+          }
+      }
    </script>
 
    <!-- 통합된 DOM 로딩 완료 후 초기화 스크립트 -->
    <script>
    document.addEventListener('DOMContentLoaded', function() {
 	    // 로그인 모달 초기화
-	    initLoginModal();
-	    
+	    initLoginModal();	    
 	    // 관리자 모달 초기화
-	    initAdminModal();
-	    
+	    initAdminModal();	    
 	    // 카테고리 이벤트 초기화
 	    initCategoryEvents();
 	});
@@ -821,7 +851,6 @@
 	    }
 	}
 
-	// 카테고리 이벤트 관련 함수
 	function initCategoryEvents() {
 	    const categoryItems = document.querySelectorAll('#categoryList li[data-category]');
 	    
@@ -830,13 +859,11 @@
 	            const category = this.getAttribute('data-category');
 	            console.log('카테고리 선택:', category);
 	            
-	            // 검색어 설정
 	            const searchInput = document.getElementById('searchCategory');
 	            if (searchInput) {
 	                searchInput.value = category;
 	            }
 	            
-	            // 사이드바 닫기 + 햄버거 버튼 복원
 	            const sidebar = document.getElementById('sidebar');
 	            const hamburger = document.getElementById('hamburger');
 	            if (sidebar) {
@@ -846,7 +873,9 @@
 	                hamburger.classList.remove('hide');
 	            }
 	            
-	            // 검색 실행 (안전한 호출)
+	            clearTimeout(sidebarTimer);
+	            clearTimeout(inputTimer);
+	            
 	            if (typeof window.startSearch === 'function') {
 	                window.startSearch();
 	            } else {

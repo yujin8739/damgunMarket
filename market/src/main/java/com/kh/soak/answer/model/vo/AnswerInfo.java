@@ -18,6 +18,7 @@ public class AnswerInfo {
     private String userQnaTitle; // USERQNA_TITLE VARCHAR2(255) - 문의제목
     private String userQna;      // USERQNA CLOB - 문의내용
     private String userQnaImg;   // USERQNA_IMG VARCHAR2(255) - 문의이미지
-//    private int exuserNum;  // EXUSER_NUM
-//    private int pdNum;      // PD_NUM
+    private boolean STATUS;
+
 }
+
