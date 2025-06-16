@@ -241,7 +241,7 @@
 	
 	/* 기존 .hero 스타일을 이걸로 교체 */
 	.hero {
-		padding: 40px 20px;
+		padding: 15px 20px;
 		min-height: 300px;
 		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 		color: white;
