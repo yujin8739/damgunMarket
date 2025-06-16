@@ -564,5 +564,10 @@
 		  AND ENROLL_NUM = #{enrollNo}
 	</update>
 
+<!-- 	담구기 -->
+	 <update id="updateProductRank" parameterType="map">
+        UPDATE PRODUCT
+        SET PD_RANK = PD_RANK + #{rankChange}
+        WHERE PD_NUM = #{pdNum}
+    </update>
 </mapper>
-	

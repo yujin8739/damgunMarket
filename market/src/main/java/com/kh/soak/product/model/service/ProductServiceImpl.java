@@ -142,4 +142,12 @@ public class ProductServiceImpl implements ProductService {
 		return dao.selectyMyHistoryList(sqlSession, userNo, status, rowBounds);
 	}
 
+	 @Override
+	    public int increaseProductRank(int pdNum, int points) {
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("pdNum", pdNum);
+	        params.put("rankChange", points);
+	        return dao.updateProductRank(sqlSession, params); 
+	    }
+
 }

@@ -172,4 +172,8 @@ public class ProductDao {
 		param.put("status", status);
 		return sqlSession.update("productMapper.selectHistoryUpdate",param);
 	}
+	 public int updateProductRank(SqlSessionTemplate sqlSession, Map<String, Object> params) {
+	        return sqlSession.update("productMapper.updateProductRank", params);
+	    }
+
 }

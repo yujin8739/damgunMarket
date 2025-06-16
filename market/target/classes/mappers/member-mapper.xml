@@ -12,10 +12,11 @@
 		<result property="userName" column="USERNAME" />
 		<result property="email" column="EMAIL" />
 		<result property="status" column="STATUS" />
+		<result property="userRank" column="USERRANK" />
 		<result property="latitude" column="LATITUDE" />
 		<result property="longitude" column="LONGITUDE" />
 	</resultMap>
-	
+
 	<!-- 로그인 시 아이디로만 조회 (비밀번호는 컨트롤러에서 bcrypt로 비교) -->
 	<select id="loginMember" parameterType="Member" resultType="Member" resultMap="memberResultMap">
 		SELECT USER_NO
@@ -135,5 +136,18 @@
 		SET USERRANK = USERRANK + #{point}
 		WHERE USERID = #{userId}
 	</update>
+	
+
+    <select id="selectUserRank" parameterType="_int" resultType="_int">
+        SELECT USERRANK
+        FROM USER_INFO
+        WHERE USER_NO = #{userNo}
+    </select>
+
+    <update id="updateUserRank" parameterType="map">
+        UPDATE USER_INFO
+        SET USERRANK = USERRANK + #{rankChange}
+        WHERE USER_NO = #{userNo}
+    </update>
 
 </mapper>

@@ -102,6 +102,14 @@
 	    <p id="enrollStatus" style="cursor: pointer; color: green; font-size: 16px;"></p>
 	    <h1 style="display: flex; justify-content: space-between; align-items: center;">
 	    	${product.pdTitle}
+	    	<%-- 담구기 기능 추가 시작 --%>
+			<div style="display: flex; align-items: center;">
+				<input type="number" id="dampgugiPoints" min="1" value="1"
+					style="width: 80px; margin-right: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+				<button type="button" id="dampgugiButton"
+					style="cursor: pointer; background-color: #6a0dad; color: white; border: none; padding: 10px 16px; border-radius: 6px;">담구기</button>
+			</div>
+			<%-- 담구기 기능 추가 끝 --%>
 	    	<span id="favoriteStar" style="cursor: pointer; color: gold; font-size: 24px;">☆</span>
 		</h1>
 	    
@@ -132,7 +140,7 @@
 	    
 	    <c:if test="${sessionScope.loginUser.userNo == product.userNo && enrollStatus != '판매완료'}">
 	        <div style="margin-top: 20px; text-align: right;">
-				<div id="editBtnBox"; style="display: flex; gap: 10px; text-align: right;justify-content: flex-end;">
+				<div id="editBtnBox" style="display: flex; gap: 10px; text-align: right;justify-content: flex-end;">
 				    <form action="${pageContext.request.contextPath}/product/delete" method="post"
 				          onsubmit="return confirm('정말 삭제하시겠습니까?');" style="margin: 0;">
 				        <input type="hidden" name="pdNum" value="${product.pdNum}" />
@@ -362,7 +370,52 @@
 	        });
 	    });
 
-	</script>
+		    // 담구기 버튼 클릭 이벤트 핸들러
+		    $('#dampgugiButton').on('click', function() {
+		        const points = parseInt($('#dampgugiPoints').val());
+		        const currentUserNo = ${sessionScope.loginUser.userNo};
+		        const productSellerNo = ${product.userNo};
+		        const pdNum = ${product.pdNum};
+
+		        if (!currentUserNo || currentUserNo === 'null') {
+		            alert('로그인 후 이용해주세요.');
+		            return;
+		        }
+
+		        if (currentUserNo === productSellerNo) {
+		            alert('자신의 상품에는 포인트를 담글 수 없습니다.');
+		            return;
+		        }
+
+		        if (isNaN(points) || points <= 0) {
+		            alert('유효한 포인트를 입력해주세요 (1 이상의 숫자).');
+		            return;
+		        }
+
+		        $.ajax({
+		            url: serverPath + '/product/dampgugi',
+		            type: 'POST',
+		            data: {
+		                pdNum: pdNum,
+		                senderUserNo: currentUserNo,
+		                receiverUserNo: productSellerNo,
+		                points: points
+		            },
+		            success: function(response) {
+		                if (response.status === 'success') {
+		                    alert(points + '포인트를 상품에 담구었습니다!\n현재 상품 랭크: ' + response.updatedProductRank);
+		                    $('#productRankDisplay').text(response.updatedProductRank);
+		                } else {
+		                    alert(response.message);
+		                }
+		            },
+		            error: function() {
+		                alert('포인트 담구기 중 오류가 발생했습니다.');
+		            }
+		        });
+		    });
+
+		</script>
 	<script>
     function startChatWithSeller(productSellerNo, loginUserNo) {
         // ChatController의 새로운 엔드포인트로 이동
@@ -373,3 +426,4 @@
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
+
