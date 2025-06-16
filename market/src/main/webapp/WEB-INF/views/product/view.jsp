@@ -147,9 +147,10 @@
 	        	<input type="hidden" name="pdNum" value="${product.pdNum}" />
 	            <input type="hidden" name="userNo" value="${product.userNo}" />
 	            <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" />
-	            <button id="chatButton" type="button" onclick=" location.href='${pageContext.request.contextPath}/chat/roomList'" style="cursor: pointer; background-color: black; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
-					채팅하기
-	            </button>
+	            <input type="hidden" name="userNo" value="${product.userNo}" />         <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" /> <button id="chatButton" type="button" 
+                onclick="startChatWithSeller(${product.userNo}, ${sessionScope.loginUser.userNo})"  style="cursor: pointer; background-color: black; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+           		채팅하기
+        		</button>
 	            <button id="tradeButton" type="button"  onclick="doEnrollProcess(${product.pdNum}, ${product.userNo},${sessionScope.loginUser.userNo},'거래신청')"  style="display: none; cursor: pointer; background-color: green; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
 					거래신청
 	            </button>
@@ -344,6 +345,13 @@
 	    });
 
 	</script>
+	<script>
+    function startChatWithSeller(productSellerNo, loginUserNo) {
+        // ChatController의 새로운 엔드포인트로 이동
+        // userNo를 쿼리 파라미터로 전달 -채팅하기로 바로이동할 수 있는 스크립트.
+        location.href = '${pageContext.request.contextPath}/chat/startChat?productSellerNo=' + productSellerNo + '&loginUserNo=' + loginUserNo;
+    }
+  </script>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

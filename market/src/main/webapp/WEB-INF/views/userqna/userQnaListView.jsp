@@ -187,7 +187,7 @@
             border: 1px solid #ffb300;
         }
         
-        /* 반응형 디자인 */
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -231,7 +231,7 @@
         }
     </style>
 </head>
-<body>
+<body>	
     <div class="container">
         <div class="header">
             <h1>문의사항</h1>
@@ -241,6 +241,9 @@
                     <a href="${contextPath}/userqna/enrollForm.uq" class="btn">문의하기</a>
                 </c:if>
             </div>
+
+
+
         </div>
         
         <div class="search-form">

@@ -69,11 +69,6 @@ public class ProductServiceImpl implements ProductService {
 	public int insertPdFiles(PdFile pdFiles) {
 		return dao.insertPdFiles(sqlSession,pdFiles);
 	}
-	
-	@Override
-    public int deleteProduct(int pdNum, int userNo) {
-		return dao.deleteProduct(sqlSession, pdNum, userNo);
-    }
 
 	@Override
 	public int insertPdStation(int userNo, int pdNum, int stationNo) {
@@ -89,6 +84,21 @@ public class ProductServiceImpl implements ProductService {
 	public List<Object> favoriteList(int userNo, RowBounds rowBounds) {
 		return dao.favoriteList(sqlSession, userNo, rowBounds);
 	}
+	
+	
+	@Override
+	public int deleteProduct(int pdNum, int userNo) {
+	    dao.deleteTradeStation(sqlSession, pdNum, userNo); // Dao 통해 처리
+	    return dao.deleteProduct(sqlSession, pdNum, userNo); // 기존 삭제 로직 그대로 유지
+	}
+	
+	@Override
+	public Product editProduct(int pdNum) {
+	    return dao.editProduct(sqlSession, pdNum);
+	}
+	
+	
+	
 
 	@Override
 	public List<Object> selectMyPdList(RowBounds rowBounds, int userNo) {

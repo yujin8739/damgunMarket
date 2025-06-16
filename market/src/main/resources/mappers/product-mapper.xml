@@ -335,6 +335,30 @@
 	    DELETE FROM PRODUCT
 	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</delete>
+	
+	<select id="editProduct" resultMap="productResultMap" parameterType="int">
+	    SELECT 
+	        p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        pd.pd_url
+	    FROM Product p
+		LEFT JOIN pd_file pd 
+			ON p.user_no = pd.user_no 
+			AND p.pd_num = pd.pd_num
+	    WHERE p.PD_NUM = #{pdNum} AND (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+	</select>
 
 	<insert id="insertPdStation">
 		INSERT INTO TRADE_STATION (

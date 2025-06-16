@@ -3,8 +3,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
-<head>
-    
+<head>    
     <meta charset="UTF-8">
     <title>문의사항 수정</title>
     <style>

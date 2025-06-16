@@ -11,8 +11,8 @@
       footer {
          background: #333;
          color: white;
-         padding: 3rem 0 1rem;
-         margin-top: 4rem;
+         padding: 2rem 0 1rem;
+         margin-top: 0rem;
       }
 
       .footer-content {

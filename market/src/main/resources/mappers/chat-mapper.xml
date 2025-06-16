@@ -1,154 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="chatMapper"> <resultMap id="chatRoomResultMap" type="com.kh.soak.chat.model.vo.ChatRoomVO">
-        <id property="roomNo" column="ROOMNO"/>
-        <result property="chatType" column="CHATTYPE"/>
-        <result property="createdDate" column="CREATED_DATE"/>
-        <result property="lastVisit" column="LAST_VISIT_TIME" javaType="java.util.Date"/> <result property="otherUserId" column="OTHER_USER_ID"/>
-        <result property="otherUserName" column="OTHER_USER_NAME"/>
-    </resultMap>
+<mapper namespace="chatMapper">
+	<resultMap id="chatRoomResultMap"
+		type="com.kh.soak.chat.model.vo.ChatRoomVO">
+		<id property="roomNo" column="ROOMNO" />
+		<result property="chatType" column="CHATTYPE" />
+		<result property="createdDate" column="CREATED_DATE" />
+		<result property="lastVisit" column="LAST_VISIT_TIME"
+			javaType="java.util.Date" />
+		<result property="otherUserId" column="OTHER_USER_ID" />
+		<result property="otherUserName" column="OTHER_USER_NAME" />
+	</resultMap>
 
-    <resultMap id="messageResultMap" type="com.kh.soak.chat.model.vo.MessageVO">
-        <id property="msgNo" column="NO"/>
-        
-        <result property="roomNo" column="ROOMNO"/>
-        <result property="message" column="MESSAGE"/>
-        <result property="imageUrl" column="IMAGEURL"/>
-        <result property="userId" column="USERID"/>
-        <result property="sendTime" column="SENDTIME"/>
-        <result property="type" column="TYPE"/> 
-    </resultMap>
+	<resultMap id="messageResultMap"
+		type="com.kh.soak.chat.model.vo.MessageVO">
+		<id property="msgNo" column="NO" />
 
-    <resultMap id="chatParticipantResultMap" type="com.kh.soak.chat.model.vo.ChatParticipantVO">
-        <id property="roomNo" column="ROOMNO"/>
-        <id property="userId" column="USERID"/>
-        <result property="lastVisitTime" column="LAST_VISIT_TIME"/>
-    </resultMap>
+		<result property="roomNo" column="ROOMNO" />
+		<result property="message" column="MESSAGE" />
+		<result property="imageUrl" column="IMAGEURL" />
+		<result property="userId" column="USERID" />
+		<result property="sendTime" column="SENDTIME" />
+		<result property="type" column="TYPE" />
+	</resultMap>
 
-    <insert id="insertChatRoom" parameterType="com.kh.soak.chat.model.vo.ChatRoomVO">
-        <selectKey keyProperty="roomNo" resultType="int" order="BEFORE">
-            SELECT DAMGEUN.CHAT_ROOM_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO DAMGEUN.CHAT_ROOM (
-            ROOMNO,
-            CHATTYPE,
-            CREATED_DATE
-        ) VALUES (
-            #{roomNo},
-            #{chatType},
-            SYSDATE  )
-    </insert>
+	<resultMap id="chatParticipantResultMap"
+		type="com.kh.soak.chat.model.vo.ChatParticipantVO">
+		<id property="roomNo" column="ROOMNO" />
+		<id property="userId" column="USERID" />
+		<result property="lastVisitTime" column="LAST_VISIT_TIME" />
+	</resultMap>
 
-    <insert id="insertChatParticipant" parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
-        INSERT INTO DAMGEUN.CHAT_PARTICIPANT (
-            ROOMNO,
-            USERID,
-            LAST_VISIT_TIME
-        ) VALUES (
-            #{roomNo},
-            #{userId},
-            SYSDATE  )
-    </insert>
+	<insert id="insertChatRoom"
+		parameterType="com.kh.soak.chat.model.vo.ChatRoomVO">
+		<selectKey keyProperty="roomNo" resultType="int"
+			order="BEFORE">
+			SELECT DAMGEUN.CHAT_ROOM_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO DAMGEUN.CHAT_ROOM (
+		ROOMNO,
+		CHATTYPE,
+		CREATED_DATE
+		) VALUES (
+		#{roomNo},
+		#{chatType},
+		SYSDATE )
+	</insert>
 
-    <insert id="insertMessage" parameterType="com.kh.soak.chat.model.vo.MessageVO">
-        <selectKey keyProperty="msgNo" resultType="int" order="BEFORE"> SELECT DAMGEUN.MESSAGE_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO DAMGEUN.MESSAGE (
-            NO,
-            ROOMNO,
-            MESSAGE,
-            IMAGEURL,
-            USERID,
-            SENDTIME
-        ) VALUES (
-            #{msgNo}, #{roomNo},
-            #{message},
-            #{imageUrl},
-            #{userId},
-            #{sendTime}
-        )
-    </insert>
+	<insert id="insertChatParticipant"
+		parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
+		INSERT INTO DAMGEUN.CHAT_PARTICIPANT (
+		ROOMNO,
+		USERID,
+		LAST_VISIT_TIME
+		) VALUES (
+		#{roomNo},
+		#{userId},
+		SYSDATE )
+	</insert>
 
-    <select id="selectChatRoomByParticipants" parameterType="map" resultMap="chatRoomResultMap">
-        SELECT DISTINCT
-            cr.ROOMNO,
-            cr.CHATTYPE,
-            cr.CREATED_DATE
-        FROM DAMGEUN.CHAT_ROOM cr
-        JOIN DAMGEUN.CHAT_PARTICIPANT cp1 ON cr.ROOMNO = cp1.ROOMNO
-        JOIN DAMGEUN.CHAT_PARTICIPANT cp2 ON cr.ROOMNO = cp2.ROOMNO
-        WHERE cp1.USERID = #{userId1}
-          AND cp2.USERID = #{userId2}
-          AND cp1.USERID &lt;&gt; cp2.USERID
-          AND (SELECT COUNT(*) FROM DAMGEUN.CHAT_PARTICIPANT WHERE ROOMNO = cr.ROOMNO) = 2
-    </select>
+	<insert id="insertMessage"
+		parameterType="com.kh.soak.chat.model.vo.MessageVO">
+		<selectKey keyProperty="msgNo" resultType="int"
+			order="BEFORE"> SELECT DAMGEUN.MESSAGE_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO DAMGEUN.MESSAGE (
+		NO,
+		ROOMNO,
+		MESSAGE,
+		IMAGEURL,
+		USERID,
+		SENDTIME
+		) VALUES (
+		#{msgNo}, #{roomNo},
+		#{message},
+		#{imageUrl},
+		#{userId},
+		#{sendTime}
+		)
+	</insert>
 
-    <select id="selectChatRoomsByUserId" parameterType="string" resultMap="chatRoomResultMap">
-        SELECT
-            cr.ROOMNO,
-            cr.CHATTYPE,
-            cr.CREATED_DATE,
-            cp.LAST_VISIT_TIME,
-            (SELECT cp2.USERID FROM DAMGEUN.CHAT_PARTICIPANT cp2 WHERE cp2.ROOMNO = cr.ROOMNO AND cp2.USERID != #{userId}) AS OTHER_USER_ID,
-            (SELECT ui.USERNAME FROM DAMGEUN.USER_INFO ui JOIN DAMGEUN.CHAT_PARTICIPANT cp2 ON ui.USERID = cp2.USERID WHERE cp2.ROOMNO = cr.ROOMNO AND cp2.USERID != #{userId}) AS OTHER_USER_NAME
-        FROM DAMGEUN.CHAT_PARTICIPANT cp
-        JOIN DAMGEUN.CHAT_ROOM cr ON cp.ROOMNO = cr.ROOMNO
-        WHERE cp.USERID = #{userId}
-        ORDER BY cp.LAST_VISIT_TIME DESC NULLS LAST
-    </select>
-    
-    <select id="selectMessagesByRoomNo" parameterType="int" resultMap="messageResultMap">
-        SELECT
-            NO,       ROOMNO,
-            MESSAGE,
-            IMAGEURL,
-            USERID,
-            SENDTIME
-        FROM DAMGEUN.MESSAGE
-        WHERE ROOMNO = #{roomNo}
-        ORDER BY SENDTIME ASC, NO ASC
-    </select>
+	<select id="selectChatRoomByParticipants" parameterType="map"
+		resultMap="chatRoomResultMap">
+		SELECT DISTINCT
+		cr.ROOMNO,
+		cr.CHATTYPE,
+		cr.CREATED_DATE
+		FROM DAMGEUN.CHAT_ROOM cr
+		JOIN DAMGEUN.CHAT_PARTICIPANT cp1 ON cr.ROOMNO = cp1.ROOMNO
+		JOIN DAMGEUN.CHAT_PARTICIPANT cp2 ON cr.ROOMNO = cp2.ROOMNO
+		WHERE cp1.USERID = #{userId1}
+		AND cp2.USERID = #{userId2}
+		AND cp1.USERID &lt;&gt; cp2.USERID
+		AND (SELECT COUNT(*) FROM DAMGEUN.CHAT_PARTICIPANT WHERE ROOMNO =
+		cr.ROOMNO) = 2
+	</select>
 
-    <select id="selectChatRoomByRoomNo" parameterType="int" resultMap="chatRoomResultMap">
-        SELECT
-            ROOMNO,
-            CHATTYPE,
-            CREATED_DATE
-        FROM DAMGEUN.CHAT_ROOM
-        WHERE ROOMNO = #{roomNo}
-    </select>
+	<select id="selectChatRoomsByUserId" parameterType="string"
+		resultMap="chatRoomResultMap">
+		SELECT
+		cr.ROOMNO,
+		cr.CHATTYPE,
+		cr.CREATED_DATE,
+		cp.LAST_VISIT_TIME,
+		(SELECT cp2.USERID FROM DAMGEUN.CHAT_PARTICIPANT cp2 WHERE cp2.ROOMNO =
+		cr.ROOMNO AND cp2.USERID != #{userId}) AS OTHER_USER_ID,
+		(SELECT ui.USERNAME FROM DAMGEUN.USER_INFO ui JOIN DAMGEUN.CHAT_PARTICIPANT
+		cp2 ON ui.USERID = cp2.USERID WHERE cp2.ROOMNO = cr.ROOMNO AND
+		cp2.USERID != #{userId}) AS OTHER_USER_NAME
+		FROM DAMGEUN.CHAT_PARTICIPANT cp
+		JOIN DAMGEUN.CHAT_ROOM cr ON cp.ROOMNO = cr.ROOMNO
+		WHERE cp.USERID = #{userId}
+		ORDER BY cp.LAST_VISIT_TIME DESC NULLS LAST
+	</select>
 
-    <select id="selectLastVisitTime" parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO" resultType="java.util.Date">
-        SELECT LAST_VISIT_TIME
-        FROM DAMGEUN.CHAT_PARTICIPANT
-        WHERE ROOMNO = #{roomNo} AND USERID = #{userId}
-    </select>
+	<select id="selectMessagesByRoomNo" parameterType="int"
+		resultMap="messageResultMap">
+		SELECT
+		NO, ROOMNO,
+		MESSAGE,
+		IMAGEURL,
+		USERID,
+		SENDTIME
+		FROM DAMGEUN.MESSAGE
+		WHERE ROOMNO = #{roomNo}
+		ORDER BY SENDTIME ASC, NO ASC
+	</select>
 
-    <select id="selectUnreadMessageCount" parameterType="map" resultType="int">
-        SELECT COUNT(*)
-        FROM DAMGEUN.MESSAGE
-        WHERE ROOMNO = #{roomNo}
-          AND SENDTIME > #{lastVisitTime}
-          AND USERID &lt;&gt; #{userId}
-    </select>
+	<select id="selectChatRoomByRoomNo" parameterType="int"
+		resultMap="chatRoomResultMap">
+		SELECT
+		ROOMNO,
+		CHATTYPE,
+		CREATED_DATE
+		FROM DAMGEUN.CHAT_ROOM
+		WHERE ROOMNO = #{roomNo}
+	</select>
 
-    <select id="selectOtherParticipantId" parameterType="map" resultType="string">
-        SELECT USERID
-        FROM DAMGEUN.CHAT_PARTICIPANT
-        WHERE ROOMNO = #{roomNo}
-          AND USERID != #{currentUserId}
-    </select>
+	<select id="selectLastVisitTime"
+		parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO"
+		resultType="java.util.Date">
+		SELECT LAST_VISIT_TIME
+		FROM DAMGEUN.CHAT_PARTICIPANT
+		WHERE ROOMNO = #{roomNo} AND USERID = #{userId}
+	</select>
 
-    <select id="selectUserNameByUserId" parameterType="string" resultType="string">
-        SELECT USERNAME
-        FROM DAMGEUN.USER_INFO
-        WHERE USERID = #{userId}
-    </select>
+	<select id="selectUnreadMessageCount" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM DAMGEUN.MESSAGE
+		WHERE ROOMNO = #{roomNo}
+		AND SENDTIME > #{lastVisitTime}
+		AND USERID &lt;&gt; #{userId}
+	</select>
 
-    <update id="updateLastVisit" parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
-        UPDATE DAMGEUN.CHAT_PARTICIPANT
-        SET LAST_VISIT_TIME = #{lastVisitTime}
-        WHERE ROOMNO = #{roomNo} AND USERID = #{userId}
-    </update>
+	<select id="selectOtherParticipantId" parameterType="map"
+		resultType="string">
+		SELECT USERID
+		FROM DAMGEUN.CHAT_PARTICIPANT
+		WHERE ROOMNO = #{roomNo}
+		AND USERID != #{currentUserId}
+	</select>
 
+	<select id="selectUserNameByUserId" parameterType="string"
+		resultType="string">
+		SELECT USERNAME
+		FROM DAMGEUN.USER_INFO
+		WHERE USERID = #{userId}
+	</select>
+
+	<update id="updateLastVisit"
+		parameterType="com.kh.soak.chat.model.vo.ChatParticipantVO">
+		UPDATE DAMGEUN.CHAT_PARTICIPANT
+		SET LAST_VISIT_TIME = #{lastVisitTime}
+		WHERE ROOMNO = #{roomNo} AND USERID = #{userId}
+	</update>
+	<select id="selectUserIdByUserNo" parameterType="int"
+		resultType="string">
+		SELECT USERID
+		FROM DAMGEUN.USER_INFO WHERE USER_NO = #{userNo}
+	</select>
 </mapper>

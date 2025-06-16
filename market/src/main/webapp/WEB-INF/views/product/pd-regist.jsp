@@ -13,31 +13,47 @@
         .form-container {
             max-width: 800px;
             margin: 50px auto;
-            padding: 30px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            border-radius: 10px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(180, 139, 255, 0.08);
+            border: 2px solid #f0ebff;
         }
         .form-title {
             text-align: center;
             margin-bottom: 30px;
-            color: #333;
+            color: #a88bff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(168, 139, 255, 0.15);
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #f0ebff;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.05);
         }
         .form-label {
             font-weight: bold;
             margin-bottom: 8px;
+            color: #a88bff;
+            font-size: 1rem;
         }
         .required {
-            color: #dc3545;
+            color: #ff6b6b;
         }
         .file-upload-area {
-            border: 2px dashed #dee2e6;
-            border-radius: 5px;
+            border: 2px dashed #e8e0ff;
+            border-radius: 8px;
             padding: 20px;
             text-align: center;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #faf9ff 0%, #f8f6ff 100%);
+            transition: all 0.3s ease;
+        }
+        .file-upload-area:hover {
+            border-color: #c8b8ff;
         }
         .file-preview {
             display: flex;
@@ -49,27 +65,56 @@
             width: 100px;
             height: 100px;
             object-fit: cover;
-            border-radius: 5px;
-            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            border: 2px solid #e8e0ff;
+            box-shadow: 0 3px 10px rgba(180, 139, 255, 0.1);
         }
         .btn-submit {
-            background-color: #007bff;
-            border-color: #007bff;
-            padding: 12px 30px;
+            background: linear-gradient(135deg, #8b45ff 0%, #b45aff 100%);
+            border: 2px solid #7b68ee;
+            color: white;
+            padding: 15px 35px;
             font-size: 16px;
+            font-weight: 600;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(139, 69, 255, 0.3);
+            transition: all 0.3s ease;
         }
         .btn-submit:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            background: linear-gradient(135deg, #7b68ee 0%, #9370db 100%);
+            border-color: #6a5acd;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 69, 255, 0.4);
         }
+		.btn-secondary {
+		    background: linear-gradient(135deg, #b4a0ff 0%, #c8b8ff 100%) !important;
+		    border: 2px solid #a88bff !important;
+		    color: white !important;
+		    padding: 15px 35px !important;
+		    font-size: 16px !important;
+		    font-weight: 600 !important;
+		    border-radius: 25px !important;
+		    box-shadow: 0 4px 15px rgba(180, 160, 255, 0.2) !important;
+		    transition: all 0.3s ease !important;
+		}
+		
+		.btn-secondary:hover {
+		    background: linear-gradient(135deg, #a88bff 0%, #b49fff 100%) !important;
+		    border-color: #9370db !important;
+		    color: white !important;
+		    transform: translateY(-2px) !important;
+		    box-shadow: 0 6px 20px rgba(180, 160, 255, 0.3) !important;
+		}	
         .category-select {
             margin-bottom: 15px;
         }
         .location-info {
-            background-color: #e9ecef;
+            background: linear-gradient(135deg, #faf9ff 0%, #f5f2ff 100%);
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 10px;
             margin-top: 10px;
+            border: 2px solid #e8e0ff;
         }
         .station-selection-container {
 		    margin: 20px 0;
@@ -79,7 +124,7 @@
 		    display: block;
 		    margin-bottom: 10px;
 		    font-size: 1.2rem;
-		    color: #6a0dad;
+		    color: #a88bff;
 		    font-weight: bold;
 		}
 		.station-list {
@@ -88,16 +133,17 @@
 		    justify-content: center;
 		    gap: 10px;
 		}
-		.station-list input[type="radio"] {
+		.station-list input[type="checkbox"] {
 		    display: none;
 		}
 		.station-item {
-		    display: block;
+		    display: inline-block;
   			margin-bottom: 8px;
+  			margin-right: 10px;
 		    padding: 10px 20px;
-		    background-color: #eee;
+		    background: linear-gradient(135deg, #faf9ff 0%, #f8f6ff 100%);
 		    border-radius: 30px;
-		    border: 2px solid transparent;
+		    border: 2px solid #e8e0ff;
 		    cursor: pointer;
 		    font-size: 1rem;
 		    color: #333;
@@ -105,16 +151,43 @@
 		    min-width: 120px;
 		    text-align: center;
 		}
-		.station-list input[type="radio"]:checked + .station-item {
-		    background-color: #c084fc;
-		    border-color: #9333ea;
+		.station-list input[type="checkbox"]:checked ~ .station-item,
+		.station-item.selected {
+		    background: linear-gradient(135deg, #c8b8ff 0%, #b4a0ff 100%);
+		    border-color: #a88bff;
 		    color: white;
 		    font-weight: bold;
-		    box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+		    box-shadow: 0 0 15px rgba(200, 184, 255, 0.5);
 		}
 		.station-item:hover {
-		    background-color: #e0d4f7;
+		    background: linear-gradient(135deg, #f0ebff 0%, #e8e0ff 100%);
+		    border-color: #c8b8ff;
 		}
+		
+		/* 입력 필드들 스타일 수정 */
+		.form-control, .form-select {
+            border: 2px solid #e8e0ff;
+            border-radius: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #c8b8ff;
+            box-shadow: 0 0 15px rgba(200, 184, 255, 0.3);
+            background: white;
+        }
+        
+        .help-text {
+            font-size: 13px;
+            color: #8a7bcc;
+            margin-top: 8px;
+            padding: 10px;
+            background: linear-gradient(135deg, #faf9ff 0%, #f8f6ff 100%);
+            border-radius: 8px;
+            border-left: 3px solid #c8b8ff;
+        }
         
     </style>
 </head>
@@ -201,8 +274,8 @@
                 
                 <!-- 버튼 영역 -->
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-                    <button type="button" class="btn btn-secondary me-2" onclick="history.back()">취소</button>
-                    <button type="submit" class="btn btn-primary btn-submit">상품 등록</button>
+                	<button type="submit" class="btn btn-primary btn-submit">상품 등록</button>
+                    <button type="button" class="btn btn-secondary me-2" onclick="history.back()">취소</button>                    
                 </div>
                 
             </form>
