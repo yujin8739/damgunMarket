@@ -609,7 +609,7 @@
 				<c:choose>
 					<c:when test="${empty loginUser and empty loginAdmin}">
 						<a href="${contextRoot}/insert.me">회원가입</a> 
-						<a href="#"id="loginLink">로그인</a>
+						<a href="#" id="loginLink">로그인</a>
 						<a href="#" id="adminLoginLink">관리자로그인</a>
 					</c:when>
 					<c:otherwise>
@@ -738,7 +738,7 @@
     	        sidebarTimer = setTimeout(() => {
     	            sidebar.classList.remove('open');
     	            hamburger.classList.remove('hide');
-    	        }, 5000);
+    	        }, 3000);
     	    } else {
     	        // 사이드바 닫힐 때: 햄버거 즉시 나타남
     	        hamburger.classList.remove('hide');
