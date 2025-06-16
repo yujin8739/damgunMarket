@@ -7,9 +7,6 @@ public interface AdminService {
     // 관리자 로그인
     Admin loginAdmin(Admin admin);
     
-    // 관리자 등록
-    int insertAdmin(Admin admin);
-    
     // 관리자 정보 수정
     int updateAdmin(Admin admin);
     

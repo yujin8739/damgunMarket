@@ -11,8 +11,8 @@
       footer {
          background: #333;
          color: white;
-         padding: 3rem 0 1rem;
-         margin-top: 4rem;
+         padding: 2rem 0 1rem;
+         margin-top: 0rem;
       }
 
       .footer-content {
@@ -159,7 +159,6 @@
                   <!-- 관리자 전용 메뉴 -->
                   <c:if test="${not empty loginAdmin}">
                      <li><a href="${contextRoot}/admin/main.ad" class="admin-menu">관리자 메인</a></li>
-                     <li><a href="${contextRoot}/admin/insert.ad" class="admin-menu">관리자 등록</a></li>
                   </c:if>
                </ul>
             </div>

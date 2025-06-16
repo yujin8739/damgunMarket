@@ -263,7 +263,7 @@
 		
 		        
 		        if (idUsable && pwdOk && nameOk) {
-	                if (!$('#latitude').val().trim()&&!$('#longitude').val().trim()) {
+		        	if (!$('#latitude').val().trim()&&!$('#longitude').val().trim()) {
 	                	submitBtn.attr("disabled", true);
 	                } else {
 	                	 submitBtn.attr("disabled", false);

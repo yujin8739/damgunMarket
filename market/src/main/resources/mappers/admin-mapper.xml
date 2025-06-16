@@ -21,12 +21,6 @@
         WHERE ADMIN_ID = #{adminId}
     </select>
 
-    
-    <insert id="insertAdmin" parameterType="Admin">
-        INSERT INTO ADMIN (ADMIN_NUM, ADMIN_ID, ADMIN_PW, ADMIN_NAME)
-        VALUES (SEQ_ADMIN.NEXTVAL, #{adminId}, #{adminPw}, #{adminName})
-    </insert>
-    
     <update id="updateAdmin" parameterType="Admin">
         UPDATE ADMIN SET ADMIN_NAME = #{adminName} WHERE ADMIN_ID = #{adminId}
     </update>

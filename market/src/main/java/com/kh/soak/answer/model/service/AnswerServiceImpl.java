@@ -49,15 +49,12 @@ public class AnswerServiceImpl implements AnswerService {
     }
     
     @Override
-    public List<AnswerInfo> selectAnswersByProduct(int pdNum) {
-        return dao.selectAnswersByProduct(sqlSession, pdNum);
+    public boolean hasAnswer(int userQnaNum) {
+        return dao.hasAnswer(sqlSession, userQnaNum);
     }
     
     @Override
-    public boolean hasAnswer(int userQnaNum) {
-        AnswerInfo answer = dao.selectAnswer(sqlSession, userQnaNum);
-        // 답변이 존재하고 답변 제목이나 내용이 있는지 확인
-        return answer != null && answer.getAnswerTitle() != null && !answer.getAnswerTitle().trim().isEmpty();
+    public AnswerInfo selectAnswerByQnaNum(int userQnaNum) {
+        return dao.selectAnswerByQnaNum(sqlSession, userQnaNum);
     }
-    
 }

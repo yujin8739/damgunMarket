@@ -16,14 +16,6 @@ public class AdminDao {
         return sqlSession.selectOne("adminMapper.loginAdmin", admin);
     }
     
-    
-    
-    
-    // 관리자 등록
-    public int insertAdmin(SqlSessionTemplate sqlSession, Admin admin) {
-        return sqlSession.insert("adminMapper.insertAdmin", admin);
-    }
-    
     // 관리자 정보 수정
     public int updateAdmin(SqlSessionTemplate sqlSession, Admin admin) {
         return sqlSession.update("adminMapper.updateAdmin", admin);

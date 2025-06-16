@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +8,24 @@
     <title>답변 관리</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .home-btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
         table { width: 100%; border-collapse: collapse; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #f2f2f2; }
@@ -27,7 +46,11 @@
     </style>
 </head>
 <body>
-    <h2>답변 관리 (문의사항 목록)</h2>
+    <div class="header">
+        <h2>답변 관리 (문의사항 목록)</h2>
+        <a href="${contextPath}/" class="home-btn">홈으로</a>
+    </div>
+    
     <table>
         <thead>
             <tr>
@@ -79,7 +102,7 @@
         
         function checkAnswerStatus(qno) {
             // AJAX로 답변 존재 여부 확인
-            return answer != null && answer.getAnswerTitle() != null && !answer.getAnswerTitle().trim().isEmpty();
+            fetch('checkAnswer.an?qno=' + qno)
                 .then(response => response.json())
                 .then(data => {
                     const statusElement = document.getElementById('status-' + qno);
