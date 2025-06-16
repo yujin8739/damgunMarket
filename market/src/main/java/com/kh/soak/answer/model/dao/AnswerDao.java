@@ -40,8 +40,8 @@ public class AnswerDao {
         return sqlSession.selectList("answerMapper.selectAnswersByUser", userNo);
     }
     
-    // 상품별 답변 목록 조회
-    public List<AnswerInfo> selectAnswersByProduct(SqlSessionTemplate sqlSession, int productNum) {
-        return sqlSession.selectList("answerMapper.selectAnswersByProduct", productNum);
+    // 상품별 답변 목록 조회 (pdNum 사용)
+    public List<AnswerInfo> selectAnswersByProduct(SqlSessionTemplate sqlSession, int pdNum) {
+        return sqlSession.selectList("answerMapper.selectAnswersByProduct", pdNum);
     }
 }

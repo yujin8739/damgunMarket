@@ -18,10 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.kh.soak.admin.model.vo.Admin;
 import com.kh.soak.etc.model.service.EtcService;
 import com.kh.soak.etc.model.vo.Station;
 import com.kh.soak.product.model.vo.Product;
@@ -123,5 +125,19 @@ public class EtcController {
 
         return addressMap;
     }
+    
+	 @RequestMapping(value = "etc/chargePoint", produces = "application/json;charset=UTF-8")
+	 @ResponseBody  // → AJAX 응답을 직접 돌려줄 경우 반드시 필요!
+	 public int chargePoint(@RequestParam("userId") String userId,
+	                           @RequestParam("point") int point,
+	                           HttpSession session) {
+		 Admin admin = (Admin) session.getAttribute("loginAdmin");
+		 if(admin!=null&&admin.getAdminId()!=null&&!admin.getAdminId().equals("")) {
+			 return service.chargePoint(userId, point);
+		 } else { 
+			 return -1;
+		 }
+	 }
+
 
 }

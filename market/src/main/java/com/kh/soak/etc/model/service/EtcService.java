@@ -14,5 +14,10 @@ public interface EtcService {
 	List<Product> selectSmallCateList(String bigCate, String midCate);
 
 	List<Station> selectNearStations(double lat, double lng);
+	
+	List<Station> selectPdStationList(int pdNum, int userNo);
+	
+	int insertPoint(int userNo, int point);
 
+	int chargePoint(String userId, int point);
 }

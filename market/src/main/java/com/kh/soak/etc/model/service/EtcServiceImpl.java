@@ -5,11 +5,13 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.soak.etc.model.dao.EtcDao;
 import com.kh.soak.etc.model.vo.Station;
 import com.kh.soak.product.model.vo.Product;
 
+@Transactional
 @Service
 public class EtcServiceImpl implements EtcService {
 
@@ -39,5 +41,19 @@ public class EtcServiceImpl implements EtcService {
 		return dao.selectNearStations(sqlSession, lat, lng);
 	}
 	
+	@Override
+	public List<Station> selectPdStationList(int pdNum, int userNo) {
+		return dao.selectPdStationList(sqlSession, pdNum, userNo);
+	}
+	
+	@Override
+	public int insertPoint(int userNo, int point) {
+		return dao.insertPoint(sqlSession, userNo, point);
+	}
+
+	@Override
+	public int chargePoint(String userId, int point) {
+		return dao.chargePoint(sqlSession, userId, point);
+	}
 
 }

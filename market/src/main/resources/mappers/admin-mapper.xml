@@ -21,9 +21,6 @@
         WHERE ADMIN_ID = #{adminId}
     </select>
 
-
-    
-    
     
     <insert id="insertAdmin" parameterType="Admin">
         INSERT INTO ADMIN (ADMIN_NUM, ADMIN_ID, ADMIN_PW, ADMIN_NAME)

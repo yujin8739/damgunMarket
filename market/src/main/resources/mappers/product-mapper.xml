@@ -49,8 +49,9 @@
 	    WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
 	</update>
 	
+	<!-- 전체 상품 조회 -->
 	<select id="selectAllProducts" resultMap="productResultMap" resultType="Product">
-	    SELECT 
+	   SELECT 
 	        p.USER_NO,
 	        p.PD_NUM,
 	        p.PD_TITLE,
@@ -67,37 +68,176 @@
 	        p.IS_SUB,
 	        pd.pd_url
 	    FROM Product p
-			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.user_no 
-				AND p.pd_num = pd.pd_num
-		WHERE pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL
-		ORDER BY p.update_time DESC
+	    LEFT JOIN pd_file pd 
+	        ON p.user_no = pd.user_no 
+	        AND p.pd_num = pd.pd_num
+	    WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+	      AND EXISTS (
+	        SELECT 1
+	        FROM TRADE_STATION ts
+	        WHERE ts.USER_NO = p.USER_NO
+	          AND ts.PD_NUM = p.PD_NUM
+	          AND ts.STATION_NUM IN (
+	              SELECT s2.STATION_NUM
+	              FROM STATION s2
+	              WHERE s2.LINE_NAME = (
+	                  SELECT LINE_NAME FROM (
+	                      SELECT s.LINE_NAME
+	                      FROM STATION s
+	                      ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+	                  ) WHERE ROWNUM = 1
+	              )
+	          )
+	    )
+	    ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
 	</select>
+	
+	<!-- 키워드 검색 -->
 	<select id="selectProducts" resultMap="productResultMap" resultType="Product">
 	    SELECT 
-	        p.USER_NO,
-	        p.PD_NUM,
-	        p.PD_TITLE,
-	        p.PD_BOARD,
-	        p.PD_PRICE,
-	        p.LATITUDE,
-	        p.LONGITUDE,
-	        p.BIG_CATE,
-	        p.MID_CATE,
-	        p.SMALL_CATE,
-	        p.UPDATE_TIME,
-	        p.PD_RANK,
-	        p.PD_STATUS,
-	        p.IS_SUB,
-	        pd.pd_url
-	    FROM Product p
-			LEFT JOIN pd_file pd 
-				ON p.user_no = pd.user_no 
-				AND p.pd_num = pd.pd_num
-		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) 
-		AND (PD_TITLE LIKE '%${keyword}%' OR PD_BOARD LIKE '%${keyword}%')
-		ORDER BY p.update_time DESC
+		    p.USER_NO,
+		    p.PD_NUM,
+		    p.PD_TITLE,
+		    p.PD_BOARD,
+		    p.PD_PRICE,
+		    p.LATITUDE,
+		    p.LONGITUDE,
+		    p.BIG_CATE,
+		    p.MID_CATE,
+		    p.SMALL_CATE,
+		    p.UPDATE_TIME,
+		    p.PD_RANK,
+		    p.PD_STATUS,
+		    p.IS_SUB,
+		    pd.pd_url
+		FROM Product p
+		LEFT JOIN pd_file pd 
+		    ON p.user_no = pd.user_no 
+		    AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+		  AND (p.PD_TITLE LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%' 
+		       OR p.PD_BOARD LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%')
+		  AND EXISTS (
+		      SELECT 1
+		      FROM TRADE_STATION ts
+		      WHERE ts.USER_NO = p.USER_NO
+		        AND ts.PD_NUM = p.PD_NUM
+		        AND ts.STATION_NUM IN (
+		            SELECT s2.STATION_NUM
+		            FROM STATION s2
+		            WHERE s2.LINE_NAME = (
+		                SELECT LINE_NAME FROM (
+		                    SELECT s.LINE_NAME
+		                    FROM STATION s
+		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+		                ) WHERE ROWNUM = 1
+		            )
+		        )
+		  )
+		ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
 	</select>
+	
+	<!-- 카테고리 검색 -->
+	<select id="searchCategory" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+		    p.USER_NO,
+		    p.PD_NUM,
+		    p.PD_TITLE,
+		    p.PD_BOARD,
+		    p.PD_PRICE,
+		    p.LATITUDE,
+		    p.LONGITUDE,
+		    p.BIG_CATE,
+		    p.MID_CATE,
+		    p.SMALL_CATE,
+		    p.UPDATE_TIME,
+		    p.PD_RANK,
+		    p.PD_STATUS,
+		    p.IS_SUB,
+		    pd.pd_url
+		FROM Product p
+		LEFT JOIN pd_file pd 
+		    ON p.user_no = pd.user_no 
+		    AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+		  AND (p.BIG_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		       OR p.MID_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		       OR p.SMALL_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%')
+		  AND EXISTS (
+		      SELECT 1
+		      FROM TRADE_STATION ts
+		      WHERE ts.USER_NO = p.USER_NO
+		        AND ts.PD_NUM = p.PD_NUM
+		        AND ts.STATION_NUM IN (
+		            SELECT s2.STATION_NUM
+		            FROM STATION s2
+		            WHERE s2.LINE_NAME = (
+		                SELECT LINE_NAME FROM (
+		                    SELECT s.LINE_NAME
+		                    FROM STATION s
+		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+		                ) WHERE ROWNUM = 1
+		            )
+		        )
+		  )
+		ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
+	</select>
+	
+	<!-- 키워드 + 카테고리 동시 검색 -->
+	<select id="bothSelectProducts" resultMap="productResultMap" resultType="Product">
+	    SELECT 
+		    p.USER_NO,
+		    p.PD_NUM,
+		    p.PD_TITLE,
+		    p.PD_BOARD,
+		    p.PD_PRICE,
+		    p.LATITUDE,
+		    p.LONGITUDE,
+		    p.BIG_CATE,
+		    p.MID_CATE,
+		    p.SMALL_CATE,
+		    p.UPDATE_TIME,
+		    p.PD_RANK,
+		    p.PD_STATUS,
+		    p.IS_SUB,
+		    pd.pd_url
+		FROM Product p
+		LEFT JOIN pd_file pd 
+		    ON p.user_no = pd.user_no 
+		    AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL)
+		  AND (
+		      (p.PD_TITLE LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%' 
+		       OR p.PD_BOARD LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%')
+		      AND (
+		          p.BIG_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		          OR p.MID_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		          OR p.SMALL_CATE LIKE '%' || #{category, jdbcType=VARCHAR} || '%'
+		      )
+		  )
+		  AND EXISTS (
+		      SELECT 1
+		      FROM TRADE_STATION ts
+		      WHERE ts.USER_NO = p.USER_NO
+		        AND ts.PD_NUM = p.PD_NUM
+		        AND ts.STATION_NUM IN (
+		            SELECT s2.STATION_NUM
+		            FROM STATION s2
+		            WHERE s2.LINE_NAME = (
+		                SELECT LINE_NAME FROM (
+		                    SELECT s.LINE_NAME
+		                    FROM STATION s
+		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
+		                ) WHERE ROWNUM = 1
+		            )
+		        )
+		  )
+		ORDER BY (p.UPDATE_TIME - NUMTODSINTERVAL(p.PD_RANK, 'DAY')) DESC
+
+	</select>
+
+
+
 	<select id="selectOneProduct" resultMap="productResultMap" resultType="Product">
 	    SELECT 
 	        p.USER_NO,
@@ -258,6 +398,175 @@
 		) PF ON P.USER_NO = PF.USER_NO AND P.PD_NUM = PF.PD_NUM
 		WHERE F.USER_NO = #{userNo}
 	</select>
+	
+	<select id="selectMyPdList" parameterType="Product" resultMap="productResultMap">
+	    SELECT 
+	        p.USER_NO,
+	        p.PD_NUM,
+	        p.PD_TITLE,
+	        p.PD_BOARD,
+	        p.PD_PRICE,
+	        p.LATITUDE,
+	        p.LONGITUDE,
+	        p.BIG_CATE,
+	        p.MID_CATE,
+	        p.SMALL_CATE,
+	        p.UPDATE_TIME,
+	        p.PD_RANK,
+	        p.PD_STATUS,
+	        p.IS_SUB,
+	        pd.pd_url
+	    FROM Product p
+			LEFT JOIN pd_file pd 
+				ON p.user_no = pd.user_no 
+				AND p.pd_num = pd.pd_num
+		WHERE (pd.ISTHUMBNAIL = 'Y' OR pd.ISTHUMBNAIL IS NULL) AND p.USER_NO = #{userNo} 
+		ORDER BY p.update_time DESC
+	</select>
+	
+	<select id="checkPdEnroll" resultType="string">
+	    SELECT 
+	        CASE
+	            WHEN EXISTS (
+	                SELECT 1 FROM TRADE_ENROLL 
+	                WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '판매완료'
+	            ) THEN '판매완료'
+	            WHEN EXISTS (
+	                SELECT 1 FROM TRADE_ENROLL 
+	                WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '예약중'
+	            ) THEN '예약중'
+	            ELSE '판매중'
+	        END
+	    FROM DUAL
+	</select>
+
+	
+	<select id="checkEnroll" resultType="string">
+		SELECT STATUS  
+		FROM TRADE_ENROLL
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo}
+	</select>
+	
+	<select id="checkMyEnroll" resultType="string">
+<!-- 		SELECT STATUS  
+		FROM TRADE_ENROLL
+		WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND ENROLL_NUM = #{enrollNo} -->
+		SELECT 
+		    CASE 
+		        WHEN EXISTS (
+		            SELECT 1 FROM TRADE_ENROLL 
+		            WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '판매완료'
+		        ) THEN '판매완료'
+		        WHEN EXISTS (
+		            SELECT 1 FROM TRADE_ENROLL 
+		            WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND STATUS = '예약중'
+		        ) THEN '예약중'
+		        WHEN EXISTS (
+		            SELECT 1 FROM TRADE_ENROLL 
+		            WHERE PD_NUM = #{pdNum} AND USER_NO = #{userNo} AND ENROLL_NUM = #{enrollNo} AND STATUS = '거래신청'
+		        ) THEN '거래신청'
+		        ELSE '판매중'
+		    END AS STATUS
+		FROM DUAL
+		
+	</select>
+	
+	<insert id="tradeEnroll">
+		INSERT INTO TRADE_ENROLL 
+		(PD_NUM, USER_NO
+		,ENROLL_NUM, STATUS) VALUES
+		(#{pdNum}, #{userNo}, #{enrollNo}, #{status})
+	</insert>
+
+	<select id="selectHistoryList" resultMap="productResultMap">
+	    SELECT 
+	        P.USER_NO,
+	        P.PD_NUM,
+	        P.PD_TITLE,
+	        P.PD_BOARD,
+	        P.PD_PRICE,
+	        P.LATITUDE,
+	        P.LONGITUDE,
+	        P.BIG_CATE,
+	        P.MID_CATE,
+	        P.SMALL_CATE,
+	        P.UPDATE_TIME,
+	        P.PD_RANK,
+	        P.PD_STATUS,
+	        P.IS_SUB,
+	        PF.PD_URL
+	    FROM PRODUCT P
+	    LEFT JOIN (
+	        SELECT USER_NO, PD_NUM, PD_URL
+	        FROM PD_FILE
+	        WHERE ISTHUMBNAIL = 'Y'
+	    ) PF ON P.USER_NO = PF.USER_NO AND P.PD_NUM = PF.PD_NUM
+	    WHERE (P.USER_NO, P.PD_NUM) IN (
+	        SELECT T.USER_NO, T.PD_NUM
+	        FROM TRADE_ENROLL T
+	        WHERE T.USER_NO = #{userNo}
+	          AND T.STATUS = #{status}
+	          
+	          <if test="status == '거래신청'">
+	              AND NOT EXISTS (
+	                  SELECT 1
+	                  FROM TRADE_ENROLL T2
+	                  WHERE T2.USER_NO = T.USER_NO
+	                    AND T2.PD_NUM = T.PD_NUM
+	                    AND T2.STATUS IN ('예약중', '판매완료')
+	              )
+	          </if>
+	    )
+	</select>
+	
+	<select id="selectMyHistoryList" resultMap="productResultMap">
+	    SELECT 
+	        P.USER_NO,
+	        P.PD_NUM,
+	        P.PD_TITLE,
+	        P.PD_BOARD,
+	        P.PD_PRICE,
+	        P.LATITUDE,
+	        P.LONGITUDE,
+	        P.BIG_CATE,
+	        P.MID_CATE,
+	        P.SMALL_CATE,
+	        P.UPDATE_TIME,
+	        P.PD_RANK,
+	        P.PD_STATUS,
+	        P.IS_SUB,
+	        PF.PD_URL
+	    FROM PRODUCT P
+	    LEFT JOIN (
+	        SELECT USER_NO, PD_NUM, PD_URL
+	        FROM PD_FILE
+	        WHERE ISTHUMBNAIL = 'Y'
+	    ) PF ON P.USER_NO = PF.USER_NO AND P.PD_NUM = PF.PD_NUM
+	    WHERE (P.USER_NO, P.PD_NUM) IN (
+	        SELECT T.USER_NO, T.PD_NUM
+	        FROM TRADE_ENROLL T
+	        WHERE T.ENROLL_NUM = #{userNo}
+	          AND T.STATUS = #{status}
+	          
+	          <if test="status == '거래신청'">
+	              AND NOT EXISTS (
+	                  SELECT 1
+	                  FROM TRADE_ENROLL T2
+	                  WHERE T2.USER_NO = T.USER_NO
+	                    AND T2.PD_NUM = T.PD_NUM
+	                    AND T2.STATUS IN ('예약중', '판매완료')
+	              )
+	          </if>
+	    )
+	</select>
+	
+	<update id="selectHistoryUpdate">
+		UPDATE TRADE_ENROLL
+	    SET STATUS = #{status}
+		WHERE PD_NUM = #{pdNum}
+		  AND USER_NO = #{userNo}
+		  AND ENROLL_NUM = #{enrollNo}
+	</update>
 
 </mapper>
 	

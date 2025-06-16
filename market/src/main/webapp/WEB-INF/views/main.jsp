@@ -101,9 +101,16 @@
 	<div id=all-container >
 	    <form id="searchForm" onsubmit="return false;">
 	        <input type="text" id="searchKeyword" placeholder="상품명 검색">
+	        <input type="hidden" id="searchCategory">
+	        <input type="hidden" id="latitude" value="${loginUser.latitude}">
+			<input type="hidden" id="longitude" value="${loginUser.longitude}">
 	        <button onclick="startSearch()">검색</button>
-	        <button onclick="location.href='${pageContext.request.contextPath}/product/regist'">상품등록</button>
-	        <button id="chat-move" onclick="location.href='${pageContext.request.contextPath}/chat/roomList'">채팅이동</button>
+	        <c:choose>
+				<c:when test="${not empty loginUser or not empty loginAdmin}">
+					<button onclick="location.href='${pageContext.request.contextPath}/product/regist'">상품등록</button>
+	        		<button id="chat-move" onclick="location.href='${pageContext.request.contextPath}/chat/roomList'">채팅이동</button>
+				</c:when>
+			</c:choose>
 	    </form>
 	    <hr>
 		<jsp:include page="/WEB-INF/views/product/productList.jsp"/>

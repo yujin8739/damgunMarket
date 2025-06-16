@@ -1,6 +1,8 @@
 package com.kh.soak.answer.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,30 +17,41 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.soak.answer.model.service.AnswerService;
 import com.kh.soak.answer.model.vo.AnswerInfo;
+import com.kh.soak.userqna.model.service.UserQnaService;
+import com.kh.soak.userqna.model.vo.UserQnaInfo;
 
 @Controller
 @RequestMapping("/answer")
 public class AnswerController {
     
     @Autowired
-    private AnswerService service;
+    private AnswerService answerService;
     
-    // 답변 목록 페이지
+    @Autowired
+    private UserQnaService userQnaService; // UserQna 서비스 추가
+    
+    // 답변 목록 페이지 - 모든 문의사항을 보여줌
     @RequestMapping("list.an")
     public String answerList(Model model) {
         
-        List<AnswerInfo> list = service.selectAnswerList();
+        // UserQna에서 모든 문의사항을 가져옴
+        List<UserQnaInfo> userQnaList = userQnaService.selectUserQnaList();
         
-        model.addAttribute("list", list);
+        model.addAttribute("list", userQnaList);
         return "answer/answerListView";
     }
     
-    // 답변 상세보기
+    // 답변 상세보기 - 문의사항과 답변을 함께 보여줌
     @RequestMapping("detail.an")
     public String answerDetail(@RequestParam("qno") int userQnaNum, Model model) {
         
-        AnswerInfo answer = service.selectAnswer(userQnaNum);
+        // 문의사항 정보 조회
+        UserQnaInfo userQna = userQnaService.selectUserQna(userQnaNum);
         
+        // 답변 정보 조회 (있을 수도 없을 수도 있음)
+        AnswerInfo answer = answerService.selectAnswer(userQnaNum);
+        
+        model.addAttribute("userQna", userQna);
         model.addAttribute("answer", answer);
         return "answer/answerDetailView";
     }
@@ -47,17 +60,21 @@ public class AnswerController {
     @GetMapping("enrollForm.an")
     public String answerEnrollForm(@RequestParam("qno") int userQnaNum, Model model) {
         
+        // 문의사항 정보도 함께 전달
+        UserQnaInfo userQna = userQnaService.selectUserQna(userQnaNum);
+        
+        model.addAttribute("userQna", userQna);
         model.addAttribute("userQnaNum", userQnaNum);
         return "answer/answerEnrollForm";
     }
     
-    // 답변 작성 처리
+
     @PostMapping("insert.an")
     public String insertAnswer(AnswerInfo answer, HttpSession session, Model model) {
         
         System.out.println("답변 작성 시도: " + answer);
         
-        int result = service.insertAnswer(answer);
+        int result = answerService.insertAnswer(answer);
         
         if(result > 0) {
             session.setAttribute("alertMsg", "답변이 성공적으로 등록되었습니다.");
@@ -68,21 +85,21 @@ public class AnswerController {
         }
     }
     
-    // 답변 수정 페이지 이동
     @GetMapping("updateForm.an")
     public String answerUpdateForm(@RequestParam("qno") int userQnaNum, Model model) {
         
-        AnswerInfo answer = service.selectAnswer(userQnaNum);
+        UserQnaInfo userQna = userQnaService.selectUserQna(userQnaNum);
+        AnswerInfo answer = answerService.selectAnswer(userQnaNum);
         
+        model.addAttribute("userQna", userQna);
         model.addAttribute("answer", answer);
         return "answer/answerUpdateForm";
     }
     
-    // 답변 수정 처리
     @PostMapping("update.an")
     public String updateAnswer(AnswerInfo answer, HttpSession session, Model model) {
         
-        int result = service.updateAnswer(answer);
+        int result = answerService.updateAnswer(answer);
         
         if(result > 0) {
             session.setAttribute("alertMsg", "답변이 성공적으로 수정되었습니다.");
@@ -93,11 +110,10 @@ public class AnswerController {
         }
     }
     
-    // 답변 삭제 처리
     @PostMapping("delete.an")
     public String deleteAnswer(@RequestParam("qno") int userQnaNum, HttpSession session, Model model) {
         
-        int result = service.deleteAnswer(userQnaNum);
+        int result = answerService.deleteAnswer(userQnaNum);
         
         if(result > 0) {
             session.setAttribute("alertMsg", "답변이 성공적으로 삭제되었습니다.");
@@ -108,13 +124,20 @@ public class AnswerController {
         }
     }
     
-    // 유저별 답변 목록 조회 (AJAX)
     @ResponseBody
     @RequestMapping(value="userAnswers.an", produces = "application/json;charset=UTF-8")
     public List<AnswerInfo> getUserAnswers(@RequestParam("userNo") int userNo) {
         
-        List<AnswerInfo> userAnswers = service.selectAnswersByUser(userNo);
+        List<AnswerInfo> userAnswers = answerService.selectAnswersByUser(userNo);
         
         return userAnswers;
+    }
+    
+    @ResponseBody
+    @RequestMapping("checkAnswer.an")
+    public Map<String, Boolean> checkAnswer(@RequestParam("qno") int userQnaNum) {
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("hasAnswer", answerService.hasAnswer(userQnaNum));
+        return result;
     }
 }

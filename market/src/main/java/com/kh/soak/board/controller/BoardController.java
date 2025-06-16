@@ -23,37 +23,41 @@ public class BoardController {
     @Autowired
     private BoardService service;
     
-    // 공지사항 목록 페이지
+    // 공지사항 목록 페이지 (모든 사용자 접근 가능)
     @RequestMapping("list.bo")
     public String boardList(Model model) {
-        
         List<Board> list = service.selectBoardList();
-        
         model.addAttribute("list", list);
         return "board/boardListView";
     }
     
-    // 공지사항 상세보기
+    // 공지사항 상세보기 (모든 사용자 접근 가능)
     @RequestMapping("detail.bo")
     public String boardDetail(@RequestParam("bno") int noticeNum, Model model) {
-        
         Board board = service.selectBoard(noticeNum);
-        
         model.addAttribute("board", board);
         return "board/boardDetailView";
     }
     
-    // 공지사항 작성 페이지 이동
+    // 공지사항 작성 페이지 이동 (관리자만)
     @GetMapping("enrollForm.bo")
-    public String boardEnrollForm() {
+    public String boardEnrollForm(HttpSession session, Model model) {
+        // 관리자 권한 체크
+        if(session.getAttribute("loginAdmin") == null) {
+            model.addAttribute("errorMsg", "관리자만 접근 가능합니다.");
+            return "common/errorPage";
+        }
         return "board/boardEnrollForm";
     }
     
-    // 공지사항 작성 처리
+    // 공지사항 작성 처리 (관리자만)
     @PostMapping("insert.bo")
     public String insertBoard(Board board, HttpSession session, Model model) {
-        
-        System.out.println("공지사항 작성 시도: " + board);
+        // 관리자 권한 체크
+        if(session.getAttribute("loginAdmin") == null) {
+            model.addAttribute("errorMsg", "관리자만 접근 가능합니다.");
+            return "common/errorPage";
+        }
         
         int result = service.insertBoard(board);
         
@@ -66,19 +70,28 @@ public class BoardController {
         }
     }
     
-    // 공지사항 수정 페이지 이동
+    // 공지사항 수정 페이지 이동 (관리자만)
     @GetMapping("updateForm.bo")
-    public String boardUpdateForm(@RequestParam("bno") int noticeNum, Model model) {
+    public String boardUpdateForm(@RequestParam("bno") int noticeNum, HttpSession session, Model model) {
+        // 관리자 권한 체크
+        if(session.getAttribute("loginAdmin") == null) {
+            model.addAttribute("errorMsg", "관리자만 접근 가능합니다.");
+            return "common/errorPage";
+        }
         
         Board board = service.selectBoard(noticeNum);
-        
         model.addAttribute("board", board);
         return "board/boardUpdateForm";
     }
     
-    // 공지사항 수정 처리
+    // 공지사항 수정 처리 (관리자만)
     @PostMapping("update.bo")
     public String updateBoard(Board board, HttpSession session, Model model) {
+        // 관리자 권한 체크
+        if(session.getAttribute("loginAdmin") == null) {
+            model.addAttribute("errorMsg", "관리자만 접근 가능합니다.");
+            return "common/errorPage";
+        }
         
         int result = service.updateBoard(board);
         
@@ -91,9 +104,14 @@ public class BoardController {
         }
     }
     
-    // 공지사항 삭제 처리
+    // 공지사항 삭제 처리 (관리자만)
     @PostMapping("delete.bo")
     public String deleteBoard(@RequestParam("bno") int noticeNum, HttpSession session, Model model) {
+        // 관리자 권한 체크
+        if(session.getAttribute("loginAdmin") == null) {
+            model.addAttribute("errorMsg", "관리자만 접근 가능합니다.");
+            return "common/errorPage";
+        }
         
         int result = service.deleteBoard(noticeNum);
         
@@ -106,13 +124,10 @@ public class BoardController {
         }
     }
     
-    // AJAX로 공지사항 검색
+    // AJAX로 공지사항 검색 (모든 사용자)
     @ResponseBody
     @RequestMapping(value="search.bo", produces = "application/json;charset=UTF-8")
     public List<Board> searchBoard(@RequestParam("keyword") String keyword) {
-        
-        List<Board> searchList = service.searchBoard(keyword);
-        
-        return searchList;
+        return service.searchBoard(keyword);
     }
 }

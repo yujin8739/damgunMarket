@@ -31,13 +31,13 @@ public class HistoryController {
 		
 		TradeHistory t = new TradeHistory(userNo, pdNum, pdTitle, pdPrice, filed, pdImage);
 		//서비스에 전달 및 요청
-		int result = service.insertMyHistory(t);
-		
-		if(result>0) {
-			session.setAttribute("alertMsg","거래가 완료 되었습니다.");
-		}else {
-			session.setAttribute("alertMsg", "거래가 실패 했습니다.");
-		}
+//		int result = service.insertMyHistory(t);
+//		
+//		if(result>0) {
+//			session.setAttribute("alertMsg","거래가 완료 되었습니다.");
+//		}else {
+//			session.setAttribute("alertMsg", "거래가 실패 했습니다.");
+//		}
 		return "/";
 		
 	}

@@ -30,7 +30,7 @@ public class AdminController {
         return "admin/adminLoginForm";
     }
     
-    /*
+    
     // 관리자 로그인 처리
     @RequestMapping("login.ad")
     public String loginAdmin(Admin admin, HttpSession session, Model model) {
@@ -52,54 +52,13 @@ public class AdminController {
         if(loginAdmin != null && bcrypt.matches(admin.getAdminPw(), loginAdmin.getAdminPw())) {
             session.setAttribute("alertMsg", "관리자 로그인 성공!");
             session.setAttribute("loginAdmin", loginAdmin);
-            return "redirect:/admin/main.ad";
+            return "redirect:/";
         } else {
             model.addAttribute("errorMsg", "관리자 아이디 또는 비밀번호가 일치하지 않습니다.");
             return "common/errorPage";
         }
     }
-    */
-    @RequestMapping("login.ad")
-    public String loginAdmin(Admin admin, HttpSession session, Model model) {
-        
-        System.out.println("관리자 로그인 시도 - ID: " + admin.getAdminId());
-        
-        Admin loginAdmin = service.loginAdmin(admin);
-        
-        System.out.println("DB에서 조회된 사용자: " + loginAdmin);
-        System.out.println("사용자가 입력한 비밀번호 : " + admin.getAdminPw());
-        System.out.println("DB의 암호화된 비밀번호: " + (loginAdmin != null ? loginAdmin.getAdminPw() : "null"));
-        
-        // ===== 직접 여러 비밀번호 테스트 =====
-        if(loginAdmin != null) {
-            String dbPassword = loginAdmin.getAdminPw();
-            String[] testPasswords = {"admin", "1234", "password", "admin123", "관리자", "admin1234", "Administrator", "root"};
-            
-            System.out.println("=== 비밀번호 매칭 테스트 ===");
-            for(String testPw : testPasswords) {
-                boolean match = bcrypt.matches(testPw, dbPassword);
-                System.out.println("- " + testPw + " : " + match);
-                if(match) {
-                    System.out.println("🎉 정답 발견: " + testPw);
-                }
-            }
-            System.out.println("========================");
-            
-            // 원래 로직
-            boolean passwordMatch = bcrypt.matches(admin.getAdminPw(), loginAdmin.getAdminPw());
-            System.out.println("비밀번호 매칭 결과: " + passwordMatch);
-        }
-        
-        if(loginAdmin != null && bcrypt.matches(admin.getAdminPw(), loginAdmin.getAdminPw())) {
-            session.setAttribute("alertMsg", "관리자 로그인 성공!");
-            session.setAttribute("loginAdmin", loginAdmin);
-            return "redirect:/admin/main.ad";
-        } else {
-            model.addAttribute("errorMsg", "관리자 아이디 또는 비밀번호가 일치하지 않습니다.");
-            return "common/errorPage";
-        }
-    }
-    
+ 
   
     
     // 관리자 로그아웃
@@ -192,5 +151,10 @@ public class AdminController {
         } else {
             return "NNNNY"; // 사용가능
         }
+    }
+    
+    @GetMapping("chargePoint")
+    public String chargePoint() {
+    	return "admin/chargePoint";
     }
 }

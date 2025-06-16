@@ -76,4 +76,8 @@ public class ChatDAO {
     public String selectUserNameByUserId(String userId) {
         return sqlSession.selectOne("chatMapper.selectUserNameByUserId", userId);
     }
+    public String selectUserIdByUserNo(int userNo) {
+        return sqlSession.selectOne("chatMapper.selectUserIdByUserNo", userNo);
+    }
+
 }
