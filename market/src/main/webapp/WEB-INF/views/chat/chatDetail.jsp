@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -25,14 +25,15 @@ body {
 	background-color: #fff; /* 콘텐츠 배경색 */
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    position: relative; /* Add this to make it the positioning context for absolute children */
-    min-height: calc(100vh - 120px); /* Adjust based on actual header/footer heights */
-                                   /* Example: 100vh - header_height - footer_height */
-                                   /* This prevents footer from floating up on short content */
-    display: flex;
-    flex-direction: column; /* Allows content to stack vertically */
+	position: relative;
+	/* Add this to make it the positioning context for absolute children */
+	min-height: calc(100vh - 120px);
+	/* Adjust based on actual header/footer heights */
+	/* Example: 100vh - header_height - footer_height */
+	/* This prevents footer from floating up on short content */
+	display: flex;
+	flex-direction: column; /* Allows content to stack vertically */
 }
-
 
 /* h2 스타일 조정 */
 h2 {
@@ -51,7 +52,8 @@ h2 {
 	margin-bottom: 10px;
 	background-color: #fdfdfd; /* 채팅 배경색 */
 	border-radius: 8px;
-    flex-grow: 1; /* Allow chat container to take available vertical space */
+	flex-grow: 1;
+	/* Allow chat container to take available vertical space */
 }
 
 .message {
@@ -123,7 +125,7 @@ h2 {
 	font-size: 1em;
 	box-sizing: border-box;
 	vertical-align: middle; /* 버튼과 정렬 */
-    margin-bottom: 10px; /* Space between input and notification */
+	margin-bottom: 10px; /* Space between input and notification */
 }
 
 .send-button {
@@ -165,7 +167,8 @@ h2 {
 
 .new-message-notification {
 	position: absolute;
-	bottom: 80px; /* Adjust as needed, relative to the main-content bottom */
+	bottom: 80px;
+	/* Adjust as needed, relative to the main-content bottom */
 	left: 50%;
 	transform: translateX(-50%);
 	background-color: #ffc107; /* 알림 색상 유지 */
@@ -183,59 +186,67 @@ h2 {
 
 /* 채팅방 목록으로 돌아가기 링크 스타일 */
 .back-link {
-    display: block;
-    text-align: center;
-    margin-top: 25px;
-    /* margin-bottom is implicitly handled by footer.jsp */
-    font-size: 1.05em;
-    color: #7b68ee; /* 헤더 강조색과 통일 */
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.2s ease;
+	display: block;
+	text-align: center;
+	margin-top: 25px;
+	/* margin-bottom is implicitly handled by footer.jsp */
+	font-size: 1.05em;
+	color: #7b68ee; /* 헤더 강조색과 통일 */
+	text-decoration: none;
+	font-weight: 600;
+	transition: color 0.2s ease;
 }
 
 .back-link:hover {
-    color: #5a4fcf;
-    text-decoration: underline;
+	color: #5a4fcf;
+	text-decoration: underline;
 }
 </style>
 </head>
 <body>
 
-    <%-- Header Include --%>
-    <%@ include file="/WEB-INF/views/common/header.jsp" %>
+	<%-- Header Include --%>
+	<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-    <div class="main-content">
-        <h2>${chatRoom.otherUserName}(${chatRoom.otherUserId})채팅방(RoomNo: ${chatRoom.roomNo})</h2>
+	<div class="main-content">
+		<h2>${chatRoom.otherUserName}(${chatRoom.otherUserId})채팅방(RoomNo:
+			${chatRoom.roomNo})</h2>
 
-        <div id="connectionStatus" class="connection-status disconnected">연결 중...</div>
+		<div id="connectionStatus" class="connection-status disconnected">연결
+			중...</div>
 
-        <div class="chat-container" id="chatContainer">
-            <%-- 서버에서 미리 로드된 기존 메시지들 --%>
-            <c:forEach var="msg" items="${messages}">
-                <div class="message <c:if test='${msg.userId eq currentUserId}'>my-message</c:if><c:if test='${msg.userId ne currentUserId}'>other-message</c:if>">
-                    <span class="sender">${msg.userId}</span>
-                    <div class="message-content">${msg.message}</div>
-                    <span class="time">(<fmt:formatDate value="${msg.sendTime}" pattern="HH:mm:ss" />)</span>
-                    <c:if test="${not empty msg.imageUrl}">
-                        <br>
-                        <img src="${msg.imageUrl}" class="message-image" alt="이미지">
-                    </c:if>
-                </div>
-            </c:forEach>
-        </div>
+		<div class="chat-container" id="chatContainer">
+			<%-- 서버에서 미리 로드된 기존 메시지들 --%>
+			<c:forEach var="msg" items="${messages}">
+				<div
+					class="message <c:if test='${msg.userId eq currentUserId}'>my-message</c:if><c:if test='${msg.userId ne currentUserId}'>other-message</c:if>">
+					<span class="sender">${msg.userId}</span>
+					<div class="message-content">${msg.message}</div>
+					<span class="time">(<fmt:formatDate value="${msg.sendTime}"
+							pattern="HH:mm:ss" />)
+					</span>
+					<c:if test="${not empty msg.imageUrl}">
+						<br>
+						<img src="${msg.imageUrl}" class="message-image" alt="이미지">
+					</c:if>
+				</div>
+			</c:forEach>
+		</div>
 
-        <div id="newMessageNotification" class="new-message-notification" onclick="scrollToBottom()">새로운 메시지가 있습니다. 클릭하여 이동</div>
+		<div id="newMessageNotification" class="new-message-notification"
+			onclick="scrollToBottom()">새로운 메시지가 있습니다. 클릭하여 이동</div>
 
-        <input type="text" id="messageInput" class="message-input" placeholder="메시지를 입력하세요...">
-        <button onclick="sendMessage()" class="send-button">전송</button>
+		<input type="text" id="messageInput" class="message-input"
+			placeholder="메시지를 입력하세요...">
+		<button onclick="sendMessage()" class="send-button">전송</button>
 
-        <p>
-            <a href="${pageContext.request.contextPath}/chat/roomList" class="back-link">채팅방 목록으로 돌아가기</a>
-        </p>
-    </div>
+		<p>
+			<a href="${pageContext.request.contextPath}/chat/roomList"
+				class="back-link">채팅방 목록으로 돌아가기</a>
+		</p>
+	</div>
 
-    <script>
+	<script>
         var websocket;
         var roomNo = ${chatRoom.roomNo};
         var currentUserId = '${currentUserId}';
@@ -426,15 +437,19 @@ h2 {
 
         // 메시지 고유 ID 생성 함수
         function generateMessageId(messageData) {
-            var userId = extractValue(messageData, ['userId', 'sender', 'from', 'user']) || 'unknown';
-            var message = extractValue(messageData, ['message', 'content', 'text', 'msg']) || '';
-            var sendTime = extractValue(messageData, ['sendTime', 'timestamp', 'time', 'createdAt']) || new Date().toISOString();
-            
-            // 간단한 해시 생성 (userId + message + 시간을 분 단위로 반올림)
-            var timeForId = new Date(sendTime);
-            timeForId.setSeconds(0, 0); // 초와 밀리초를 0으로 설정
-            return btoa(userId + '|' + message + '|' + timeForId.toISOString());
-        }
+    var userId = extractValue(messageData, ['userId', 'sender', 'from', 'user']) || 'unknown';
+    var message = extractValue(messageData, ['message', 'content', 'text', 'msg']) || '';
+    var sendTime = extractValue(messageData, ['sendTime', 'timestamp', 'time', 'createdAt']) || new Date().toISOString();
+    
+    var timeForId = new Date(sendTime);
+    timeForId.setSeconds(0, 0); // 초와 밀리초를 0으로 설정
+
+    // 1. 인코딩할 전체 문자열을 만듭니다.
+    const stringToEncode = userId + '|' + message + '|' + timeForId.toISOString();
+    
+    // 2. encodeURIComponent로 먼저 인코딩한 후, 그 결과를 btoa로 인코딩합니다.
+    return btoa(encodeURIComponent(stringToEncode));
+}
 
         // 이미 표시된 메시지인지 확인하는 함수
         function isMessageAlreadyDisplayed(messageId) {
@@ -648,7 +663,7 @@ h2 {
         }
     </script>
 
-    <%-- Footer Include --%>
-    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
+	<%-- Footer Include --%>
+	<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </body>
 </html>
