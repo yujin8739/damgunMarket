@@ -351,7 +351,7 @@
         // userNo를 쿼리 파라미터로 전달 -채팅하기로 바로이동할 수 있는 스크립트.
         location.href = '${pageContext.request.contextPath}/chat/startChat?productSellerNo=' + productSellerNo + '&loginUserNo=' + loginUserNo;
     }
-</script>
+  </script>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
