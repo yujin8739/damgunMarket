@@ -102,6 +102,14 @@
 	    <p id="enrollStatus" style="cursor: pointer; color: green; font-size: 16px;"></p>
 	    <h1 style="display: flex; justify-content: space-between; align-items: center;">
 	    	${product.pdTitle}
+	    	<%-- 담구기 기능 추가 시작 --%>
+			<div style="display: flex; align-items: center;">
+				<input type="number" id="dampgugiPoints" min="1" value="1"
+					style="width: 80px; margin-right: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+				<button type="button" id="dampgugiButton"
+					style="cursor: pointer; background-color: #6a0dad; color: white; border: none; padding: 10px 16px; border-radius: 6px;">담구기</button>
+			</div>
+			<%-- 담구기 기능 추가 끝 --%>
 	    	<span id="favoriteStar" style="cursor: pointer; color: gold; font-size: 24px;">☆</span>
 		</h1>
 	    
