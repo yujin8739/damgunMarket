@@ -56,7 +56,7 @@ public class MemberController {
 	        System.out.println("로그아웃 시도 - 세션 ID: " + session.getId());
 
 	        if (session != null) { 
-	            session.invalidate(); 
+//	            session.invalidate(); 
 	            session.removeAttribute("loginUser");
 	            System.out.println("INFO: 세션이 성공적으로 무효화되었습니다.");
 	        }
