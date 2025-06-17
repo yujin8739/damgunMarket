@@ -357,14 +357,30 @@
 	        const jsonData = document.getElementById("json-data").dataset.json;
 	        const fileList = JSON.parse(jsonData);
 	        console.log("fileList:", fileList);
-
+	        
 	        fileList.forEach(url => {
-	            const img = document.createElement("img");
-	            img.src = url;
-	            img.alt = "상품 이미지";
-	            img.style.margin = "5px";
-	            img.style.maxWidth = "700px";
-	            imageContainer.appendChild(img);
+	            const extension = url.split('.').pop().toLowerCase();  // 확장자 추출
+	            let element;
+
+	            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+	                // 이미지 파일
+	                element = document.createElement("img");
+	                element.src = url;
+	                element.alt = "상품 이미지";
+	                element.style.maxWidth = "700px";
+	            } else if (['mp4', 'webm', 'avi'].includes(extension)) {
+	                // 영상 파일
+	                element = document.createElement("video");
+	                element.src = url;
+	                element.controls = true;
+	                element.style.maxWidth = "700px";
+	            } else {
+	                // 지원하지 않는 확장자 무시
+	                return;
+	            }
+
+	            element.style.margin = "5px";
+	            imageContainer.appendChild(element);
 	        });
 
 	        // 즐겨찾기 별 클릭 처리
