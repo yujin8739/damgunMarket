@@ -200,18 +200,18 @@ button:hover {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: 'user1=${currentUserId}&user2=' + targetUserId
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('채팅방 생성 성공! 방 번호: ' + data.roomNo);
-                    location.reload();
-                } else {
-                    alert('채팅방 생성 실패: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+            	})
+            	.then(response => response.json())
+            	.then(data => {
+                	if (data.status === 'success') {
+                    	alert('채팅방 생성 성공! 방 번호: ' + data.roomNo);
+                    	location.reload();
+                	} else {
+                    	alert('채팅방 생성 실패: ' + data.message);
+                	}
+            	})
+            	.catch(error => console.error('Error:', error));
+        	}
+    	</script>
 </body>
 </html>
