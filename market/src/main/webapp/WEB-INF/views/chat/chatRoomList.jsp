@@ -172,7 +172,7 @@ button:hover {
 			</c:otherwise>
 		</c:choose>
 
-		<h3>새 채팅방 생성 (테스트용)</h3>
+		<h3>새 채팅방 생성</h3>
 		<p>
 			상대방 ID: <input type="text" id="targetUserId" value="testuser" />
 		</p>
@@ -200,18 +200,18 @@ button:hover {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: 'user1=${currentUserId}&user2=' + targetUserId
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('채팅방 생성 성공! 방 번호: ' + data.roomNo);
-                    location.reload();
-                } else {
-                    alert('채팅방 생성 실패: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+            	})
+            	.then(response => response.json())
+            	.then(data => {
+                	if (data.status === 'success') {
+                    	alert('채팅방 생성 성공! 방 번호: ' + data.roomNo);
+                    	location.reload();
+                	} else {
+                    	alert('채팅방 생성 실패: ' + data.message);
+                	}
+            	})
+            	.catch(error => console.error('Error:', error));
+        	}
+    	</script>
 </body>
 </html>

@@ -63,7 +63,7 @@
         <form action="${pageContext.request.contextPath}/product/edit" method="post" enctype="multipart/form-data">
             <!-- 숨겨진 상품 번호 -->
             <input type="hidden" name="pdNum" value="${product.pdNum}" />
-
+			<input type="hidden" name="userNo" value="${product.userNo}" />
             <!-- 상품명 -->
             <div class="form-group">
                 <label for="pdTitle" class="form-label">상품명 <span class="required">*</span></label>
@@ -112,7 +112,7 @@
                     <label class="form-label">상품 이미지 <span class="required">*</span></label>
                     <div class="file-upload-area">
                         <p class="mb-2">이미지를 선택해주세요 (최대 5장)</p>
-                       <input type="file" class="form-control" id="uploadFile" name="uploadFiles" multiple accept="image/*" required>
+                       <input type="file" class="form-control" id="uploadFile" name="uploadFiles" multiple accept="image/*">
                         <small class="text-muted">첫 번째 이미지가 대표 이미지로 설정됩니다.</small>
                     </div>
                     <div class="file-preview" id="filePreview"></div>
