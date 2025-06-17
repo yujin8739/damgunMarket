@@ -18,6 +18,5 @@ public class UserQnaInfo {
     private String userQnaImg;  // USERQNA_IMG VARCHAR2(255) - 문의이미지
     private boolean status; // STATUS - 답변여부
     private Date  createdate; //-작성일 
-    //private Date  modifydate; //-수정일
-    
+
 }

@@ -181,12 +181,17 @@
             display: inline-block;
         }
         
-        .badge-warning {
+        .badge-answered {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: 1px solid #28a745;
+        }
+        
+        .badge-waiting {
             background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
             color: #856404;
             border: 1px solid #ffb300;
         }
-        
 
         @media (max-width: 768px) {
             .container {
@@ -242,13 +247,11 @@
                 </c:if>
             </div>
 
-
-
         </div>
         
         <div class="search-form">
             <form action="${contextPath}/userqna/list.uq" method="get">
-                <input type="text" name="keyword" class="search-input" placeholder="제목 또는 내용으로 검색">
+                <input type="text" name="keyword" class="search-input" placeholder="제목 또는 내용으로 검색" value="${keyword}">
                 <button type="submit" class="btn">검색</button>
             </form>
         </div>
@@ -276,11 +279,11 @@
                                 </td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${not empty loginUser.userName}">
-                                            ${loginUser.userName}
+                                        <c:when test="${not empty qna.userName}">
+                                            ${qna.userName}
                                         </c:when>
                                         <c:otherwise>
-                                            회원${loginUser.userNo}
+                                            회원${qna.userNo}
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
@@ -295,15 +298,16 @@
                                     </c:choose>
                                 </td>
                                 <td>
-								    <c:choose>
-								        <c:when test="${qna.status == true || qna.status == 'Y' || qna.status == 'true'}">
-								            <span class="badge" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: 1px solid #28a745;">답변완료</span>
-								        </c:when>
-								        <c:otherwise>
-								            <span class="badge badge-warning">답변대기</span>
-								        </c:otherwise>
-								    </c:choose>
-								</td>
+                                    <!-- Answer 서비스에서 설정한 status 값으로 간단히 표시 -->
+                                    <c:choose>
+                                        <c:when test="${qna.status}">
+                                            <span class="badge badge-answered">답변완료</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge badge-waiting">답변대기</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>

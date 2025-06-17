@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+	
+	<resultMap type="Member" id="memberResultMap">
+		<result property="userNo" column="USER_NO" />
+		<result property="userId" column="USERID" />
+		<result property="passWord" column="PASSWORD" />
+		<result property="userName" column="USERNAME" />
+		<result property="email" column="EMAIL" />
+		<result property="status" column="STATUS" />
+		<result property="userRank" column="USERRANK" />
+		<result property="latitude" column="LATITUDE" />
+		<result property="longitude" column="LONGITUDE" />
+	</resultMap>
+
+	<!-- 로그인 시 아이디로만 조회 (비밀번호는 컨트롤러에서 bcrypt로 비교) -->
+	<select id="loginMember" parameterType="Member" resultType="Member" resultMap="memberResultMap">
+		SELECT USER_NO
+			  ,USERID 
+			  ,PASSWORD
+			  ,USERNAME
+			  ,EMAIL
+			  ,STATUS
+			  ,USERRANK
+			  ,LATITUDE
+	  	      ,LONGITUDE
+		FROM USER_INFO 
+		WHERE USERID = '${userId}'
+		AND STATUS = 'Y'
+	</select>
+	
+	<!-- 회원가입 시 USERNO를 자동증가로 설정 -->
+	<insert id="insertMember" parameterType="Member"> 
+		INSERT INTO USER_INFO(USER_NO
+						  ,USERID 
+						  ,PASSWORD
+						  ,USERNAME
+						  ,EMAIL
+						  ,STATUS
+						  ,USERRANK
+						  ,LATITUDE
+	  	                  ,LONGITUDE)
+           		    VALUES(USER_INFO_SEQ.NEXTVAL
+           		    	  ,#{userId}
+           		    	  ,#{passWord}
+           		    	  ,#{userName}
+           		    	  ,#{email}
+           		    	  ,'Y'
+           		    	  ,1
+           		    	  ,#{latitude} 
+           		    	  ,#{longitude})
+	</insert>
+	
+	<update id="updateMember" parameterType="Member">
+		UPDATE USER_INFO
+		SET USERNAME = #{userName}
+		   ,EMAIL = #{email}
+		   ,LATITUDE = #{latitude}
+	  	   ,LONGITUDE = #{longitude}
+		WHERE USERID = #{userId}
+		AND STATUS = 'Y'	
+	</update>
+	
+	<update id="deleteMember" parameterType="Member">
+		UPDATE USER_INFO
+		SET STATUS = 'N'
+		WHERE USERID = #{userId}
+	</update>
+	
+	<select id="idCheck" resultType="_int">
+		SELECT COUNT(*)
+		FROM USER_INFO
+		WHERE USERID = #{userId}
+		AND STATUS = 'Y'
+	</select>
+	
+	<insert id="saveFavorite">
+		INSERT INTO FAVORITE (PD_NUM, USER_NO)
+		VALUES(#{pdNum},#{userNo})
+	</insert>
+	
+	<delete id="deleteFavorite">
+		DELETE FROM FAVORITE
+		WHERE PD_NUM = #{pdNum}
+		AND USER_NO = #{userNo}
+	</delete>
+	
+	<select id="selectFavorite" resultType="_int">
+		SELECT COUNT(*)
+		FROM FAVORITE
+		WHERE PD_NUM = #{pdNum}
+		AND USER_NO = #{userNo}
+	</select>
+	
+	<select id="selectEnrollMemberList" resultType="Member" resultMap="memberResultMap">
+		SELECT UI.USER_NO
+			,UI.USERNAME
+			,UI.EMAIL
+			,UI.STATUS
+			,UI.USERRANK
+			,UI.LATITUDE
+	  	    ,UI.LONGITUDE
+		FROM TRADE_ENROLL TE
+		JOIN USER_INFO UI
+		ON TE.ENROLL_NUM = UI.USER_NO
+		WHERE TE.PD_NUM = #{pdNum}
+		AND TE.USER_NO = #{userNo}
+		AND TE.STATUS = #{status}
+	</select>
+	
+	<select id="selectHistoryMember" resultType="Member" resultMap="memberResultMap">
+		SELECT USER_NO 
+			  ,USERNAME
+			  ,EMAIL
+			  ,STATUS
+			  ,USERRANK
+			  ,LATITUDE
+	  	      ,LONGITUDE
+		FROM USER_INFO 
+		WHERE USER_NO = #{userNo}
+		AND STATUS = 'Y'
+	</select>
+	
+	<update id="insertPoint">
+		UPDATE USER_INFO
+		SET USERRANK = USERRANK + #{point}
+		WHERE USER_NO = #{userNo}
+	</update>
+	
+	<update id="chargePoint">
+		UPDATE USER_INFO
+		SET USERRANK = USERRANK + #{point}
+		WHERE USERID = #{userId}
+	</update>
+	
+
+    <select id="selectUserRank" parameterType="_int" resultType="_int">
+        SELECT USERRANK
+        FROM USER_INFO
+        WHERE USER_NO = #{userNo}
+    </select>
+
+    <update id="updateUserRank" parameterType="map">
+        UPDATE USER_INFO
+        SET USERRANK = USERRANK + #{rankChange}
+        WHERE USER_NO = #{userNo}
+    </update>
+
+</mapper>

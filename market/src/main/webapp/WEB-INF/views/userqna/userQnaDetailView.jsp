@@ -203,7 +203,19 @@
                     </c:otherwise>
                 </c:choose>
                 <br>
-                작성자: <span>${loginUser.userName}님</span><br>
+                작성자: 
+                <c:choose>
+                    <c:when test="${not empty userQna.userName}">
+                        ${userQna.userName}님
+                    </c:when>
+                    <c:when test="${not empty loginUser.userName}">
+                        ${loginUser.userName}님
+                    </c:when>
+                    <c:otherwise>
+                        회원${userQna.userNo}
+                    </c:otherwise>
+                </c:choose>
+                <br>
                 문의번호: ${userQna.userQnaNum}
             </div>
         </div>

@@ -22,9 +22,9 @@
     </select>
     
     <insert id="insertBoard" parameterType="Board">
-        INSERT INTO BOARD (NOTICE_NUM, NOTICE_TITLE, NOTICE, NOTICE_IMG)
-        VALUES (BOARD_NOTICE_NUM_SEQ.NEXTVAL, #{noticeTitle}, #{notice}, #{noticeImg})
-    </insert>
+    INSERT INTO BOARD (NOTICE_NUM, NOTICE_TITLE, NOTICE, NOTICE_IMG, CREATEDATE, MODIFYDATE)
+    VALUES (BOARD_NOTICE_NUM_SEQ.NEXTVAL, #{noticeTitle}, #{notice}, #{noticeImg}, SYSDATE, SYSDATE)
+	</insert>	
     
     <update id="updateBoard" parameterType="Board">
     UPDATE BOARD SET 
