@@ -79,7 +79,11 @@ public class ProductDao {
 	public int insertPdFiles(SqlSessionTemplate sqlSession, PdFile pdFile) {
 		return sqlSession.insert("productMapper.insertProductFile", pdFile);
 	}
-
+	
+	public int deletePdFiles(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
+		return sqlSession.delete("productMapper.deleteProductFilesByPdNumUserNo",
+				Map.of("pdNum", pdNum, "userNo", userNo));
+	}
 	
 	public int deleteProduct(SqlSessionTemplate sqlSession, int pdNum, int userNo) {
 		// 기존 상품 삭제와 파일 삭제
@@ -168,4 +172,8 @@ public class ProductDao {
 		param.put("status", status);
 		return sqlSession.update("productMapper.selectHistoryUpdate",param);
 	}
+	 public int updateProductRank(SqlSessionTemplate sqlSession, Map<String, Object> params) {
+	        return sqlSession.update("productMapper.updateProductRank", params);
+	    }
+
 }

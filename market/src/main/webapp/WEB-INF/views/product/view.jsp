@@ -102,6 +102,14 @@
 	    <p id="enrollStatus" style="cursor: pointer; color: green; font-size: 16px;"></p>
 	    <h1 style="display: flex; justify-content: space-between; align-items: center;">
 	    	${product.pdTitle}
+	    	<%-- 담구기 기능 추가 시작 --%>
+			<div style="display: flex; align-items: center;">
+				<input type="number" id="dampgugiPoints" min="1" value="1"
+					style="width: 80px; margin-right: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+				<button type="button" id="dampgugiButton"
+					style="cursor: pointer; background-color: #6a0dad; color: white; border: none; padding: 10px 16px; border-radius: 6px;">담구기</button>
+			</div>
+			<%-- 담구기 기능 추가 끝 --%>
 	    	<span id="favoriteStar" style="cursor: pointer; color: gold; font-size: 24px;">☆</span>
 		</h1>
 	    
@@ -115,7 +123,8 @@
 		<div id="json-data" data-json='${fileListJson}' style="display:inline-block; ;"></div>
 	    <div class="product-info">
 	        <p><strong>가격:</strong> ${product.pdPrice} 원</p>
-	        <p><strong>설명:</strong> ${product.pdBoard}</p>
+	        <p><strong>설명:</strong></p><p style="white-space: pre-wrap;">${product.pdBoard}</p>
+	        
 	        <!-- <p><strong>위치:</strong> 위도 ${product.latitude}, 경도 ${product.longitude}</p> -->
 	        <!--<p><strong>랭크:</strong> ${product.pdRank}</p>-->
 	        <%-- <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p> --%>
@@ -129,16 +138,27 @@
 			</div>
 	    </div>
 	    
-	    <c:if test="${sessionScope.loginUser.userNo == product.userNo}">
+	    <c:if test="${sessionScope.loginUser.userNo == product.userNo && enrollStatus != '판매완료'}">
 	        <div style="margin-top: 20px; text-align: right;">
-	            <form action="${pageContext.request.contextPath}/product/delete" method="post"
-	                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
-	                <input type="hidden" name="pdNum" value="${product.pdNum}" />
-	                <input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo}" />
-	                <button type="submit" style="background-color: #ff5c5c; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
-	                    삭제
-	                </button>
-	            </form>
+				<div id="editBtnBox" style="display: flex; gap: 10px; text-align: right;justify-content: flex-end;">
+				    <form action="${pageContext.request.contextPath}/product/delete" method="post"
+				          onsubmit="return confirm('정말 삭제하시겠습니까?');" style="margin: 0;">
+				        <input type="hidden" name="pdNum" value="${product.pdNum}" />
+				        <input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo}" />
+				        <button id="deleteBtn"  type="submit" style="background-color: #ff5c5c; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+				            삭제
+				        </button>
+				    </form>
+				    <form action="${pageContext.request.contextPath}/product/pdedit" method="get"
+				          onsubmit="return confirm('정말 수정하시겠습니까?');" style="margin: 0;">
+				        <input type="hidden" name="pdNum" value="${product.pdNum}" />
+				        <input type="hidden" name="userNo" value="${product.userNo}" />
+				        <button id="editBtn" type="submit" style="background-color: green; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
+				            수정
+				        </button>
+				    </form>
+				</div>
+
 	        </div>
 	    </c:if>
 	    
@@ -149,7 +169,7 @@
 	            <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" />
 	            <input type="hidden" name="userNo" value="${product.userNo}" />         <input type="hidden" name="enrollNo" value="${sessionScope.loginUser.userNo}" /> <button id="chatButton" type="button" 
                 onclick="startChatWithSeller(${product.userNo}, ${sessionScope.loginUser.userNo})"  style="cursor: pointer; background-color: black; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
-           		채팅하기
+           			채팅하기
         		</button>
 	            <button id="tradeButton" type="button"  onclick="doEnrollProcess(${product.pdNum}, ${product.userNo},${sessionScope.loginUser.userNo},'거래신청')"  style="display: none; cursor: pointer; background-color: green; color: white; border: none; padding: 10px 16px; border-radius: 6px;">
 					거래신청
@@ -268,6 +288,11 @@
 							$('#enrollEndButton').hide()
 						}
 					}
+	    		    
+	    		    if (status === '판매완료') {
+	    		    	$('#editBtn').hide();
+	    		    	$('#deleteBtn').hide()
+	    		    }
 				},
 				error: function () {
 					alert("거래 시도에 실패했습니다.");
@@ -290,6 +315,7 @@
 		    	doEnrollProcess(pdNum, sellerNo, null, null);
 			}
 		    checkStation();
+		    
 	        // 기존 이미지 로딩 스크립트
 	        const imageContainer = document.getElementById("imageContainer");
 	        const jsonData = document.getElementById("json-data").dataset.json;
@@ -344,7 +370,52 @@
 	        });
 	    });
 
-	</script>
+		    // 담구기 버튼 클릭 이벤트 핸들러
+		    $('#dampgugiButton').on('click', function() {
+		        const points = parseInt($('#dampgugiPoints').val());
+		        const currentUserNo = ${sessionScope.loginUser.userNo};
+		        const productSellerNo = ${product.userNo};
+		        const pdNum = ${product.pdNum};
+
+		        if (!currentUserNo || currentUserNo === 'null') {
+		            alert('로그인 후 이용해주세요.');
+		            return;
+		        }
+
+		        if (currentUserNo === productSellerNo) {
+		            alert('자신의 상품에는 포인트를 담글 수 없습니다.');
+		            return;
+		        }
+
+		        if (isNaN(points) || points <= 0) {
+		            alert('유효한 포인트를 입력해주세요 (1 이상의 숫자).');
+		            return;
+		        }
+
+		        $.ajax({
+		            url: serverPath + '/product/dampgugi',
+		            type: 'POST',
+		            data: {
+		                pdNum: pdNum,
+		                senderUserNo: currentUserNo,
+		                receiverUserNo: productSellerNo,
+		                points: points
+		            },
+		            success: function(response) {
+		                if (response.status === 'success') {
+		                    alert(points + '포인트를 상품에 담구었습니다!\n현재 상품 랭크: ' + response.updatedProductRank);
+		                    $('#productRankDisplay').text(response.updatedProductRank);
+		                } else {
+		                    alert(response.message);
+		                }
+		            },
+		            error: function() {
+		                alert('포인트 담구기 중 오류가 발생했습니다.');
+		            }
+		        });
+		    });
+
+		</script>
 	<script>
     function startChatWithSeller(productSellerNo, loginUserNo) {
         // ChatController의 새로운 엔드포인트로 이동
@@ -355,3 +426,4 @@
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
+

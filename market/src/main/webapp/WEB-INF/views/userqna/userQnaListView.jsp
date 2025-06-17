@@ -246,6 +246,7 @@
                     <a href="${contextPath}/userqna/enrollForm.uq" class="btn">문의하기</a>
                 </c:if>
             </div>
+
         </div>
         
         <div class="search-form">

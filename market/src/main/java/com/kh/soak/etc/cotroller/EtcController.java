@@ -1,5 +1,10 @@
 package com.kh.soak.etc.cotroller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,16 +12,21 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +43,15 @@ public class EtcController {
 	
 	@Autowired
 	private EtcService service;
+	
+	private static final String ACME_CHALLENGE_PATH = "C:\\Users\\dambaepijyo\\Desktop\\apache-tomcat-9.0.102\\webapps\\ROOT\\.well-known\\acme-challenge\\";
+	
+    private final Map<String, String> tokenMap = new ConcurrentHashMap<>();
+
+    // ACME 클라이언트가 토큰을 여기 등록하도록 API 등 만들면 좋음
+    public void addToken(String token, String keyAuthorization) {
+        tokenMap.put(token, keyAuthorization);
+    }
 	
 	@GetMapping("/error-403")
 	public String errorNotAllow(HttpSession session) {
@@ -139,5 +158,26 @@ public class EtcController {
 		 }
 	 }
 
+	 @GetMapping("/.well-known/acme-challenge/{fileName}")
+	 public void getAcmeChallengeFile(
+	            @org.springframework.web.bind.annotation.PathVariable String fileName,
+	            HttpServletResponse response
+	    ) throws IOException {
+	        File file = new File(ACME_CHALLENGE_PATH + fileName);
+
+	        if (!file.exists()) {
+	            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	            return;
+	        }
+
+	        response.setContentType("text/plain; charset=UTF-8");
+	        try (BufferedReader br = new BufferedReader(new FileReader(file));
+	             PrintWriter out = response.getWriter()) {
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                out.println(line);
+	            }
+	        }
+	    }   
 
 }
