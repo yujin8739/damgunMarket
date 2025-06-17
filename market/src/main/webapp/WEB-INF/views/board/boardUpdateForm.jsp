@@ -117,7 +117,6 @@
             <input type="hidden" name="noticeNum" value="${board.noticeNum}">
             <input type="text" name="noticeTitle" value="${board.noticeTitle}" placeholder="제목" required>
             <textarea name="notice" placeholder="내용" required>${board.notice}</textarea>
-            <input type="text" name="noticeImg" value="${board.noticeImg}" placeholder="이미지 URL (선택사항)">
             <button type="submit" class="btn-primary">수정</button>
             <button type="button" class="btn-secondary" onclick="location.href='detail.bo?bno=${board.noticeNum}'">취소</button>
         </form>

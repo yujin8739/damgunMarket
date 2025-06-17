@@ -56,13 +56,17 @@
 	</insert>
 	
 	<update id="updateMember" parameterType="Member">
-		UPDATE USER_INFO
-		SET USERNAME = #{userName}
-		   ,EMAIL = #{email}
-		   ,LATITUDE = #{latitude}
-	  	   ,LONGITUDE = #{longitude}
-		WHERE USERID = #{userId}
-		AND STATUS = 'Y'	
+	    UPDATE USER_INFO
+	    SET USERNAME = #{userName}
+	       ,EMAIL = #{email}
+	       ,LATITUDE = #{latitude}
+	       ,LONGITUDE = #{longitude}
+	       <!-- 비밀번호가 있을 때만 업데이트 -->
+	       <if test="passWord != null and passWord != ''">
+	       ,PASSWORD = #{passWord}
+	       </if>
+	    WHERE USERID = #{userId}
+	    AND STATUS = 'Y'	
 	</update>
 	
 	<update id="deleteMember" parameterType="Member">
