@@ -28,8 +28,15 @@
 			background-color: #ffffff;
 			border-radius: 16px;
 			padding: 30px 40px;
-			box-shadow: 0 4px 12px rgba(168, 139, 255, 0.2); /* 연보라 그림자 */
+			box-shadow: 0 4px 12px rgba(168, 139, 255, 0.2);
 		}
+        .password-section {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body>
@@ -41,15 +48,6 @@
         <div class="innerOuter">
             <h2>마이페이지</h2>
             <br>
-            
-            <!-- 
-            	updateMember() 메소드를 작성하여 정보수정 처리해보기 
-            	성공시 : 정보수정 성공! 메시지와 함께 마이페이지로 되돌아오기 (변경된 정보 갱신)
-            	실패시 : 에러페이지로 정보수정 실패! 메시지와 함께 위임시키기(model 이용)
-            	
-            	마이바티스 메소드와 태그는 update() / <update> 를 이용하시면 됩니다. 
-            
-             -->
 
             <form action="${contextRoot }/update.me" method="post">
                 <div class="form-group">
@@ -61,6 +59,22 @@
 
                     <label for="email"> &nbsp; Email : </label>
                     <input type="text" class="form-control" id="email" value="${loginUser.email }" name="email"> <br>
+
+                    <!-- 비밀번호 변경 섹션 -->
+                    <div class="password-section">
+                        <h5>🔒 비밀번호 변경 (선택사항)</h5>
+                        <p class="text-muted">비밀번호를 변경하지 않으려면 아래 필드를 비워두세요.</p>
+                        
+                        <label for="newPassword">새 비밀번호 :</label>
+                        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="변경하지 않으려면 비워두세요">
+                        <small class="form-text text-muted">8자 이상, 영문+숫자 조합을 권장합니다.</small>
+                        <br>
+                        
+                        <label for="confirmPassword">새 비밀번호 확인 :</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="새 비밀번호를 다시 입력하세요">
+                        <div id="passwordMatchMessage" class="mt-2"></div>
+                    </div>
+
 					<input type="hidden" class="form-control" id="latitude" name="latitude"  value="${loginUser.latitude}">
 					<input type="hidden" class="form-control" id="longitude" name="longitude"  value="${loginUser.longitude}">
 					
@@ -80,21 +94,49 @@
 						    <button  type="button" class="btn btn-primary" onclick="checkStation(true)">내 위치 다시 확인</button>
 						</div>
 					<br>
-			
 					</div>
-                   
                 </div> 
                 <br>
                 <div class="btns" align="center">
-                    <button type="submit" class="btn btn-primary">수정하기</button>
+                    <button type="submit" class="btn btn-primary" id="updateBtn">수정하기</button>
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteForm">회원탈퇴</button>
                 </div>
             </form>
         </div>
         <br><br>
-        
     </div>
-    
+
+    <!-- 회원탈퇴 Modal -->
+    <div class="modal fade" id="deleteForm">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">회원탈퇴</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <form action="${contextRoot }/delete.me" method="post">
+                	<input type="hidden" name="userId" value="${loginUser.userId }">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div align="center">
+                            탈퇴 후 복구가 불가능합니다. <br>
+                            정말로 탈퇴 하시겠습니까? <br>
+                        </div>
+                        <br>
+                            <label for="passWord" class="mr-sm-2">Password : </label>
+                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deletePassWord" name="passWord"> <br>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer" align="center">
+                        <button type="submit" class="btn btn-danger">탈퇴하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
     	function geoCodingRun(lat,lng,answer){
 	         $('#latitude').val(lat);
@@ -134,50 +176,41 @@
 	  	
 	  	$(document).ready(function() {
 	  		geoCodingRun($('#latitude').val(),$('#longitude').val(),false);
+	  		
+	  		// 비밀번호 확인 검증
+	  		$('#confirmPassword').on('keyup', function() {
+	  		    const newPassword = $('#newPassword').val();
+	  		    const confirmPassword = $(this).val();
+	  		    const messageDiv = $('#passwordMatchMessage');
+	  		    const updateBtn = $('#updateBtn');
+	  		    
+	  		    // 새 비밀번호가 입력되었을 때만 검증
+	  		    if (newPassword.length > 0) {
+	  		        if (confirmPassword.length > 0) {
+	  		            if (newPassword === confirmPassword) {
+	  		                messageDiv.html('<span class="text-success">✓ 비밀번호가 일치합니다</span>');
+	  		                updateBtn.prop('disabled', false);
+	  		            } else {
+	  		                messageDiv.html('<span class="text-danger">✗ 비밀번호가 일치하지 않습니다</span>');
+	  		                updateBtn.prop('disabled', true);
+	  		            }
+	  		        } else {
+	  		            messageDiv.html('<span class="text-warning">새 비밀번호 확인을 입력해주세요</span>');
+	  		            updateBtn.prop('disabled', true);
+	  		        }
+	  		    } else {
+	  		        // 새 비밀번호가 없으면 확인 메시지 지우고 버튼 활성화
+	  		        messageDiv.html('');
+	  		        updateBtn.prop('disabled', false);
+	  		    }
+	  		});
+	  		
+	  		// 새 비밀번호 입력 시에도 확인
+	  		$('#newPassword').on('keyup', function() {
+	  		    $('#confirmPassword').trigger('keyup');
+	  		});
 	  	});
-    
     </script>
-    
-    
-    <!-- 
-    	성공시 회원 탈퇴 성공 메시지와 함께 메인페이지로 이동(재요청) - 세션에 담긴 로그인정보 삭제하기 
-    	실패시 회원 탈퇴 실패 메시지와 함께 마이페이지로 이동(재요청) 	
-    	회원탈퇴 처리도 update로 작성하기 (STATUS 에 Y를 N으로 변경하는 처리)   
-     -->
-   
-
-    <!-- 회원탈퇴 버튼 클릭 시 보여질 Modal -->
-    <div class="modal fade" id="deleteForm">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">회원탈퇴</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <form action="${contextRoot }/delete.me" method="post">
-                	<!--요청시 아이디 전달 -->
-                	<input type="hidden" name="userId" value="${loginUser.userId }">
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <div align="center">
-                            탈퇴 후 복구가 불가능합니다. <br>
-                            정말로 탈퇴 하시겠습니까? <br>
-                        </div>
-                        <br>
-                            <label for="passWord" class="mr-sm-2">Password : </label>
-                            <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="deletePassWord" name="passWord"> <br>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer" align="center">
-                        <button type="submit" class="btn btn-danger">탈퇴하기</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 

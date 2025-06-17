@@ -8,9 +8,7 @@
         <result column="NOTICE_NUM" property="noticeNum"/>
         <result column="NOTICE_TITLE" property="noticeTitle"/>
         <result column="NOTICE" property="notice"/>  
-        <result column="NOTICE_IMG" property="noticeImg"/>
         <result column="CREATEDATE" property="createdate"/>
-        <result column="MODIFYDATE" property="modifydate"/>
     </resultMap>
     
     <select id="selectBoardList" resultMap="boardResultSet">
@@ -22,18 +20,16 @@
     </select>
     
     <insert id="insertBoard" parameterType="Board">
-    INSERT INTO BOARD (NOTICE_NUM, NOTICE_TITLE, NOTICE, NOTICE_IMG, CREATEDATE, MODIFYDATE)
-    VALUES (BOARD_NOTICE_NUM_SEQ.NEXTVAL, #{noticeTitle}, #{notice}, #{noticeImg}, SYSDATE, SYSDATE)
-	</insert>	
+        INSERT INTO BOARD (NOTICE_NUM, NOTICE_TITLE, NOTICE, CREATEDATE)
+        VALUES (BOARD_NOTICE_NUM_SEQ.NEXTVAL, #{noticeTitle}, #{notice}, SYSDATE)
+    </insert>	
     
     <update id="updateBoard" parameterType="Board">
-    UPDATE BOARD SET 
-        NOTICE_TITLE = #{noticeTitle},
-        NOTICE = #{notice},
-        NOTICE_IMG = #{noticeImg},
-        MODIFYDATE = SYSDATE
-    WHERE NOTICE_NUM = #{noticeNum}
-</update>
+        UPDATE BOARD SET 
+            NOTICE_TITLE = #{noticeTitle},
+            NOTICE = #{notice}
+        WHERE NOTICE_NUM = #{noticeNum}
+    </update>
     
     <delete id="deleteBoard" parameterType="_int">
         DELETE FROM BOARD WHERE NOTICE_NUM = #{noticeNum}

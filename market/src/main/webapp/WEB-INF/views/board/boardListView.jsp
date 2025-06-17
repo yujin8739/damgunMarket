@@ -217,9 +217,6 @@
 								<!-- 기존 하드코딩된 날짜를 실제 데이터로 변경 -->
 								<div class="notice-date">
 								    <fmt:formatDate value="${board.createdate}" pattern="yyyy-MM-dd"/>
-								    <c:if test="${not empty board.modifydate}">
-								        (수정: <fmt:formatDate value="${board.modifydate}" pattern="yyyy-MM-dd"/>)
-								    </c:if>
 								</div>
                             <c:if test="${not empty loginAdmin}">
 						    <div class="admin-actions">

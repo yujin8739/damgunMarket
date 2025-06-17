@@ -102,22 +102,30 @@ public class MemberController {
 	
 	//정보수정 메소드 
 	@RequestMapping("update.me")
-	public String updateMember(Member m, HttpSession session, Model model) {
-		
-		int result = service.updateMember(m);
-		
-		if(result > 0) {
-			session.setAttribute("alertMsg", "정보수정 성공!");
-			
-			//변경된 정보 갱신
-			Member updateMember = service.loginMember(m);
-			session.setAttribute("loginUser", updateMember);
-			
-			return "redirect:/mypage.me";
-		} else {
-			model.addAttribute("errorMsg","정보수정 실패!");
-			return "common/errorPage";
-		}
+	public String updateMember(Member m, 
+	                          @RequestParam(value="newPassword", required=false) String newPassword,
+	                          HttpSession session, Model model) {
+	    
+	    // 새 비밀번호가 입력되었으면 암호화해서 설정
+	    if (newPassword != null && !newPassword.trim().isEmpty()) {
+	        String encPwd = bcrypt.encode(newPassword);
+	        m.setPassWord(encPwd);
+	    }
+	    
+	    int result = service.updateMember(m);
+	    
+	    if(result > 0) {
+	        session.setAttribute("alertMsg", "정보수정 성공!");
+	        
+	        //변경된 정보 갱신
+	        Member updateMember = service.loginMember(m);
+	        session.setAttribute("loginUser", updateMember);
+	        
+	        return "redirect:/mypage.me";
+	    } else {
+	        model.addAttribute("errorMsg","정보수정 실패!");
+	        return "common/errorPage";
+	    }
 	}
 	
 	@RequestMapping("delete.me")

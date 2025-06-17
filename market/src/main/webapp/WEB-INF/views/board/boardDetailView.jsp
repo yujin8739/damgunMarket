@@ -56,15 +56,6 @@
             background: white;
         }
         
-        .content img { 
-            max-width: 100%; 
-            height: auto; 
-            border-radius: 10px; 
-            margin: 20px 0; 
-            box-shadow: 0 5px 15px rgba(180, 139, 255, 0.1);
-            border: 2px solid #f0ebff;
-        }
-        
         .actions { 
             padding: 30px; 
             border-top: 2px solid #e8e0ff; 
@@ -135,7 +126,6 @@
             color: white !important; 
             text-decoration: none;
         }
-
     </style>
 </head>
 <body>
@@ -143,30 +133,22 @@
         <div class="header">
             <h2>${board.noticeTitle}</h2>
             <div class="meta-info">
-			    작성일: <fmt:formatDate value="${board.createdate}" pattern="yyyy-MM-dd HH:mm"/>
-			    <c:if test="${not empty board.modifydate}">
-			        <br>수정일: <fmt:formatDate value="${board.modifydate}" pattern="yyyy-MM-dd HH:mm"/>
-			    </c:if>
-			</div>
+                작성일: <fmt:formatDate value="${board.createdate}" pattern="yyyy-MM-dd HH:mm"/>
+            </div>
         </div>
         
         <div class="content">
             ${board.notice}
-            <c:if test="${not empty board.noticeImg}">
-                <div style="text-align: center; margin-top: 20px;">
-                    <img src="${board.noticeImg}" alt="공지이미지">
-                </div>
-            </c:if>
         </div>
         
         <div class="actions">
             <a href="list.bo" class="btn btn-secondary back-btn">목록으로</a>
             <c:if test="${not empty loginAdmin}">
-			    <div class="btn-group">
-			        <a href="updateForm.bo?bno=${board.noticeNum}" class="btn btn-primary">수정</a>
-			        <a href="javascript:deleteBoard()" class="btn btn-danger">삭제</a>
-			    </div>
-			</c:if>
+                <div class="btn-group">
+                    <a href="updateForm.bo?bno=${board.noticeNum}" class="btn btn-primary">수정</a>
+                    <a href="javascript:deleteBoard()" class="btn btn-danger">삭제</a>
+                </div>
+            </c:if>
         </div>
     </div>
     
@@ -186,7 +168,7 @@
             }
         }
         
-        // 알림 메시지 표시
+
         <c:if test="${not empty sessionScope.alertMsg}">
             alert('${sessionScope.alertMsg}');
             <c:remove var="alertMsg" scope="session"/>

@@ -78,7 +78,7 @@
                         </span>
                     </td>
                     <td>
-                        <a href="enrollForm.an?qno=${userQna.userQnaNum}">답변작성</a>
+                        
                         <a href="detail.an?qno=${userQna.userQnaNum}">상세보기</a>
                     </td>
                 </tr>
