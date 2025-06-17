@@ -82,7 +82,7 @@
 	                      SELECT s.LINE_NAME
 	                      FROM STATION s
 	                      ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
-	                  ) WHERE ROWNUM = 5
+	                  ) WHERE ROWNUM = 2
 	              )
 	          )
 	    )
@@ -127,7 +127,7 @@
 		                    SELECT s.LINE_NAME
 		                    FROM STATION s
 		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
-		                ) WHERE ROWNUM = 5
+		                ) WHERE ROWNUM = 2
 		            )
 		        )
 		  )
@@ -173,7 +173,7 @@
 		                    SELECT s.LINE_NAME
 		                    FROM STATION s
 		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
-		                ) WHERE ROWNUM = 5
+		                ) WHERE ROWNUM = 2
 		            )
 		        )
 		  )
@@ -225,7 +225,7 @@
 		                    SELECT s.LINE_NAME
 		                    FROM STATION s
 		                    ORDER BY POWER(s.LATITUDE - #{latitude}, 2) + POWER(s.LONGITDE - #{longitude}, 2)
-		                ) WHERE ROWNUM = 5
+		                ) WHERE ROWNUM = 2
 		            )
 		        )
 		  )
