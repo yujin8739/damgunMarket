@@ -123,7 +123,8 @@
 		<div id="json-data" data-json='${fileListJson}' style="display:inline-block; ;"></div>
 	    <div class="product-info">
 	        <p><strong>가격:</strong> ${product.pdPrice} 원</p>
-	        <p><strong>설명:</strong> ${product.pdBoard}</p>
+	        <p><strong>설명:</strong></p><p style="white-space: pre-wrap;">${product.pdBoard}</p>
+	        
 	        <!-- <p><strong>위치:</strong> 위도 ${product.latitude}, 경도 ${product.longitude}</p> -->
 	        <!--<p><strong>랭크:</strong> ${product.pdRank}</p>-->
 	        <%-- <p><strong>상태:</strong> ${product.pdStatus == 1 ? "판매중" : "판매완료"}</p> --%>
