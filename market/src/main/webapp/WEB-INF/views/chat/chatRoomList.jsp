@@ -172,7 +172,7 @@ button:hover {
 			</c:otherwise>
 		</c:choose>
 
-		<h3>새 채팅방 생성 (테스트용)</h3>
+		<h3>새 채팅방 생성</h3>
 		<p>
 			상대방 ID: <input type="text" id="targetUserId" value="testuser" />
 		</p>
