@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userQnaMapper">
+    
+    <resultMap id="userQnaResultSet" type="UserQnaInfo">
+        <result column="USERQNA_NUM" property="userQnaNum"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="USERQNA_TITLE" property="userQnaTitle"/>
+        <result column="USERQNA" property="userQna"/>
+        <result column="EXUSER_NUM" property="exuserNum"/> 
+        <result column="USERQNA_IMG" property="userQnaImg"/>
+    </resultMap>
+    
+    <select id="selectUserQnaList" resultMap="userQnaResultSet">
+        SELECT * FROM USERQNA_INFO ORDER BY USERQNA_NUM DESC
+    </select>
+    
+    <select id="selectUserQna" parameterType="_int" resultMap="userQnaResultSet">
+        SELECT * FROM USERQNA_INFO WHERE USERQNA_NUM = #{userQnaNum}
+    </select>
+    
+
+	<insert id="insertUserQna" parameterType="UserQnaInfo">
+	    INSERT INTO USERQNA_INFO (
+	        USERQNA_NUM, 
+	        USER_NO, 
+	        USERQNA_TITLE, 
+	        USERQNA,
+	        CREATEDATE
+	        <if test="userQnaImg != null and userQnaImg != ''">
+	        , USERQNA_IMG
+	        </if>
+	    ) VALUES (
+	        USERQNA_NUM_SEQ.NEXTVAL, 
+	        #{userNo}, 
+	        #{userQnaTitle}, 
+	        #{userQna},
+	        SYSDATE
+	        <if test="userQnaImg != null and userQnaImg != ''">
+	        , #{userQnaImg}
+	        </if>
+	    )
+	</insert>
+    
+    <!-- 문의사항 수정 - STATUS 필드 포함 -->
+    <update id="updateUserQna" parameterType="UserQnaInfo">
+        UPDATE USERQNA_INFO 
+        SET 
+            USERQNA_TITLE = #{userQnaTitle},
+            USERQNA = #{userQna},
+            STATUS = #{status}
+            <if test="userQnaImg != null">
+            , USERQNA_IMG = #{userQnaImg}
+            </if>
+        WHERE USERQNA_NUM = #{userQnaNum} 
+          AND USER_NO = #{userNo}
+    </update>
+    
+    <delete id="deleteUserQna" parameterType="_int">
+        DELETE FROM USERQNA_INFO WHERE USERQNA_NUM = #{userQnaNum}
+    </delete>
+    
+    <select id="selectUserQnaByUser" parameterType="_int" resultMap="userQnaResultSet">
+        SELECT * FROM USERQNA_INFO WHERE USER_NO = #{userNo} ORDER BY USERQNA_NUM DESC
+    </select>
+    
+    <select id="selectReportQna" parameterType="_int" resultMap="userQnaResultSet">
+        SELECT * FROM USERQNA_INFO WHERE EXUSER_NUM = #{exuserNum} ORDER BY USERQNA_NUM DESC
+    </select>
+    
+    <select id="searchUserQna" parameterType="string" resultMap="userQnaResultSet">
+        SELECT * FROM USERQNA_INFO 
+        WHERE USERQNA_TITLE LIKE '%'||#{keyword}||'%' 
+           OR USERQNA LIKE '%'||#{keyword}||'%'
+        ORDER BY USERQNA_NUM DESC
+    </select>
+    
+    <select id="selectLatestUserQnaNum" parameterType="_int" resultType="java.lang.Integer">
+        SELECT NVL(MAX(USERQNA_NUM), 0)
+        FROM USERQNA_INFO 
+        WHERE USER_NO = #{userNo}
+    </select>
+</mapper>
