@@ -74,7 +74,7 @@ public class AdminController {
         return "admin/adminMain";
     }
     
-  
+  /*
     // 관리자 정보 수정
     @PostMapping("update.ad")
     public String updateAdmin(Admin admin, HttpSession session, Model model) {
@@ -94,7 +94,7 @@ public class AdminController {
             return "common/errorPage";
         }
     }
-    
+    */
     // 관리자 삭제
     @PostMapping("delete.ad")
     public String deleteAdmin(Admin admin, HttpSession session, Model model) {
@@ -118,7 +118,7 @@ public class AdminController {
             return "redirect:/admin/main.ad";
         }
     }
-    
+    /*
     // 관리자 아이디 중복체크
     @ResponseBody
     @RequestMapping(value="idCheck.ad", produces = "text/html;charset=UTF-8")
@@ -132,7 +132,7 @@ public class AdminController {
             return "NNNNY"; // 사용가능
         }
     }
-    
+    */
     @GetMapping("chargePoint")
     public String chargePoint() {
     	return "admin/chargePoint";
