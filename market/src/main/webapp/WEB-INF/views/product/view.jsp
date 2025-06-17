@@ -279,13 +279,13 @@
 	                	$('#enrollStatus').text(status);
 						if (loginUserNo) {
 							$('#tradeButton').show();
-							$('#enrollEndButton').hide()
+							$('#enrollEndButton').hide();
 						}
 					} else {
 	                    $('#enrollStatus').text(status);
 						if (loginUserNo) {
-							$('#tradeButton').show();
-							$('#enrollEndButton').hide()
+							$('#tradeButton').hide();
+							$('#enrollEndButton').hide();
 						}
 					}
 	    		    
