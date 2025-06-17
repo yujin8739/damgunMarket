@@ -51,12 +51,20 @@ public class MemberController {
 		}
 	}
 	
-	//로그아웃
-	@RequestMapping("logout.me")
-	public String logoutMember(HttpSession session) {
-		session.removeAttribute("loginUser");
-		return "redirect:/";
-	}
+	  @RequestMapping("logout.me")
+	    public String logoutMember(HttpSession session) {
+	        System.out.println("로그아웃 시도 - 세션 ID: " + session.getId());
+
+	        if (session != null) { 
+	            session.invalidate(); 
+	            session.removeAttribute("loginUser");
+	            System.out.println("INFO: 세션이 성공적으로 무효화되었습니다.");
+	        }
+
+	        return "redirect:/"; 
+	    }
+
+		
 	
 	//회원가입 페이지로 이동
 	@GetMapping("insert.me")
