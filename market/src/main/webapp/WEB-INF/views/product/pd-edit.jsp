@@ -63,7 +63,7 @@
         <form action="${pageContext.request.contextPath}/product/edit" method="post" enctype="multipart/form-data">
             <!-- 숨겨진 상품 번호 -->
             <input type="hidden" name="pdNum" value="${product.pdNum}" />
-			<input type="hidden" name="pdNum" value="${product.userNo}" />
+			<input type="hidden" name="userNo" value="${product.userNo}" />
             <!-- 상품명 -->
             <div class="form-group">
                 <label for="pdTitle" class="form-label">상품명 <span class="required">*</span></label>
